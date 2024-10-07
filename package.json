@@ -1,0 +1,40 @@
+{
+  "name": "@roughapp/slack-bot",
+  "private": true,
+  "version": "1.0.0",
+  "packageManager": "pnpm@9.12.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "author": {
+    "name": "George Czabania"
+  },
+  "license": "MIT",
+  "imports": {
+    "#src/*": "./dist/*"
+  },
+  "scripts": {
+    "test": "vitest --watch=false",
+    "tidy": "biome check --write --unsafe ./src",
+    "build": "tsup",
+    "watch": "tsx --watch ./src/index.ts",
+    "start": "tsx --env-file=.env ./src/index.ts",
+    "tsc": "tsc"
+  },
+  "dependencies": {
+    "@slack/bolt": "3.22.0",
+    "@slack/web-api": "7.5.0",
+    "@stayradiated/error-boundary": "4.3.0",
+    "better-sqlite3": "11.3.0",
+    "dotenv": "16.4.5",
+    "kysely": "0.27.4",
+    "zod": "3.23.8"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.9.3",
+    "@types/better-sqlite3": "7.6.11",
+    "tsup": "8.3.0",
+    "tsx": "4.19.1",
+    "typescript": "5.6.2",
+    "vitest": "2.1.2"
+  }
+}
