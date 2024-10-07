@@ -27,7 +27,7 @@ jobs:
 
       - # https://github.com/gembaadvantage/uplift-action
         name: Version, Changelog & Release
-        uses: gembaadvantage/uplift-action@0f015585b669da121873849ace19daa2f49090bc # v2.0.1
+        uses: gembaadvantage/uplift-action@0d28005618a55f97d0bb9253329383720d3e9031 # v2.0.2
         with:
           install-only: true
           args: none
