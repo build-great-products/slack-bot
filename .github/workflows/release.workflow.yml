@@ -106,6 +106,6 @@ jobs:
 
       - # https://github.com/softprops/action-gh-release
         name: Release
-        uses: softprops/action-gh-release@9d7c94cfd0a1f3ed45544c887983e9fa900f0564 # v2.0.4
+        uses: softprops/action-gh-release@c062e08bd532815e2082a85e87e3ef29c3e6d191 # v2.0.8
         with:
           tag_name: v${{ needs.uplift.outputs.VERSION }}
