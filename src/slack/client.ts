@@ -34,9 +34,7 @@ const createClient = async (options: CreateClientOptions) => {
     installationStore: createInstallationStore(db),
   })
 
-  const { client } = app
-
-  app.command('/rough-connect', async ({ command, ack, respond }) => {
+  app.command('/rough-connect', async ({ client, command, ack, respond }) => {
     // Acknowledge the command request
     await ack()
 
@@ -115,7 +113,7 @@ const createClient = async (options: CreateClientOptions) => {
   })
   type PrivateMetadata = z.infer<typeof $PrivateMetadata>
 
-  app.command('/rough-identify', async ({ ack, command }) => {
+  app.command('/rough-identify', async ({ client, ack, command }) => {
     await ack()
 
     // Open a modal with a dynamic dropdown (external select)
@@ -222,7 +220,7 @@ const createClient = async (options: CreateClientOptions) => {
     })
   })
 
-  app.view('identify_modal', async ({ ack, view, body }) => {
+  app.view('identify_modal', async ({ client, ack, view, body }) => {
     const privateMetadata = $PrivateMetadata.parse(
       JSON.parse(view.private_metadata),
     )
@@ -313,71 +311,74 @@ const createClient = async (options: CreateClientOptions) => {
     }
   })
 
-  app.shortcut('create_insight', async ({ shortcut, body, ack, respond }) => {
-    if (shortcut.type !== 'message_action') {
-      throw new Error('flail')
-    }
-    if (!shortcut.team) {
-      throw new Error('flail')
-    }
+  app.shortcut(
+    'create_insight',
+    async ({ client, shortcut, body, ack, respond }) => {
+      if (shortcut.type !== 'message_action') {
+        throw new Error('flail')
+      }
+      if (!shortcut.team) {
+        throw new Error('flail')
+      }
 
-    // Acknowledge the shortcut
-    await ack()
+      // Acknowledge the shortcut
+      await ack()
 
-    const { message, channel } = shortcut
-    if (!message || !message.text || message.text.trim().length === 0) {
-      await respond({
-        text: 'The insight text cannot be empty.',
-        response_type: 'ephemeral',
-      })
-      return
-    }
+      const { message, channel } = shortcut
+      if (!message || !message.text || message.text.trim().length === 0) {
+        await respond({
+          text: 'The insight text cannot be empty.',
+          response_type: 'ephemeral',
+        })
+        return
+      }
 
-    // Fetch the author's user info from Slack
-    const authorId = message.user
-    let authorName = 'Unknown User'
-    if (typeof authorId === 'string') {
-      const authorInfo = await client.users.info({ user: authorId })
-      authorName =
-        authorInfo.user?.real_name || authorInfo.user?.name || 'Unknown User'
-    }
+      // Fetch the author's user info from Slack
+      const authorId = message.user
+      let authorName = 'Unknown User'
+      if (typeof authorId === 'string') {
+        const authorInfo = await client.users.info({ user: authorId })
+        authorName =
+          authorInfo.user?.real_name || authorInfo.user?.name || 'Unknown User'
+      }
 
-    // Optionally, modify the message content if it's not authored by the user submitting the insight
-    let content = message.text
-    if (authorId !== body.user.id) {
-      content = `${authorName} said: ${content}`
-    }
+      // Optionally, modify the message content if it's not authored by the user submitting the insight
+      let content = message.text
+      if (authorId !== body.user.id) {
+        content = `${authorName} said: ${content}`
+      }
 
-    // Generate the reference URL for the message
-    const referencePath = `/archives/${channel.id}/p${message.ts.replace('.', '')}`
+      // Generate the reference URL for the message
+      const referencePath = `/archives/${channel.id}/p${message.ts.replace('.', '')}`
 
-    // Call the createInsight function (adapted for Slack)
-    const { success, reply } = await createInsight({
-      db: db, // Database connection
-      slackWorkspaceId: body.team?.id as SlackWorkspaceId, // Slack team/workspace ID
-      userId: body.user.id as UserId, // Slack user ID of the person invoking the action
-      content,
-      referencePath,
-    })
-
-    if (success) {
-      // Add a 📌 reaction to pin the message
-      void client.reactions.add({
-        channel: channel.id,
-        name: 'pushpin',
-        timestamp: message.ts,
+      // Call the createInsight function (adapted for Slack)
+      const { success, reply } = await createInsight({
+        db: db, // Database connection
+        slackWorkspaceId: body.team?.id as SlackWorkspaceId, // Slack team/workspace ID
+        userId: body.user.id as UserId, // Slack user ID of the person invoking the action
+        content,
+        referencePath,
       })
 
-      // Respond with success message
-      await respond({
-        text: '✅ Captured insight successfully.',
-        response_type: 'ephemeral',
-      })
-    } else {
-      // Handle failure
-      await respond(reply)
-    }
-  })
+      if (success) {
+        // Add a 📌 reaction to pin the message
+        void client.reactions.add({
+          channel: channel.id,
+          name: 'pushpin',
+          timestamp: message.ts,
+        })
+
+        // Respond with success message
+        await respond({
+          text: '✅ Captured insight successfully.',
+          response_type: 'ephemeral',
+        })
+      } else {
+        // Handle failure
+        await respond(reply)
+      }
+    },
+  )
 
   await app.start(port)
   console.log(`⚡️ Slack app is running on port ${port}!`)
