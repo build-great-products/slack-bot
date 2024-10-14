@@ -1,5 +1,6 @@
 import SqliteDatabase from 'better-sqlite3'
 import { CamelCasePlugin, Kysely, SqliteDialect } from 'kysely'
+import memoize from 'memoize'
 
 import { env } from './env.js'
 
@@ -45,11 +46,13 @@ type Database = {
 
 type KyselyDb = Kysely<Database>
 
-const db: KyselyDb = new Kysely({
-  dialect: new SqliteDialect({
-    database: async () => new SqliteDatabase(env.DB_PATH),
-  }),
-  plugins: [new CamelCasePlugin()],
+const getDb = memoize((dbPath: string = env.DB_PATH): KyselyDb => {
+  return new Kysely({
+    dialect: new SqliteDialect({
+      database: async () => new SqliteDatabase(dbPath),
+    }),
+    plugins: [new CamelCasePlugin()],
+  })
 })
 
 export type {
@@ -63,4 +66,4 @@ export type {
   SlackInstallation,
   KyselyDb,
 }
-export { db }
+export { getDb }

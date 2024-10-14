@@ -41,6 +41,8 @@ const getInstallationId = (
 const createInstallationStore = (db: KyselyDb): InstallationStore => {
   return {
     storeInstallation: async (installation) => {
+      console.dir({ storeInstallation: installation }, { depth: null })
+
       const installationId = getInstallationId(installation)
 
       const result = await errorBoundary(() =>
@@ -60,6 +62,8 @@ const createInstallationStore = (db: KyselyDb): InstallationStore => {
       }
     },
     fetchInstallation: async (installQuery) => {
+      console.dir({ fetchInstallation: installQuery }, { depth: null })
+
       const installationId = getInstallationId(installQuery)
 
       const installation = await errorBoundary(async () => {
@@ -71,6 +75,7 @@ const createInstallationStore = (db: KyselyDb): InstallationStore => {
 
         return JSON.parse(row.value) as Installation
       })
+      console.dir({ installationId, installation }, { depth: null })
       if (installation instanceof Error) {
         console.error(installation)
         throw new Error('Failed fetching installation')

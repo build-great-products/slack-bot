@@ -1,8 +1,10 @@
-import { db } from './database.js'
+import { getDb } from './database.js'
 import { migrateToLatest } from './migrate.js'
 
 import { env } from './env.js'
 import { createClient } from './slack/client.js'
+
+const db = getDb()
 
 await migrateToLatest(db)
 
