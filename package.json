@@ -14,8 +14,8 @@
   },
   "scripts": {
     "test": "vitest",
-    "tidy": "biome check --write --unsafe ./src",
-    "tidy:check": "biome check ./src",
+    "tidy": "biome check --write --unsafe",
+    "tidy:check": "biome check",
     "build": "tsup",
     "watch": "tsx --watch ./src/index.ts",
     "start": "tsx --env-file=.env ./src/index.ts",

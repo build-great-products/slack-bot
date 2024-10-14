@@ -1,54 +1,49 @@
 {
-    "display_information": {
-        "name": "Rough"
+  "display_information": {
+    "name": "Rough"
+  },
+  "features": {
+    "bot_user": {
+      "display_name": "Rough",
+      "always_online": false
     },
-    "features": {
-        "bot_user": {
-            "display_name": "Rough",
-            "always_online": false
-        },
-        "shortcuts": [
-            {
-                "name": "Capture Insight",
-                "type": "message",
-                "callback_id": "create_insight",
-                "description": "Creates an Insight in Rough.app"
-            }
-        ],
-        "slash_commands": [
-            {
-                "command": "/rough-connect",
-                "url": "https://slack.rough.app/slack/events",
-                "description": "Connect this Slack workspace to Rough",
-                "usage_hint": "[api token]",
-                "should_escape": false
-            },
-            {
-                "command": "/rough-identify",
-                "url": "https://slack.rough.app/slack/events",
-                "description": "Link your Slack account with Rough",
-                "should_escape": false
-            }
-        ]
-    },
-    "oauth_config": {
-        "scopes": {
-            "bot": [
-                "commands",
-                "reactions:write",
-                "users:read",
-                "team:read"
-            ]
-        }
-    },
-    "settings": {
-        "interactivity": {
-            "is_enabled": true,
-            "request_url": "https://slack.rough.app/slack/events",
-            "message_menu_options_url": "https://slack.rough.app/slack/events"
-        },
-        "org_deploy_enabled": false,
-        "socket_mode_enabled": false,
-        "token_rotation_enabled": false
+    "shortcuts": [
+      {
+        "name": "Capture Insight",
+        "type": "message",
+        "callback_id": "create_insight",
+        "description": "Creates an Insight in Rough.app"
+      }
+    ],
+    "slash_commands": [
+      {
+        "command": "/rough-connect",
+        "url": "https://slack.rough.app/slack/events",
+        "description": "Connect this Slack workspace to Rough",
+        "usage_hint": "[api token]",
+        "should_escape": false
+      },
+      {
+        "command": "/rough-identify",
+        "url": "https://slack.rough.app/slack/events",
+        "description": "Link your Slack account with Rough",
+        "should_escape": false
+      }
+    ]
+  },
+  "oauth_config": {
+    "scopes": {
+      "bot": ["commands", "reactions:write", "users:read", "team:read"]
     }
+  },
+  "settings": {
+    "interactivity": {
+      "is_enabled": true,
+      "request_url": "https://slack.rough.app/slack/events",
+      "message_menu_options_url": "https://slack.rough.app/slack/events"
+    },
+    "org_deploy_enabled": false,
+    "socket_mode_enabled": false,
+    "token_rotation_enabled": false
+  }
 }
