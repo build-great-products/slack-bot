@@ -1,23 +1,22 @@
-import { promises as fs } from 'node:fs'
-import * as path from 'node:path'
-import { fileURLToPath } from 'node:url'
-import { FileMigrationProvider, type Kysely, Migrator } from 'kysely'
+import { type Kysely, type MigrationProvider, Migrator } from 'kysely'
 
 import type { Database } from './database.js'
 
-const migrationFolder = path.join(
-  path.dirname(fileURLToPath(import.meta.url)),
-  'migrations',
-)
+const migrationProvider = {
+  getMigrations: async () => {
+    return {
+      '2024-05-31': await import('./migrations/2024-05-31-init.js'),
+      '2024-10-14': await import(
+        './migrations/2024-10-14-installation-store.js'
+      ),
+    }
+  },
+} satisfies MigrationProvider
 
 const migrateToLatest = async (db: Kysely<Database>) => {
   const migrator = new Migrator({
     db,
-    provider: new FileMigrationProvider({
-      fs,
-      path,
-      migrationFolder,
-    }),
+    provider: migrationProvider,
   })
 
   const { error, results } = await migrator.migrateToLatest()

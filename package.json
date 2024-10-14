@@ -13,8 +13,9 @@
     "#src/*": "./dist/*"
   },
   "scripts": {
-    "test": "vitest --watch=false",
-    "tidy": "biome check --write --unsafe ./src",
+    "test": "vitest",
+    "tidy": "biome check --write --unsafe",
+    "tidy:check": "biome check",
     "build": "tsup",
     "watch": "tsx --watch ./src/index.ts",
     "start": "tsx --env-file=.env ./src/index.ts",
@@ -26,6 +27,7 @@
     "better-sqlite3": "11.3.0",
     "dotenv": "16.4.5",
     "kysely": "0.27.4",
+    "memoize": "10.0.0",
     "zod": "3.23.8"
   },
   "devDependencies": {
@@ -34,6 +36,10 @@
     "tsup": "8.3.0",
     "tsx": "4.19.1",
     "typescript": "5.6.3",
+    "vite-tsconfig-paths": "5.0.1",
     "vitest": "2.1.3"
+  },
+  "engines": {
+    "node": "^22.9.0"
   }
 }

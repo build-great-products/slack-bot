@@ -1,4 +1,4 @@
-import slack from '@slack/bolt'
+import bolt from '@slack/bolt'
 import { z } from 'zod'
 
 import type { KyselyDb, SlackWorkspaceId, UserId } from '#src/database.js'
@@ -13,28 +13,23 @@ import { createInstallationStore } from '#src/slack/installation-store.js'
 
 type CreateClientOptions = {
   db: KyselyDb
-  slackClientId: string
-  slackClientSecret: string
-  slackSigningSecret: string
-  slackStateSecret: string
   port: number
+  slack: {
+    clientId: string
+    clientSecret: string
+    signingSecret: string
+    stateSecret: string
+  }
 }
 
 const createClient = async (options: CreateClientOptions) => {
-  const {
-    db,
-    slackClientId,
-    slackClientSecret,
-    slackSigningSecret,
-    slackStateSecret,
-    port,
-  } = options
+  const { db, port, slack } = options
 
-  const app = new slack.App({
-    clientId: slackClientId,
-    clientSecret: slackClientSecret,
-    signingSecret: slackSigningSecret,
-    stateSecret: slackStateSecret,
+  const app = new bolt.App({
+    clientId: slack.clientId,
+    clientSecret: slack.clientSecret,
+    signingSecret: slack.signingSecret,
+    stateSecret: slack.stateSecret,
     scopes: ['commands', 'reactions:write', 'users:read', 'team:read'],
     installationStore: createInstallationStore(db),
   })
