@@ -93,6 +93,15 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
+      - # notify watchtower to update the container
+        name: Notify Watchtower
+        run: |
+          # we need to sleep to give the image time to be pushed to the registry
+          sleep 10
+
+          curl https://watchtower.rough.app/v1/update \
+            -H "Authorization: Bearer ${{ secrets.WATCHTOWER_API_KEY }}"
+
   release:
     timeout-minutes: 5
     runs-on: ubuntu-latest
