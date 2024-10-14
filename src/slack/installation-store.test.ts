@@ -1,5 +1,5 @@
 import type { Installation } from '@slack/bolt'
-import { test as anyTest, describe, expect } from 'vitest'
+import { test as anyTest, describe, expect, vi } from 'vitest'
 
 import type { SlackInstallationId } from '#src/database.js'
 
@@ -17,7 +17,7 @@ describe('storeInstallation', () => {
   test('should store team installation', async ({ now, db }) => {
     const installationStore = createInstallationStore(db)
 
-    const teamId = 'T001' as SlackInstallationId
+    const teamId = 'T0001' as SlackInstallationId
 
     const installation: Installation = {
       isEnterpriseInstall: false,
@@ -81,13 +81,76 @@ describe('storeInstallation', () => {
       updatedAt: now,
     })
   })
+
+  test('should handle overwriting an existing installation', async ({
+    now,
+    db,
+  }) => {
+    const installationStore = createInstallationStore(db)
+
+    const teamId = 'T0012' as SlackInstallationId
+
+    const installation: Installation = {
+      isEnterpriseInstall: false,
+      team: {
+        id: teamId,
+      },
+      enterprise: undefined,
+      user: {
+        id: 'U123',
+        token: 'xoxb-123',
+        scopes: [],
+      },
+    }
+
+    await db
+      .insertInto('slackInstallation')
+      .values({
+        id: teamId,
+        value: JSON.stringify(installation),
+        createdAt: now,
+        updatedAt: now,
+      })
+      .execute()
+
+    // move clock forward
+    vi.setSystemTime(now + 1000)
+
+    const updatedInstallation: Installation = {
+      isEnterpriseInstall: false,
+      team: {
+        id: teamId,
+      },
+      enterprise: undefined,
+      user: {
+        id: 'U123',
+        token: 'xoxb-456',
+        scopes: [],
+      },
+    }
+
+    await installationStore.storeInstallation(updatedInstallation)
+
+    const row = await db
+      .selectFrom('slackInstallation')
+      .selectAll('slackInstallation')
+      .where('id', '=', teamId)
+      .executeTakeFirstOrThrow()
+
+    expect(row).toEqual({
+      id: teamId,
+      value: JSON.stringify(updatedInstallation),
+      createdAt: now,
+      updatedAt: now + 1000,
+    })
+  })
 })
 
 describe('fetchInstallation', () => {
   test('should fetch team installation', async ({ now, db }) => {
     const installationStore = createInstallationStore(db)
 
-    const teamId = 'T002' as SlackInstallationId
+    const teamId = 'T0103' as SlackInstallationId
 
     const installation: Installation = {
       isEnterpriseInstall: false,
@@ -163,7 +226,7 @@ describe('deleteInstallation', () => {
   test('should delete team installation', async ({ now, db }) => {
     const installationStore = createInstallationStore(db)
 
-    const teamId = 'T003' as SlackInstallationId
+    const teamId = 'T1004' as SlackInstallationId
 
     const installation: Installation = {
       isEnterpriseInstall: false,

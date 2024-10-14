@@ -54,6 +54,12 @@ const createInstallationStore = (db: KyselyDb): InstallationStore => {
             createdAt: Date.now(),
             updatedAt: Date.now(),
           })
+          .onConflict((oc) =>
+            oc.doUpdateSet({
+              value: JSON.stringify(installation),
+              updatedAt: Date.now(),
+            }),
+          )
           .execute(),
       )
       if (result instanceof Error) {
