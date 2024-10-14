@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v0.7.0](https://github.com/build-great-products/slack-bot/releases/tag/v0.7.0) - 2024-10-14
+
+- [`af286ef`](https://github.com/build-great-products/slack-bot/commit/af286effa5b3b5068b0aab2c6e46fca06671bcac) feat: Refactor Slack command handlers to use client from context 🔧 (#13)
+
 ## [v0.6.0](https://github.com/build-great-products/slack-bot/releases/tag/v0.6.0) - 2024-10-14
 
 - [`07e2857`](https://github.com/build-great-products/slack-bot/commit/07e28577ae46d9146b5eea7e801f976974e0ec21) Merge pull request #12 from build-great-products/george/upsert-store-installation
