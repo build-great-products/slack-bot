@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v0.4.0](https://github.com/build-great-products/slack-bot/releases/tag/v0.4.0) - 2024-10-14
+
+- [`3491658`](https://github.com/build-great-products/slack-bot/commit/3491658082ac80cc6d784e44088ddf8be7b4c901) feat: Add Watchtower notification step to release workflow 🐳
+- [`c88eb91`](https://github.com/build-great-products/slack-bot/commit/c88eb914b7059f92130f01f4496543f2e5133f77) Merge pull request #6 from build-great-products/dependabot/github_actions/docker/setup-qemu-action-3.2.0
+- [`1e7f521`](https://github.com/build-great-products/slack-bot/commit/1e7f52181c67c948b1938cda93458035d5dd6465) Merge pull request #7 from build-great-products/dependabot/github_actions/docker/login-action-3.3.0
+- [`328b535`](https://github.com/build-great-products/slack-bot/commit/328b535dcf05e468172215b94095b1d016793df8) Merge pull request #8 from build-great-products/dependabot/github_actions/actions/checkout-4.2.1
+- [`494313a`](https://github.com/build-great-products/slack-bot/commit/494313a4b740cc51c48cff3e8c4cb8ff55b5cb67) chore(deps): bump actions/checkout from 4.2.0 to 4.2.1
+- [`f787827`](https://github.com/build-great-products/slack-bot/commit/f7878270902cef2faefa8b0bb6ccdab92d3ef166) chore(deps): bump docker/login-action from 3.1.0 to 3.3.0
+- [`34e077c`](https://github.com/build-great-products/slack-bot/commit/34e077c7e4e2ee99ebdedd245329ba2757821cf7) chore(deps): bump docker/setup-qemu-action from 3.0.0 to 3.2.0
+
 ## [v0.3.0](https://github.com/build-great-products/slack-bot/releases/tag/v0.3.0) - 2024-10-14
 
 - [`bf800db`](https://github.com/build-great-products/slack-bot/commit/bf800dbcb82923c71e008f01cc50a0275fc7c244) Merge pull request #9 from build-great-products/george/slack-installation-store
