@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v0.5.0](https://github.com/build-great-products/slack-bot/releases/tag/v0.5.0) - 2024-10-14
+
+- [`28797a9`](https://github.com/build-great-products/slack-bot/commit/28797a91a61642787ff6d3136fb197b3e2d8e034) Merge pull request #10 from build-great-products/george/add-tests
+- [`5936ca0`](https://github.com/build-great-products/slack-bot/commit/5936ca0fa81cf39324084ac94795ce923e255723) feat: Add redirect URL for OAuth configuration 🔐
+- [`075283a`](https://github.com/build-great-products/slack-bot/commit/075283aecdf142b8635b02a740a09b2bab7f5b24) refactor: Reorganize environment configuration and improve modularity 🛠️
+- [`c0f64fd`](https://github.com/build-great-products/slack-bot/commit/c0f64fdc27c2efe351832f9be13b68834aa9dc53) style: Format config files and update scripts 🎨
+- [`ec75298`](https://github.com/build-great-products/slack-bot/commit/ec752985a51fdfd260ab0cff5b59a60399834e8c) feat: Update Node.js and pnpm setup in CI workflow 🛠️
+- [`b6899cc`](https://github.com/build-great-products/slack-bot/commit/b6899ccaceed27d9c8f4cd9751444a86b21f0369) feat: Add GitHub Actions workflow for CI 🚀
+- [`1d572bb`](https://github.com/build-great-products/slack-bot/commit/1d572bb12ae3bce6582e4ce4384c15890249ef01) feat: Add tests for installation store and improve DB handling 🧪
+
 ## [v0.4.0](https://github.com/build-great-products/slack-bot/releases/tag/v0.4.0) - 2024-10-14
 
 - [`3491658`](https://github.com/build-great-products/slack-bot/commit/3491658082ac80cc6d784e44088ddf8be7b4c901) feat: Add Watchtower notification step to release workflow 🐳
