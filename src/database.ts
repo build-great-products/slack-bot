@@ -28,9 +28,19 @@ type SlackWorkspaceUser = {
   updatedAt: number
 }
 
+type SlackInstallationId = string & { __brand: 'slackInstallationId' }
+
+type SlackInstallation = {
+  id: SlackInstallationId
+  value: string
+  createdAt: number
+  updatedAt: number
+}
+
 type Database = {
   slackWorkspace: SlackWorkspace
   slackWorkspaceUser: SlackWorkspaceUser
+  slackInstallation: SlackInstallation
 }
 
 type KyselyDb = Kysely<Database>
@@ -49,6 +59,8 @@ export type {
   Database,
   SlackWorkspace,
   SlackWorkspaceUser,
+  SlackInstallationId,
+  SlackInstallation,
   KyselyDb,
 }
 export { db }
