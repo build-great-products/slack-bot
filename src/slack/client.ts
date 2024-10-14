@@ -1,5 +1,4 @@
 import slack from '@slack/bolt'
-import { WebClient } from '@slack/web-api'
 import { z } from 'zod'
 
 import type { KyselyDb, SlackWorkspaceId, UserId } from '#src/database.js'
@@ -10,22 +9,37 @@ import { getSlackWorkspace } from '#src/db/slack-workspace/get-slack-workspace.j
 import { upsertSlackWorkspace } from '#src/db/slack-workspace/upsert-slack-workspace.js'
 import * as roughApi from '#src/rough-api/index.js'
 
+import { createInstallationStore } from '#src/slack/installation-store.js'
+
 type CreateClientOptions = {
   db: KyselyDb
+  slackClientId: string
+  slackClientSecret: string
   slackSigningSecret: string
-  slackBotToken: string
+  slackStateSecret: string
   port: number
 }
 
 const createClient = async (options: CreateClientOptions) => {
-  const { db, slackSigningSecret, slackBotToken, port } = options
-
-  const client = new WebClient(slackBotToken)
+  const {
+    db,
+    slackClientId,
+    slackClientSecret,
+    slackSigningSecret,
+    slackStateSecret,
+    port,
+  } = options
 
   const app = new slack.App({
+    clientId: slackClientId,
+    clientSecret: slackClientSecret,
     signingSecret: slackSigningSecret,
-    token: slackBotToken,
+    stateSecret: slackStateSecret,
+    scopes: ['commands', 'reactions:write', 'users:read', 'team:read'],
+    installationStore: createInstallationStore(db),
   })
+
+  const { client } = app
 
   app.command('/rough-connect', async ({ command, ack, respond }) => {
     // Acknowledge the command request

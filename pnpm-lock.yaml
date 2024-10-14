@@ -11,9 +11,6 @@ importers:
       '@slack/bolt':
         specifier: 3.22.0
         version: 3.22.0
-      '@slack/web-api':
-        specifier: 7.5.0
-        version: 7.5.0
       '@stayradiated/error-boundary':
         specifier: 4.3.0
         version: 4.3.0
@@ -602,10 +599,6 @@ packages:
   '@slack/web-api@6.13.0':
     resolution: {integrity: sha512-dv65crIgdh9ZYHrevLU6XFHTQwTyDmNqEqzuIrV+Vqe/vgiG6w37oex5ePDU1RGm2IJ90H8iOvHFvzdEO/vB+g==}
     engines: {node: '>= 12.13.0', npm: '>= 6.12.0'}
-
-  '@slack/web-api@7.5.0':
-    resolution: {integrity: sha512-e1aRwbdnTVz0uQownF8UoyrQFdSs3uXtkPYWCpcb3fW3KuTEGvmEtVzAvj9gqNSlgpWj0o6is7AdptQCELd/rQ==}
-    engines: {node: '>= 18', npm: '>= 8.6.0'}
 
   '@stayradiated/error-boundary@4.3.0':
     resolution: {integrity: sha512-fCTFrdkb+im3yaVheb5xFuLKVuJS2WAP18gwrW3NYwsWc31MMAn5Phtazv6HERnNJIM9DRkYCE0Nmnr9eGXljg==}
@@ -2403,23 +2396,6 @@ snapshots:
       is-stream: 1.1.0
       p-queue: 6.6.2
       p-retry: 4.6.2
-    transitivePeerDependencies:
-      - debug
-
-  '@slack/web-api@7.5.0':
-    dependencies:
-      '@slack/logger': 4.0.0
-      '@slack/types': 2.14.0
-      '@types/node': 20.12.12
-      '@types/retry': 0.12.0
-      axios: 1.7.7
-      eventemitter3: 5.0.1
-      form-data: 4.0.0
-      is-electron: 2.2.2
-      is-stream: 2.0.1
-      p-queue: 6.6.2
-      p-retry: 4.6.2
-      retry: 0.13.1
     transitivePeerDependencies:
       - debug
 
