@@ -4,12 +4,12 @@ import type { Database } from './database.js'
 
 const migrationProvider = {
   getMigrations: async () => {
-    return {
-      '2024-05-31': await import('./migrations/2024-05-31-init.js'),
-      '2024-10-14': await import(
-        './migrations/2024-10-14-installation-store.js'
-      ),
-    }
+    return Object.fromEntries(
+      [
+        await import('./migrations/2024-05-31-init.js'),
+        await import('./migrations/2024-10-14-installation-store.js'),
+      ].map((file) => [file.name, file]),
+    )
   },
 } satisfies MigrationProvider
 
