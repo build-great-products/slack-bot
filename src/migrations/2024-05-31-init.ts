@@ -1,5 +1,7 @@
 import type { Kysely } from 'kysely'
 
+export const name = '2024-05-31-init'
+
 export async function up(db: Kysely<unknown>): Promise<void> {
   await db.schema
     .createTable('slack_workspace')
