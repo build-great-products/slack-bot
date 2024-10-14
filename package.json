@@ -1,7 +1,7 @@
 {
   "name": "@roughapp/slack-bot",
   "private": true,
-  "version": "0.7.0",
+  "version": "0.8.0",
   "packageManager": "pnpm@9.12.1",
   "type": "module",
   "main": "./dist/index.js",
