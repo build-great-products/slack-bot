@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v0.3.0](https://github.com/build-great-products/slack-bot/releases/tag/v0.3.0) - 2024-10-14
+
+- [`bf800db`](https://github.com/build-great-products/slack-bot/commit/bf800dbcb82923c71e008f01cc50a0275fc7c244) Merge pull request #9 from build-great-products/george/slack-installation-store
+- [`4f1af01`](https://github.com/build-great-products/slack-bot/commit/4f1af01ef47aefda378c16fc98e1611f822737bc) Merge upstream changes from main branch
+- [`ae54be2`](https://github.com/build-great-products/slack-bot/commit/ae54be2c02503787fba5acc3439fbbbef5ffbde9) feat: Implement OAuth installation store 🔐
+
 ## [v0.2.0](https://github.com/build-great-products/slack-bot/releases/tag/v0.2.0) - 2024-10-06
 
 - [`8a7928f`](https://github.com/build-great-products/slack-bot/commit/8a7928f6adba164b85696bcf38680aa62ae1ef8d) feat: Add Slack app manifest 🚀
