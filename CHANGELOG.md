@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v0.6.0](https://github.com/build-great-products/slack-bot/releases/tag/v0.6.0) - 2024-10-14
+
+- [`07e2857`](https://github.com/build-great-products/slack-bot/commit/07e28577ae46d9146b5eea7e801f976974e0ec21) Merge pull request #12 from build-great-products/george/upsert-store-installation
+- [`c0309ce`](https://github.com/build-great-products/slack-bot/commit/c0309ceec99ab0db2f6f4d7fb89252df8fbbc926) feat: Add conflict handling for Slack installation storage 🔄
+- [`fbcedc6`](https://github.com/build-great-products/slack-bot/commit/fbcedc6350079c209e636b0e54f46c8e83114aa2) Merge pull request #11 from build-great-products/george/fix-migrations
+- [`9f10cbc`](https://github.com/build-great-products/slack-bot/commit/9f10cbc28b2d1fc3b7c0cc9aa60e8504f4b10f32) refactor: Simplify migration provider and add name exports 🔧
+
 ## [v0.5.0](https://github.com/build-great-products/slack-bot/releases/tag/v0.5.0) - 2024-10-14
 
 - [`28797a9`](https://github.com/build-great-products/slack-bot/commit/28797a91a61642787ff6d3136fb197b3e2d8e034) Merge pull request #10 from build-great-products/george/add-tests
