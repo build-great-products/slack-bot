@@ -1,0 +1,45 @@
+{
+  "display_information": {
+    "name": "Rough",
+    "description": "The official Slack integration for Rough",
+    "background_color": "#b50b68"
+  },
+  "features": {
+    "bot_user": {
+      "display_name": "Rough",
+      "always_online": false
+    },
+    "shortcuts": [
+      {
+        "name": "Capture Insight",
+        "type": "message",
+        "callback_id": "create_insight",
+        "description": "Creates an Insight in Rough.app"
+      }
+    ],
+    "slash_commands": [
+      {
+        "command": "/rough",
+        "url": "https://slack.rough.app/slack/events",
+        "description": "Interact with Rough via Slack",
+        "should_escape": false
+      }
+    ]
+  },
+  "oauth_config": {
+    "redirect_urls": ["https://slack.rough.app/slack/oauth_redirect"],
+    "scopes": {
+      "bot": ["commands", "reactions:write", "users:read", "team:read"]
+    }
+  },
+  "settings": {
+    "interactivity": {
+      "is_enabled": true,
+      "request_url": "https://slack.rough.app/slack/events",
+      "message_menu_options_url": "https://slack.rough.app/slack/events"
+    },
+    "org_deploy_enabled": false,
+    "socket_mode_enabled": false,
+    "token_rotation_enabled": false
+  }
+}

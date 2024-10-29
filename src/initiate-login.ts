@@ -8,6 +8,8 @@ import type {
 } from '#src/database.ts'
 import type { Reply } from '#src/reply.ts'
 
+import { getOriginUrl } from '#src/env.ts'
+
 import { failure, text } from '#src/reply.ts'
 
 import { upsertSlackUserOauth } from '#src/db/slack-user-oauth/upsert-slack-user-oauth.ts'
@@ -56,7 +58,7 @@ const initiateLogin = async (
     }
   }
 
-  const url = new URL('/oauth/connect', 'https://slack-development.rough.app')
+  const url = new URL('/oauth/connect', getOriginUrl())
   url.searchParams.set('state', state)
 
   return {

@@ -3,6 +3,13 @@ import memoize from 'memoize'
 import { z } from 'zod'
 import 'dotenv/config'
 
+const getOriginUrl = memoize(() => {
+  const $env = z.object({
+    ORIGIN: z.string(),
+  })
+  return $env.parse(process.env).ORIGIN
+})
+
 const getRoughAppUrl = memoize(() => {
   const $env = z.object({
     ROUGH_APP_URL: z.string().default('https://in.rough.app'),
@@ -14,13 +21,11 @@ const getRoughConfig = memoize(() => {
   const $env = z.object({
     ROUGH_CLIENT_ID: z.string(),
     ROUGH_CLIENT_SECRET: z.string(),
-    ROUGH_REDIRECT_URI: z.string(),
   })
   const config = $env.parse(process.env)
   return {
     clientId: config.ROUGH_CLIENT_ID,
     clientSecret: config.ROUGH_CLIENT_SECRET,
-    redirectUri: config.ROUGH_REDIRECT_URI,
   }
 })
 
@@ -54,4 +59,11 @@ const getPort = memoize(() => {
   return $env.parse(process.env).PORT
 })
 
-export { getRoughAppUrl, getRoughConfig, getSlackConfig, getDbPath, getPort }
+export {
+  getOriginUrl,
+  getRoughAppUrl,
+  getRoughConfig,
+  getSlackConfig,
+  getDbPath,
+  getPort,
+}
