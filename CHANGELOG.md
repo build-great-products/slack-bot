@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v0.9.0](https://github.com/build-great-products/slack-bot/releases/tag/v0.9.0) - 2024-10-29
+
+- [`36b036a`](https://github.com/build-great-products/slack-bot/commit/36b036a1d34ac28bc599e81fbfe50102a245b629) feat: use OAuth flow 🚀
+
 ## [v0.8.0](https://github.com/build-great-products/slack-bot/releases/tag/v0.8.0) - 2024-10-14
 
 - [`dacd195`](https://github.com/build-great-products/slack-bot/commit/dacd1952459f04f79bff01911e9c6891431c6623) feat: Remove console logging in installation store 🧹 (#14)
