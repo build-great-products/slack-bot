@@ -1,12 +1,12 @@
 import type { Installation } from '@slack/bolt'
 import { test as anyTest, describe, expect, vi } from 'vitest'
 
-import type { SlackInstallationId } from '#src/database.js'
+import type { SlackInstallationId } from '#src/database.ts'
 
-import { useDb } from '#src/test/use-db.js'
-import { useNow } from '#src/test/use-now.js'
+import { useDb } from '#src/test/use-db.ts'
+import { useNow } from '#src/test/use-now.ts'
 
-import { createInstallationStore } from './installation-store.js'
+import { createInstallationStore } from './installation-store.ts'
 
 const test = anyTest.extend({
   now: useNow(),

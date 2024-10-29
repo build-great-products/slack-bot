@@ -2,33 +2,13 @@ import SqliteDatabase from 'better-sqlite3'
 import { CamelCasePlugin, Kysely, SqliteDialect } from 'kysely'
 import memoize from 'memoize'
 
-type SlackWorkspaceId = string & { __brand: 'slackWorkspaceId' }
-type UserId = string & { __brand: 'userId' }
+type BrandedString<Brand extends string> = string & {
+  __brand: Brand
+}
 
 type OmitTimestamps<T> = Omit<T, 'createdAt' | 'updatedAt'>
 
-type SlackWorkspace = {
-  id: SlackWorkspaceId
-  roughWorkspaceId: string
-  roughWorkspacePublicId: string
-  apiToken: string
-  name: string
-  createdAt: number
-  updatedAt: number
-  url: string
-}
-
-type SlackWorkspaceUser = {
-  slackWorkspaceId: SlackWorkspaceId
-  userId: UserId
-  roughUserId: string
-  name: string
-  createdAt: number
-  updatedAt: number
-}
-
-type SlackInstallationId = string & { __brand: 'slackInstallationId' }
-
+type SlackInstallationId = BrandedString<'slackInstallationId'>
 type SlackInstallation = {
   id: SlackInstallationId
   value: string
@@ -36,10 +16,39 @@ type SlackInstallation = {
   updatedAt: number
 }
 
+type SlackWorkspaceId = BrandedString<'slackWorkspaceId'>
+type SlackUserId = BrandedString<'slackUserId'>
+type SlackUser = {
+  slackWorkspaceId: SlackWorkspaceId
+  slackUserId: SlackUserId
+  slackWorkspaceUrl: string
+  roughUserId: string
+  roughWorkspaceId: string
+  roughWorkspacePublicId: string
+  name: string
+  accessToken: string
+  accessTokenExpiresAt: number
+  refreshToken: string
+  createdAt: number
+  updatedAt: number
+}
+
+type SlackUserOauthState = BrandedString<'slackUserOauthState'>
+type SlackUserOauth = {
+  state: SlackUserOauthState
+  slackUserId: SlackUserId
+  slackWorkspaceId: SlackWorkspaceId
+  slackWorkspaceUrl: string
+  codeVerifier: string
+  slackResponseUrl: string | null
+  createdAt: number
+  updatedAt: number
+}
+
 type Database = {
-  slackWorkspace: SlackWorkspace
-  slackWorkspaceUser: SlackWorkspaceUser
   slackInstallation: SlackInstallation
+  slackUser: SlackUser
+  slackUserOauth: SlackUserOauth
 }
 
 type KyselyDb = Kysely<Database>
@@ -54,14 +63,15 @@ const getDb = memoize((dbPath: string): KyselyDb => {
 })
 
 export type {
-  OmitTimestamps,
-  SlackWorkspaceId,
-  UserId,
   Database,
-  SlackWorkspace,
-  SlackWorkspaceUser,
-  SlackInstallationId,
-  SlackInstallation,
   KyselyDb,
+  OmitTimestamps,
+  SlackInstallation,
+  SlackInstallationId,
+  SlackUser,
+  SlackUserId,
+  SlackUserOauth,
+  SlackUserOauthState,
+  SlackWorkspaceId,
 }
 export { getDb }

@@ -2,6 +2,7 @@
   "compilerOptions": {
     "noEmit": true,
     "outDir": "dist",
+    "rootDir": ".",
 
     // Enable latest features
     "lib": ["ESNext"],
@@ -24,6 +25,9 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "noPropertyAccessFromIndexSignature": false,
+
+    // Allow importing TS files
+    "allowImportingTsExtensions": true,
 
     "paths": {
       "#src/*": ["./src/*"]

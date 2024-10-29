@@ -5,8 +5,8 @@ import type {
 } from '@slack/bolt'
 import { errorBoundary } from '@stayradiated/error-boundary'
 
-import type { KyselyDb } from '#src/database.js'
-import type { SlackInstallationId } from '#src/database.js'
+import type { KyselyDb } from '#src/database.ts'
+import type { SlackInstallationId } from '#src/database.ts'
 
 const getInstallationId = (
   installation: Installation | InstallationQuery<boolean>,

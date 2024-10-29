@@ -1,35 +1,26 @@
 type Reply = {
-  content: string
+  text: string
   response_type?: 'in_channel' | 'ephemeral'
 }
 
-const warning = (message: string): Reply => {
+const text = (message: string): Reply => {
   return {
-    content: `⚠️ ${message}`,
+    text: message,
     response_type: 'ephemeral',
   }
 }
 
-const failure = (message: string, error?: Error): Reply => {
-  return {
-    content: `❌ ${message}${error ? ` Error: \`${error.message}\`` : ''}`,
-    response_type: 'ephemeral',
-  }
-}
+const warning = (message: string) => text(`⚠️ ${message}`)
 
-const slackWorkspaceNotConnectedReply = warning(
-  'This slackWorkspace is not yet connected to Rough. Please use the `/rough-connect` command to connect it.',
-)
+const failure = (message: string, error?: Error) =>
+  text(`❌ ${message}${error ? ` Error: \`${error.message}\`` : ''}`)
+
+const success = (message: string) => text(`✅ ${message}`)
 
 const userNotIdentifiedReply = warning(
-  'You are not yet identified. Please use the `/rough-identify` command to identify yourself.',
+  'You are not yet identified. Please use the `/rough login` command to identify yourself.',
 )
 
-export {
-  warning,
-  failure,
-  slackWorkspaceNotConnectedReply,
-  userNotIdentifiedReply,
-}
+export { text, warning, failure, success, userNotIdentifiedReply }
 
 export type { Reply }

@@ -1,9 +1,9 @@
 import memoize from 'memoize'
 
-import type { KyselyDb } from '#src/database.js'
+import type { KyselyDb } from '#src/database.ts'
 
-import { getDb } from '#src/database.js'
-import { migrateToLatest } from '#src/migrate.js'
+import { getDb } from '#src/database.ts'
+import { migrateToLatest } from '#src/migrate.ts'
 
 // ensure only one instance of the in-memory database for all tests
 const getInMemoryDb = memoize(async () => {
