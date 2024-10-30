@@ -15,8 +15,8 @@ importers:
         specifier: 4.3.0
         version: 4.3.0
       arctic:
-        specifier: 2.0.1
-        version: 2.0.1
+        specifier: 2.2.0
+        version: 2.2.0
       better-sqlite3:
         specifier: 11.5.0
         version: 11.5.0
@@ -43,8 +43,8 @@ importers:
         specifier: 2.1.4
         version: 2.1.4(vitest@2.1.4(@types/node@20.12.12)(terser@5.31.0))
       knip:
-        specifier: 5.34.2
-        version: 5.34.2(@types/node@20.12.12)(typescript@5.6.3)
+        specifier: 5.34.4
+        version: 5.34.4(@types/node@20.12.12)(typescript@5.6.3)
       typescript:
         specifier: 5.6.3
         version: 5.6.3
@@ -565,8 +565,8 @@ packages:
     resolution: {integrity: sha512-bN798gFfQX+viw3R7yrGWRqnrN2oRkEkUjjl4JNn4E8GxxbjtG3FbrEIIY3l8/hrwUwIeCZvi4QuOTP4MErVug==}
     engines: {node: '>=12'}
 
-  arctic@2.0.1:
-    resolution: {integrity: sha512-2UxVMEGtBkWf5GkriStLuJ+YnkBQZ5V/PapL6nCUOySxxUPgaXt8VSauzrzQZpaoP0kEHV5lk5CsdzX4/eqnZg==}
+  arctic@2.2.0:
+    resolution: {integrity: sha512-OGY7XwuFgZ32MUbqd4e7iH2Zq9iZVmub+n0NSFzxNo33Bdkcb4/Zv/sBpeBvYlxToCJRCY46SpjeSubyDVLd5Q==}
 
   argparse@2.0.1:
     resolution: {integrity: sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==}
@@ -1041,8 +1041,8 @@ packages:
   jws@3.2.2:
     resolution: {integrity: sha512-YHlZCB6lMTllWDtSPHz/ZXTsi8S00usEV6v1tjq8tOUZzw7DpSDWVXjXDre6ed1w/pd495ODpHZYSdkRTsa0HA==}
 
-  knip@5.34.2:
-    resolution: {integrity: sha512-quSohta9fKJUWTXIqHenA4NYW24rmoP3g/Naw5Lq/Xb/LjAQYSUK4aIyU1wizDLC4EnMicGA5g/H33vJ3ovz5Q==}
+  knip@5.34.4:
+    resolution: {integrity: sha512-bbEfqcyvlvtkZyaODNyh0PAT4gnrL7sj9mvmP31F0IsiQ6EDgrebK11v5bxp1q9crYbyNj9m6jlKmfgxDI985A==}
     engines: {node: '>=18.6.0'}
     hasBin: true
     peerDependencies:
@@ -2100,7 +2100,7 @@ snapshots:
 
   ansi-styles@6.2.1: {}
 
-  arctic@2.0.1:
+  arctic@2.2.0:
     dependencies:
       '@oslojs/crypto': 1.0.1
       '@oslojs/encoding': 1.1.0
@@ -2604,7 +2604,7 @@ snapshots:
       jwa: 1.4.1
       safe-buffer: 5.2.1
 
-  knip@5.34.2(@types/node@20.12.12)(typescript@5.6.3):
+  knip@5.34.4(@types/node@20.12.12)(typescript@5.6.3):
     dependencies:
       '@nodelib/fs.walk': 1.2.8
       '@snyk/github-codeowners': 1.1.0

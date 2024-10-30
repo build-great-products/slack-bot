@@ -31,6 +31,9 @@ const createClient = async (options: CreateClientOptions) => {
     stateSecret: slack.stateSecret,
     scopes: ['commands', 'reactions:write', 'users:read', 'team:read'],
     installationStore: createInstallationStore(db),
+    installerOptions: {
+      directInstall: true,
+    },
     customRoutes: (
       await Promise.all([
         import('./routes/oauth/connect/route.ts'),
