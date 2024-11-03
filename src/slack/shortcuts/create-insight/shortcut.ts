@@ -4,6 +4,9 @@ import { errorBoundary } from '@stayradiated/error-boundary'
 import type { SlackUserId, SlackWorkspaceId } from '#src/database.ts'
 import { initiateLogin } from '#src/initiate-login.ts'
 
+import { createLookupUserIdFn } from '#src/slack/lookup-user-id.ts'
+import { getMessageText } from '#src/slack/message.ts'
+
 import { failure, success, warning } from '#src/reply.ts'
 
 import type {
@@ -78,21 +81,24 @@ const getShortcut =
       return
     }
 
-    // Fetch the author's user info from Slack
-    let authorName = 'Unknown User'
-    const messageAuthorUserId = message.user as SlackUserId | undefined
-    if (messageAuthorUserId) {
-      const authorInfo = await client.users.info({
-        user: messageAuthorUserId,
-      })
-      authorName =
-        authorInfo.user?.real_name || authorInfo.user?.name || 'Unknown User'
-    }
+    const lookupUserId = createLookupUserIdFn(client)
+
+    // Resolve user mentions in the message text
+    const content = await getMessageText({
+      lookupUserId,
+      messageText: message.text,
+    })
 
     // Optionally, modify the message content if it's not authored by the user submitting the insight
-    let content = message.text
-    if (messageAuthorUserId !== slackuser.slackUserId) {
-      content = `${authorName} said: ${content}`
+    let originalAuthorName: string | undefined
+    const messageAuthorUserId = message.user as SlackUserId | undefined
+    if (messageAuthorUserId && messageAuthorUserId !== slackuser.slackUserId) {
+      const authorName = await lookupUserId(messageAuthorUserId)
+      if (authorName instanceof Error) {
+        console.error(authorName)
+      } else {
+        originalAuthorName = authorName
+      }
     }
 
     // Generate the reference URL for the message
@@ -106,6 +112,7 @@ const getShortcut =
       slackUserId: body.user.id as SlackUserId,
       content,
       referencePath,
+      originalAuthorName,
     })
 
     if (isSuccess) {

@@ -25,6 +25,7 @@ type CreateInsightOptions = {
   content: string
   referencePath?: string
   customerName?: string
+  originalAuthorName?: string
 }
 
 const createInsight = async (
@@ -35,9 +36,10 @@ const createInsight = async (
     roughOAuth,
     slackWorkspaceId,
     slackUserId,
-    content,
+    content: originalContent,
     referencePath,
     customerName,
+    originalAuthorName,
   } = options
 
   const slackUser = await getSlackUser({
@@ -67,7 +69,9 @@ const createInsight = async (
 
   if (referencePath) {
     const snippet =
-      content.length > 40 ? `${content.trim().slice(0, 40).trim()}…` : content
+      originalContent.length > 40
+        ? `${originalContent.trim().slice(0, 40).trim()}…`
+        : originalContent
 
     const url = new URL(referencePath, slackUser.slackWorkspaceUrl)
     const reference = await rapiCreateReference({
@@ -96,6 +100,11 @@ const createInsight = async (
       }
     }
     customerId = customer.id
+  }
+
+  let content = originalContent
+  if (originalAuthorName) {
+    content = `${originalAuthorName}: ${originalContent}`
   }
 
   const note = await rapiCreateNote({
