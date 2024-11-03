@@ -1,7 +1,9 @@
+import { OAuth2RequestError } from 'arctic'
 import type { KyselyDb, SlackUser } from '#src/database.ts'
 import type { RoughOAuth2Provider } from '#src/rough/oauth2.ts'
 
 import { updateSlackUser } from '#src/db/slack-user/update-slack-user.ts'
+import { deleteSlackUser } from './db/slack-user/delete-slack-user.ts'
 
 // 1 minute of buffer
 const DEFAULT_EXPIRATION_BUFFER_MS = 1000 * 60 * 1
@@ -32,6 +34,20 @@ const getOrRefreshAccessToken = async (
   // need to refresh the token
   const tokens = await roughOAuth.refreshAccessToken(slackUser.refreshToken)
   if (tokens instanceof Error) {
+    if (tokens instanceof OAuth2RequestError) {
+      // refresh token may have expired, let's delete the user
+      const deleteUserResult = await deleteSlackUser({
+        db,
+        where: {
+          slackUserId: slackUser.slackUserId,
+          slackWorkspaceId: slackUser.slackWorkspaceId,
+        },
+      })
+      if (deleteUserResult instanceof Error) {
+        return deleteUserResult
+      }
+      return tokens
+    }
     return tokens
   }
 

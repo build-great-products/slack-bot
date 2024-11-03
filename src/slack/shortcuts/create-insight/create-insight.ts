@@ -58,9 +58,13 @@ const createInsight = async (
 
   const apiToken = await getOrRefreshAccessToken({ db, roughOAuth, slackUser })
   if (apiToken instanceof Error) {
+    console.error('Could not getOrRefreshAccessToken', apiToken)
     return {
       success: false,
-      reply: failure('Could not get access token', apiToken),
+      reply: failure(
+        'Sorry, we could not create the insight. Please use `/rough login` to reconnect your Slack account to Rough.',
+        apiToken,
+      ),
     }
   }
 
