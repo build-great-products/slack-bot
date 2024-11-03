@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v0.11.0](https://github.com/build-great-products/slack-bot/releases/tag/v0.11.0) - 2024-11-03
+
+- [`782cecd`](https://github.com/build-great-products/slack-bot/commit/782cecdbe851b0fc41f9bdce43a615affe9698f8) feat: Improve user mention handling in Slack messages 🚀
+- [`0d3f2c5`](https://github.com/build-great-products/slack-bot/commit/0d3f2c5da4a0c1a06eee0ca417a80ef6589c9e5a) chore: enable direct Slack app install 📦
+- [`974eaa9`](https://github.com/build-great-products/slack-bot/commit/974eaa9d2f306d180faff25026f3eb54b30a4b86) chore(deps): bump actions/cache from 4.1.1 to 4.1.2 (#16)
+- [`716426a`](https://github.com/build-great-products/slack-bot/commit/716426ae3af7c5adeaaa6d00294f7abb3b4d4bfe) chore(deps): bump node from 22.9.0-alpine to 23.1.0-alpine (#19)
+- [`8ed6e08`](https://github.com/build-great-products/slack-bot/commit/8ed6e08253d1dac24b7552301409e7927827bc07) chore(deps): bump actions/setup-node from 4.0.4 to 4.1.0 (#18)
+- [`6290ce1`](https://github.com/build-great-products/slack-bot/commit/6290ce17dd37a29ec73df74159c9ea5d784f3f0a) chore(deps): bump actions/checkout from 4.2.1 to 4.2.2 (#17)
+
 ## [v0.10.0](https://github.com/build-great-products/slack-bot/releases/tag/v0.10.0) - 2024-10-29
 
 - [`7c24639`](https://github.com/build-great-products/slack-bot/commit/7c24639955a21d20be05420611c0cac2f86b0dd0) feat: Update OAuth flow and add production manifest 🔐
