@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v0.12.0](https://github.com/build-great-products/slack-bot/releases/tag/v0.12.0) - 2024-11-03
+
+- [`921a7e8`](https://github.com/build-great-products/slack-bot/commit/921a7e886eb650a2eebd1bdeef1c514f27733e5e) feat: Handle expired refresh tokens and improve error messaging 🔒
+- [`22f5e17`](https://github.com/build-great-products/slack-bot/commit/22f5e17c0ef7632bec7013d76c44fc4f196f4d18) chore(deps): bump softprops/action-gh-release from 2.0.8 to 2.0.9 (#20)
+
 ## [v0.11.0](https://github.com/build-great-products/slack-bot/releases/tag/v0.11.0) - 2024-11-03
 
 - [`782cecd`](https://github.com/build-great-products/slack-bot/commit/782cecdbe851b0fc41f9bdce43a615affe9698f8) feat: Improve user mention handling in Slack messages 🚀
