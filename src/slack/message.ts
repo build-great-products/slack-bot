@@ -3,13 +3,13 @@
  * i.e. <@U07R8566MHN> becomes @johndoe
  */
 
-type GetMessageTextOptions = {
+type ResolveMentionsOptions = {
   lookupUserId: (userId: string) => Promise<string | Error>
   messageText: string
 }
 
-const getMessageText = async (
-  options: GetMessageTextOptions,
+const resolveMentions = async (
+  options: ResolveMentionsOptions,
 ): Promise<string> => {
   const { lookupUserId, messageText } = options
 
@@ -35,4 +35,42 @@ const getMessageText = async (
   return result
 }
 
-export { getMessageText }
+type MarkdownifyLinksOptions = {
+  messageText: string
+}
+
+const markdownifyLinks = async (
+  options: MarkdownifyLinksOptions,
+): Promise<string> => {
+  const { messageText } = options
+
+  const regExp = /<([^<>|]*)(?:\|([^<>]*))?>/g
+
+  const result = messageText.replace(regExp, (_match, url, label) =>
+    label ? `[${label}](${url})` : `[${url}](${url})`,
+  )
+
+  return result
+}
+
+/*
+ * - resolves user mentions in the message text
+ * - markdownifies links in the message text
+ *
+ */
+
+type GetMessageTextOptions = {
+  lookupUserId: (userId: string) => Promise<string | Error>
+  messageText: string
+}
+
+const getMessageText = async (
+  options: GetMessageTextOptions,
+): Promise<string> => {
+  const { lookupUserId, messageText } = options
+  return markdownifyLinks({
+    messageText: await resolveMentions({ lookupUserId, messageText }),
+  })
+}
+
+export { resolveMentions, markdownifyLinks, getMessageText }
