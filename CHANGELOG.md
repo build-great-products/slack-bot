@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v0.13.0](https://github.com/build-great-products/slack-bot/releases/tag/v0.13.0) - 2024-11-04
+
+- [`07183fc`](https://github.com/build-great-products/slack-bot/commit/07183fc707d7627b1f26834607788f6700b7ecc4) feat: Add markdownifyLinks function and update tests 🚀
+
 ## [v0.12.0](https://github.com/build-great-products/slack-bot/releases/tag/v0.12.0) - 2024-11-03
 
 - [`921a7e8`](https://github.com/build-great-products/slack-bot/commit/921a7e886eb650a2eebd1bdeef1c514f27733e5e) feat: Handle expired refresh tokens and improve error messaging 🔒
