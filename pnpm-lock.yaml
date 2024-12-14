@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@roughapp/sdk':
-        specifier: 0.1.0
-        version: 0.1.0
+        specifier: 0.2.0
+        version: 0.2.0
       '@slack/bolt':
         specifier: 4.1.1
         version: 4.1.1
@@ -421,8 +421,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@roughapp/sdk@0.1.0':
-    resolution: {integrity: sha512-d8sOHnSVYaUfRDF7cXIUehWkVmu3bNwsJsDi6klzEN/WR0CPClXfSp0dEiQdExoFD2pptX4wwNJPFbrOKTW0bw==}
+  '@roughapp/sdk@0.2.0':
+    resolution: {integrity: sha512-DCC77BeyImegHu0Ja2hD0Ql5qxEtZik8p5KV8Pf+VIBVmDYgKGDaauX4UBlTg1AFr+fqYWmBK8q/W9o8LAZSxA==}
     engines: {node: ^22.9.0}
 
   '@slack/bolt@4.1.1':
@@ -1887,7 +1887,7 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.24.0':
     optional: true
 
-  '@roughapp/sdk@0.1.0':
+  '@roughapp/sdk@0.2.0':
     dependencies:
       '@stayradiated/error-boundary': 4.3.0
       arctic: 2.3.1
