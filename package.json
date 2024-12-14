@@ -23,7 +23,7 @@
     "tsc": "tsc"
   },
   "dependencies": {
-    "@roughapp/sdk": "0.2.0",
+    "@roughapp/sdk": "0.2.2",
     "@slack/bolt": "4.1.1",
     "@stayradiated/error-boundary": "4.3.0",
     "arctic": "2.3.1",
