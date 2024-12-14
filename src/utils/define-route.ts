@@ -6,7 +6,7 @@ import type { KyselyDb } from '#src/database.ts'
 
 import { buildErrorResponse } from '#src/utils/error-response.ts'
 
-import type { RoughOAuth2Provider } from '#src/rough/oauth2.ts'
+import type { RoughOAuth2Provider } from '@roughapp/sdk'
 
 type ShortcutHandlerFn = Parameters<App['shortcut']>[2]
 type ShortcutEvent = Parameters<ShortcutHandlerFn>[0]

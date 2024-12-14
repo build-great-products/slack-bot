@@ -1,12 +1,15 @@
+import {
+  type RoughOAuth2Provider,
+  createCustomer as rapiCreateCustomer,
+  createNote as rapiCreateNote,
+  createReference as rapiCreateReference,
+} from '@roughapp/sdk'
+
 import type { KyselyDb, SlackUserId, SlackWorkspaceId } from '#src/database.ts'
-import type { RoughOAuth2Provider } from '#src/rough/oauth2.ts'
 
 import { getRoughAppUrl } from '#src/env.ts'
 
 import { getSlackUser } from '#src/db/slack-user/get-slack-user.ts'
-import { createCustomer as rapiCreateCustomer } from '#src/rough/api/create-customer.ts'
-import { createNote as rapiCreateNote } from '#src/rough/api/create-note.ts'
-import { createReference as rapiCreateReference } from '#src/rough/api/create-reference.ts'
 
 import { getOrRefreshAccessToken } from '#src/get-or-refresh-access-token.ts'
 
@@ -79,6 +82,7 @@ const createInsight = async (
 
     const url = new URL(referencePath, slackUser.slackWorkspaceUrl)
     const reference = await rapiCreateReference({
+      baseUrl: getRoughAppUrl(),
       apiToken,
       name: `Slack: "${snippet}"`,
       url: url.toString(),
@@ -94,6 +98,7 @@ const createInsight = async (
 
   if (customerName) {
     const customer = await rapiCreateCustomer({
+      baseUrl: getRoughAppUrl(),
       apiToken,
       name: customerName,
     })
@@ -112,6 +117,7 @@ const createInsight = async (
   }
 
   const note = await rapiCreateNote({
+    baseUrl: getRoughAppUrl(),
     apiToken,
     content,
     createdByUserId: slackUser.roughUserId,

@@ -1,8 +1,8 @@
 import type { IncomingMessage, ServerResponse } from 'node:http'
 import type { CustomRoute } from '@slack/bolt'
 
+import type { RoughOAuth2Provider } from '@roughapp/sdk'
 import type { KyselyDb } from '#src/database.ts'
-import type { RoughOAuth2Provider } from '#src/rough/oauth2.ts'
 import type { RouteContext } from '#src/utils/define-route.ts'
 
 type GetRouteFn = (context: RouteContext) => CustomRoute
