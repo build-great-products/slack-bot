@@ -1,7 +1,7 @@
 import {
   type RoughOAuth2Provider,
   createRoughOAuth2Provider,
-} from '#src/rough/oauth2.ts'
+} from '@roughapp/sdk'
 
 import { getRoughAppUrl } from '#src/env.ts'
 
@@ -22,6 +22,7 @@ const useRoughOAuth =
     use: (roughOAuth: RoughOAuth2ProviderWithInterceptors) => Promise<void>,
   ): Promise<void> => {
     const roughOAuth = createRoughOAuth2Provider({
+      baseUrl: getRoughAppUrl(),
       clientId: 'test-client-id',
       clientSecret: 'test-client-secret',
       redirectUri: 'http://internal/callback',

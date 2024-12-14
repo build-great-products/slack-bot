@@ -1,12 +1,16 @@
+import {
+  getUser as rapiGetUser,
+  getWorkspace as rapiGetWorkspace,
+} from '@roughapp/sdk'
 import { errorBoundary } from '@stayradiated/error-boundary'
+
 import type { SlackUserOauthState } from '#src/database.ts'
+
+import { getRoughAppUrl } from '#src/env.ts'
 
 import { defineRoute } from '#src/utils/define-route.ts'
 import { HttpError } from '#src/utils/error.ts'
 import { loadTemplate } from '#src/utils/html-template.ts'
-
-import { getUser as rapiGetUser } from '#src/rough/api/get-user.ts'
-import { getWorkspace as rapiGetWorkspace } from '#src/rough/api/get-workspace.ts'
 
 import { deleteSlackUserOauth } from '#src/db/slack-user-oauth/delete-slack-user-oauth.ts'
 import { getSlackUserOauth } from '#src/db/slack-user-oauth/get-slack-user-oauth.ts'
@@ -62,6 +66,7 @@ const getRoute = defineRoute(
     }
 
     const user = await rapiGetUser({
+      baseUrl: getRoughAppUrl(),
       apiToken: tokens.accessToken,
       userId: 'current',
     })
@@ -71,6 +76,7 @@ const getRoute = defineRoute(
     }
 
     const workspace = await rapiGetWorkspace({
+      baseUrl: getRoughAppUrl(),
       apiToken: tokens.accessToken,
       workspaceId: 'current',
     })

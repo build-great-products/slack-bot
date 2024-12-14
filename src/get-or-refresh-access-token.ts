@@ -1,6 +1,6 @@
+import type { RoughOAuth2Provider } from '@roughapp/sdk'
 import { OAuth2RequestError } from 'arctic'
 import type { KyselyDb, SlackUser } from '#src/database.ts'
-import type { RoughOAuth2Provider } from '#src/rough/oauth2.ts'
 
 import { updateSlackUser } from '#src/db/slack-user/update-slack-user.ts'
 import { deleteSlackUser } from './db/slack-user/delete-slack-user.ts'
