@@ -6,6 +6,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v0.14.0](https://github.com/build-great-products/slack-bot/releases/tag/v0.14.0) - 2024-12-24
+
+- [`ba51019`](https://github.com/build-great-products/slack-bot/commit/ba51019a027036db0eb787516bc2f51fa4a582be) feat: update dependencies and refactor customer to person 🔄 (#33)
+- [`6fc78f1`](https://github.com/build-great-products/slack-bot/commit/6fc78f16084d7d634c41f49c16b3b8ff2ca05050) chore: bump @roughapp/sdk from 0.2.0 to 0.2.2 ⬆️
+- [`e8be183`](https://github.com/build-great-products/slack-bot/commit/e8be183d08996e1d8b14379fc3579012442dd7c7) chore: upgrade @roughapp/sdk from 0.1.0 to 0.2.0 ⬆️
+- [`3502d35`](https://github.com/build-great-products/slack-bot/commit/3502d35e9eafe24c2378aa72e90d25e08b4ddef8) chore: update dependencies and migrate to @roughapp/sdk 🔨 (#30)
+- [`259b545`](https://github.com/build-great-products/slack-bot/commit/259b545dede8dc121a4b70114b2e70090547f800) chore(deps): bump actions/cache from 4.1.2 to 4.2.0 (#27)
+- [`dbfe122`](https://github.com/build-great-products/slack-bot/commit/dbfe122e6685255906945ce002cd45ce8600f2eb) chore(deps): bump softprops/action-gh-release from 2.0.9 to 2.2.0 (#28)
+- [`722739b`](https://github.com/build-great-products/slack-bot/commit/722739bf3d3e455d6acc0d31e2f3651f5d6654af) chore(deps): bump docker/build-push-action from 6.9.0 to 6.10.0 (#26)
+- [`a2cec5b`](https://github.com/build-great-products/slack-bot/commit/a2cec5b67703f40b0b17c9a5d94ac7b2a195c00a) chore(deps): bump docker/metadata-action from 5.5.1 to 5.6.1 (#24)
+- [`fd1892c`](https://github.com/build-great-products/slack-bot/commit/fd1892c460b0aa51b848ac965d15e6e9292c3ab8) chore(deps): bump node from 23.1.0-alpine to 23.4.0-alpine (#29)
+
 ## [v0.13.0](https://github.com/build-great-products/slack-bot/releases/tag/v0.13.0) - 2024-11-04
 
 - [`07183fc`](https://github.com/build-great-products/slack-bot/commit/07183fc707d7627b1f26834607788f6700b7ecc4) feat: Add markdownifyLinks function and update tests 🚀
