@@ -1,7 +1,7 @@
 import {
   type RoughOAuth2Provider,
-  createCustomer as rapiCreateCustomer,
   createNote as rapiCreateNote,
+  createPerson as rapiCreatePerson,
   createReference as rapiCreateReference,
 } from '@roughapp/sdk'
 
@@ -27,7 +27,7 @@ type CreateInsightOptions = {
   slackUserId: SlackUserId
   content: string
   referencePath?: string
-  customerName?: string
+  personName?: string
   originalAuthorName?: string
 }
 
@@ -41,7 +41,7 @@ const createInsight = async (
     slackUserId,
     content: originalContent,
     referencePath,
-    customerName,
+    personName,
     originalAuthorName,
   } = options
 
@@ -72,7 +72,7 @@ const createInsight = async (
   }
 
   let referenceId: string | undefined
-  let customerId: string | undefined
+  let personId: string | undefined
 
   if (referencePath) {
     const snippet =
@@ -96,19 +96,19 @@ const createInsight = async (
     referenceId = reference.id
   }
 
-  if (customerName) {
-    const customer = await rapiCreateCustomer({
+  if (personName) {
+    const person = await rapiCreatePerson({
       baseUrl: getRoughAppUrl(),
       apiToken,
-      name: customerName,
+      name: personName,
     })
-    if (customer instanceof Error) {
+    if (person instanceof Error) {
       return {
         success: false,
-        reply: failure('Could not createCustomer', customer),
+        reply: failure('Could not createPerson', person),
       }
     }
-    customerId = customer.id
+    personId = person.id
   }
 
   let content = originalContent
@@ -122,7 +122,7 @@ const createInsight = async (
     content,
     createdByUserId: slackUser.roughUserId,
     referenceId,
-    customerId,
+    personId,
   })
   if (note instanceof Error) {
     return { success: false, reply: failure('Could not createNote', note) }
