@@ -162,7 +162,7 @@ test('create an insight with a reference', async ({
   })
 })
 
-test('create an insight with a customer', async ({
+test('create an insight with a person', async ({
   db,
   roughOAuth,
   slackUser,
@@ -186,7 +186,7 @@ test('create an insight with a customer', async ({
   interceptor(getRoughAppUrl())
     .intercept({
       method: 'POST',
-      path: '/api/v1/customer',
+      path: '/api/v1/person',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${slackUser.accessToken}`,
@@ -204,7 +204,7 @@ test('create an insight with a customer', async ({
     slackUserId,
     slackWorkspaceId,
     content: 'hello world this is a particularly insightful insight',
-    customerName: 'Johny Appleseed',
+    personName: 'Johny Appleseed',
   })
 
   expect(result).toStrictEqual({

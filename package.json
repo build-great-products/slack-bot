@@ -2,7 +2,7 @@
   "name": "@roughapp/slack-bot",
   "private": true,
   "version": "0.13.0",
-  "packageManager": "pnpm@9.15.0",
+  "packageManager": "pnpm@9.15.1",
   "type": "module",
   "main": "./src/index.ts",
   "author": {
@@ -23,10 +23,10 @@
     "tsc": "tsc"
   },
   "dependencies": {
-    "@roughapp/sdk": "0.2.2",
-    "@slack/bolt": "4.1.1",
+    "@roughapp/sdk": "1.0.0",
+    "@slack/bolt": "4.2.0",
     "@stayradiated/error-boundary": "4.3.0",
-    "arctic": "2.3.1",
+    "arctic": "2.3.3",
     "better-sqlite3": "11.7.0",
     "dotenv": "16.4.7",
     "kysely": "0.27.5",
@@ -37,9 +37,9 @@
     "@biomejs/biome": "1.9.4",
     "@types/better-sqlite3": "7.6.12",
     "@vitest/coverage-v8": "2.1.8",
-    "knip": "5.40.0",
+    "knip": "5.41.1",
     "typescript": "5.7.2",
-    "undici": "7.1.0",
+    "undici": "7.2.0",
     "vite-tsconfig-paths": "5.1.4",
     "vitest": "2.1.8"
   },
