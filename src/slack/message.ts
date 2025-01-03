@@ -1,10 +1,12 @@
+import type { LookupUserIdFn } from './lookup-user-id.ts'
+
 /*
  * replaces user mentions in the message with the user's name
  * i.e. <@U07R8566MHN> becomes @johndoe
  */
 
 type ResolveMentionsOptions = {
-  lookupUserId: (userId: string) => Promise<string | Error>
+  lookupUserId: LookupUserIdFn
   messageText: string
 }
 
@@ -19,11 +21,14 @@ const resolveMentions = async (
   // Step 1: Look up all user IDs asynchronously and store results in a Map
   const userMap = new Map<string, string>()
   for (const [, userId] of userMentions) {
-    const userName = await lookupUserId(userId)
-    if (userName instanceof Error) {
+    const profile = await lookupUserId(userId)
+    if (profile instanceof Error) {
       continue
     }
-    userMap.set(userId, `@${userName}`)
+    userMap.set(
+      userId,
+      `@${profile.displayName ?? profile.realName ?? 'Anonymous'}`,
+    )
   }
 
   // Step 2: Replace all mentions with names using the Map
@@ -60,7 +65,7 @@ const markdownifyLinks = async (
  */
 
 type GetMessageTextOptions = {
-  lookupUserId: (userId: string) => Promise<string | Error>
+  lookupUserId: LookupUserIdFn
   messageText: string
 }
 

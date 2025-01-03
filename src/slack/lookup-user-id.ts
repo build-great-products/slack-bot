@@ -1,29 +1,33 @@
 import type { webApi } from '@slack/bolt'
 import { errorBoundary } from '@stayradiated/error-boundary'
 
-type LookupUserIdFn = (userId: string) => Promise<string | Error>
+type SlackUserProfile = {
+  realName: string | undefined
+  displayName: string | undefined
+  email: string | undefined
+}
+
+type LookupUserIdFn = (userId: string) => Promise<SlackUserProfile | Error>
 
 const createLookupUserIdFn = (client: webApi.WebClient): LookupUserIdFn => {
   return (userId: string) => {
     return errorBoundary(async () => {
-      const user = await client.users.info({ user: userId })
-      if (!user.ok) {
+      const response = await client.users.info({ user: userId })
+      const profile = response.user?.profile
+      if (!response.ok || !profile) {
         return new Error('User not found')
       }
 
-      const realName = user.user?.real_name
-      if (realName && realName?.trim().length > 0) {
-        return realName.trim()
-      }
+      const { real_name: realName, display_name: displayName, email } = profile
 
-      const name = user.user?.name
-      if (name && name.trim().length > 0) {
-        return name.trim()
+      return {
+        realName,
+        displayName,
+        email,
       }
-
-      return 'Anonymous'
     })
   }
 }
 
 export { createLookupUserIdFn }
+export type { LookupUserIdFn, SlackUserProfile }

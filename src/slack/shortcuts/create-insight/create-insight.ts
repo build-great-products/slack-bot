@@ -1,9 +1,5 @@
-import {
-  type RoughOAuth2Provider,
-  createNote as rapiCreateNote,
-  createPerson as rapiCreatePerson,
-  createReference as rapiCreateReference,
-} from '@roughapp/sdk'
+import * as roughSdk from '@roughapp/sdk'
+import type { RoughOAuth2Provider } from '@roughapp/sdk'
 
 import type { KyselyDb, SlackUserId, SlackWorkspaceId } from '#src/database.ts'
 
@@ -27,8 +23,10 @@ type CreateInsightOptions = {
   slackUserId: SlackUserId
   content: string
   referencePath?: string
-  personName?: string
-  originalAuthorName?: string
+  originalAuthor?: {
+    name: string
+    email: string | undefined
+  }
 }
 
 const createInsight = async (
@@ -39,10 +37,9 @@ const createInsight = async (
     roughOAuth,
     slackWorkspaceId,
     slackUserId,
-    content: originalContent,
+    content,
     referencePath,
-    personName,
-    originalAuthorName,
+    originalAuthor,
   } = options
 
   const slackUser = await getSlackUser({
@@ -72,16 +69,13 @@ const createInsight = async (
   }
 
   let referenceId: string | undefined
-  let personId: string | undefined
 
   if (referencePath) {
     const snippet =
-      originalContent.length > 40
-        ? `${originalContent.trim().slice(0, 40).trim()}…`
-        : originalContent
+      content.length > 40 ? `${content.trim().slice(0, 40).trim()}…` : content
 
     const url = new URL(referencePath, slackUser.slackWorkspaceUrl)
-    const reference = await rapiCreateReference({
+    const reference = await roughSdk.createReference({
       baseUrl: getRoughAppUrl(),
       apiToken,
       name: `Slack: "${snippet}"`,
@@ -96,27 +90,60 @@ const createInsight = async (
     referenceId = reference.id
   }
 
-  if (personName) {
-    const person = await rapiCreatePerson({
-      baseUrl: getRoughAppUrl(),
-      apiToken,
-      name: personName,
-    })
-    if (person instanceof Error) {
-      return {
-        success: false,
-        reply: failure('Could not createPerson', person),
+  let personId: string | undefined
+  if (originalAuthor) {
+    // if we have an email address, upsert by email,
+    // otherwise upsert by name
+    if (originalAuthor.email) {
+      const person = await roughSdk.upsertPersonByEmail({
+        baseUrl: getRoughAppUrl(),
+        apiToken,
+        name: originalAuthor.name,
+        email: originalAuthor.email,
+      })
+      if (person instanceof Error) {
+        return {
+          success: false,
+          reply: failure('Could not createPerson', person),
+        }
+      }
+      personId = person.id
+    } else {
+      const existingPersonList = await roughSdk.getPersonList({
+        baseUrl: getRoughAppUrl(),
+        apiToken,
+        where: {
+          name: originalAuthor.name,
+        },
+      })
+      if (existingPersonList instanceof Error) {
+        return {
+          success: false,
+          reply: failure('Could not getPersonList', existingPersonList),
+        }
+      }
+      const existingPerson = existingPersonList.at(0)
+      if (existingPerson) {
+        personId = existingPerson.id
+      } else {
+        const person = await roughSdk.createPerson({
+          baseUrl: getRoughAppUrl(),
+          apiToken,
+          name: originalAuthor.name,
+          email: originalAuthor.email,
+        })
+        if (person instanceof Error) {
+          return {
+            success: false,
+            reply: failure('Could not createPerson', person),
+          }
+        }
+        personId = person.id
       }
     }
-    personId = person.id
   }
 
-  let content = originalContent
-  if (originalAuthorName) {
-    content = `${originalAuthorName}: ${originalContent}`
-  }
-
-  const note = await rapiCreateNote({
+  const note = await roughSdk.createNote({
     baseUrl: getRoughAppUrl(),
     apiToken,
     content,

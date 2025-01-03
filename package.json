@@ -2,7 +2,7 @@
   "name": "@roughapp/slack-bot",
   "private": true,
   "version": "0.14.0",
-  "packageManager": "pnpm@9.15.1",
+  "packageManager": "pnpm@9.15.2",
   "type": "module",
   "main": "./src/index.ts",
   "author": {
@@ -20,10 +20,11 @@
     "knip": "knip",
     "watch": "node --no-warnings --experimental-strip-types --env-file=.env --watch ./src/index.ts",
     "start": "node --no-warnings --experimental-strip-types --env-file=.env ./src/index.ts",
-    "tsc": "tsc"
+    "tsc": "tsc",
+    "check": "tsc"
   },
   "dependencies": {
-    "@roughapp/sdk": "1.0.0",
+    "@roughapp/sdk": "1.2.1",
     "@slack/bolt": "4.2.0",
     "@stayradiated/error-boundary": "4.3.0",
     "arctic": "2.3.3",
@@ -44,6 +45,6 @@
     "vitest": "2.1.8"
   },
   "engines": {
-    "node": "^22.9.0"
+    "node": "^23.5.0"
   }
 }
