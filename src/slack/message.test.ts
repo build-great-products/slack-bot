@@ -1,10 +1,24 @@
 import { describe, test } from 'vitest'
 
+import type { LookupUserIdFn } from './lookup-user-id.js'
+
 import { getMessageText, markdownifyLinks, resolveMentions } from './message.js'
 
-const lookupUserId = async (userId: string) => {
-  if (userId === 'U123') return 'johndoe'
-  if (userId === 'U456') return 'janedoe'
+const lookupUserId: LookupUserIdFn = async (userId) => {
+  if (userId === 'U123') {
+    return {
+      displayName: 'johndoe',
+      realName: 'John Doe',
+      email: 'john.doe@gmail.com',
+    }
+  }
+  if (userId === 'U456') {
+    return {
+      displayName: 'janedoe',
+      realName: 'Jane Doe',
+      email: 'jane.doe@gmail.com',
+    }
+  }
   return new Error('User not found')
 }
 

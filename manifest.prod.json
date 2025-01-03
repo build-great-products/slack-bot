@@ -29,7 +29,13 @@
   "oauth_config": {
     "redirect_urls": ["https://slack.rough.app/slack/oauth_redirect"],
     "scopes": {
-      "bot": ["commands", "reactions:write", "users:read", "team:read"]
+      "bot": [
+        "commands",
+        "reactions:write",
+        "team:read",
+        "users:read",
+        "users:read.email"
+      ]
     }
   },
   "settings": {

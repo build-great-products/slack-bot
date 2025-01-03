@@ -185,6 +185,17 @@ test('create an insight with a person', async ({
 
   interceptor(getRoughAppUrl())
     .intercept({
+      method: 'GET',
+      path: '/api/v1/person?name=Johny+Appleseed',
+      headers: {
+        Authorization: `Bearer ${slackUser.accessToken}`,
+      },
+    })
+    .reply(200, [])
+    .times(1)
+
+  interceptor(getRoughAppUrl())
+    .intercept({
       method: 'POST',
       path: '/api/v1/person',
       headers: {
@@ -204,7 +215,10 @@ test('create an insight with a person', async ({
     slackUserId,
     slackWorkspaceId,
     content: 'hello world this is a particularly insightful insight',
-    personName: 'Johny Appleseed',
+    originalAuthor: {
+      name: 'Johny Appleseed',
+      email: undefined,
+    },
   })
 
   expect(result).toStrictEqual({
