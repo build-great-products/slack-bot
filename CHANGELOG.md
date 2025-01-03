@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v0.15.0](https://github.com/build-great-products/slack-bot/releases/tag/v0.15.0) - 2025-01-03
+
+- [`477839b`](https://github.com/build-great-products/slack-bot/commit/477839baed9a9254545fb215bda8f975199c67c2) feat: add support for user email lookup and improve person matching 📧 (#34)
+- [`42e0103`](https://github.com/build-great-products/slack-bot/commit/42e0103fd79cbaf72428bb0d29f770005d6e3e43) chore(deps): bump node from 23.4.0-alpine to 23.5.0-alpine (#32)
+- [`2a257b1`](https://github.com/build-great-products/slack-bot/commit/2a257b187c43d542a98ec6d3406eb70123b11dab) chore(deps): bump docker/setup-buildx-action from 3.7.1 to 3.8.0 (#31)
+
 ## [v0.14.0](https://github.com/build-great-products/slack-bot/releases/tag/v0.14.0) - 2024-12-24
 
 - [`ba51019`](https://github.com/build-great-products/slack-bot/commit/ba51019a027036db0eb787516bc2f51fa4a582be) feat: update dependencies and refactor customer to person 🔄 (#33)
