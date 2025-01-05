@@ -77,9 +77,13 @@ const createInsight = async (
     const url = new URL(referencePath, slackUser.slackWorkspaceUrl)
     const reference = await roughSdk.createReference({
       baseUrl: getRoughAppUrl(),
-      apiToken,
-      name: `Slack: "${snippet}"`,
-      url: url.toString(),
+      headers: {
+        Authorization: `Bearer ${apiToken}`,
+      },
+      body: {
+        name: `Slack: "${snippet}"`,
+        url: url.toString(),
+      }
     })
     if (reference instanceof Error) {
       return {
@@ -95,11 +99,17 @@ const createInsight = async (
     // if we have an email address, upsert by email,
     // otherwise upsert by name
     if (originalAuthor.email) {
-      const person = await roughSdk.upsertPersonByEmail({
+      const person = await roughSdk.upsertPerson({
         baseUrl: getRoughAppUrl(),
-        apiToken,
-        name: originalAuthor.name,
-        email: originalAuthor.email,
+        headers: {
+          Authorization: `Bearer ${apiToken}`,
+        },
+        path: {
+          email: originalAuthor.email,
+        },
+        body: {
+          name: originalAuthor.name,
+        }
       })
       if (person instanceof Error) {
         return {
@@ -111,8 +121,10 @@ const createInsight = async (
     } else {
       const existingPersonList = await roughSdk.getPersonList({
         baseUrl: getRoughAppUrl(),
-        apiToken,
-        where: {
+        headers: {
+          Authorization: `Bearer ${apiToken}`,
+        },
+        query: {
           name: originalAuthor.name,
         },
       })
@@ -128,9 +140,13 @@ const createInsight = async (
       } else {
         const person = await roughSdk.createPerson({
           baseUrl: getRoughAppUrl(),
-          apiToken,
-          name: originalAuthor.name,
-          email: originalAuthor.email,
+          headers: {
+            Authorization: `Bearer ${apiToken}`,
+          },
+          body: {
+            name: originalAuthor.name,
+            email: originalAuthor.email,
+          }
         })
         if (person instanceof Error) {
           return {
@@ -145,14 +161,18 @@ const createInsight = async (
 
   const note = await roughSdk.createNote({
     baseUrl: getRoughAppUrl(),
-    apiToken,
-    content,
-    createdByUserId: slackUser.roughUserId,
-    referenceId,
-    personId,
+    headers: {
+      Authorization: `Bearer ${apiToken}`,
+    },
+    body: {
+      content,
+      createdByUserId: slackUser.roughUserId,
+      referenceId,
+      personId,
+    }
   })
-  if (note instanceof Error) {
-    return { success: false, reply: failure('Could not createNote', note) }
+  if (note.error) {
+    return { success: false, reply: failure('Could not createNote', note.error.message) }
   }
 
   return {
