@@ -1,4 +1,4 @@
-import * as roughSdk from '@roughapp/sdk'
+import * as rough from '@roughapp/sdk'
 import type { RoughOAuth2Provider } from '@roughapp/sdk'
 
 import type { KyselyDb, SlackUserId, SlackWorkspaceId } from '#src/database.ts'
@@ -75,7 +75,7 @@ const createInsight = async (
       content.length > 40 ? `${content.trim().slice(0, 40).trim()}…` : content
 
     const url = new URL(referencePath, slackUser.slackWorkspaceUrl)
-    const reference = await roughSdk.createReference({
+    const reference = await rough.createReference({
       baseUrl: getRoughAppUrl(),
       headers: {
         Authorization: `Bearer ${apiToken}`,
@@ -83,15 +83,15 @@ const createInsight = async (
       body: {
         name: `Slack: "${snippet}"`,
         url: url.toString(),
-      }
+      },
     })
-    if (reference instanceof Error) {
+    if (reference.error) {
       return {
         success: false,
-        reply: failure('Could not createReference', reference),
+        reply: failure('Could not createReference', reference.error.message),
       }
     }
-    referenceId = reference.id
+    referenceId = reference.data.id
   }
 
   let personId: string | undefined
@@ -99,7 +99,7 @@ const createInsight = async (
     // if we have an email address, upsert by email,
     // otherwise upsert by name
     if (originalAuthor.email) {
-      const person = await roughSdk.upsertPerson({
+      const person = await rough.upsertPerson({
         baseUrl: getRoughAppUrl(),
         headers: {
           Authorization: `Bearer ${apiToken}`,
@@ -109,17 +109,17 @@ const createInsight = async (
         },
         body: {
           name: originalAuthor.name,
-        }
+        },
       })
-      if (person instanceof Error) {
+      if (person.error) {
         return {
           success: false,
-          reply: failure('Could not createPerson', person),
+          reply: failure('Could not createPerson', person.error.message),
         }
       }
-      personId = person.id
+      personId = person.data.id
     } else {
-      const existingPersonList = await roughSdk.getPersonList({
+      const existingPersonList = await rough.getPersonList({
         baseUrl: getRoughAppUrl(),
         headers: {
           Authorization: `Bearer ${apiToken}`,
@@ -128,17 +128,20 @@ const createInsight = async (
           name: originalAuthor.name,
         },
       })
-      if (existingPersonList instanceof Error) {
+      if (existingPersonList.error) {
         return {
           success: false,
-          reply: failure('Could not getPersonList', existingPersonList),
+          reply: failure(
+            'Could not getPersonList',
+            existingPersonList.error.message,
+          ),
         }
       }
-      const existingPerson = existingPersonList.at(0)
+      const existingPerson = existingPersonList.data.at(0)
       if (existingPerson) {
         personId = existingPerson.id
       } else {
-        const person = await roughSdk.createPerson({
+        const person = await rough.createPerson({
           baseUrl: getRoughAppUrl(),
           headers: {
             Authorization: `Bearer ${apiToken}`,
@@ -146,20 +149,20 @@ const createInsight = async (
           body: {
             name: originalAuthor.name,
             email: originalAuthor.email,
-          }
+          },
         })
-        if (person instanceof Error) {
+        if (person.error) {
           return {
             success: false,
-            reply: failure('Could not createPerson', person),
+            reply: failure('Could not createPerson', person.error.message),
           }
         }
-        personId = person.id
+        personId = person.data.id
       }
     }
   }
 
-  const note = await roughSdk.createNote({
+  const note = await rough.createNote({
     baseUrl: getRoughAppUrl(),
     headers: {
       Authorization: `Bearer ${apiToken}`,
@@ -169,10 +172,13 @@ const createInsight = async (
       createdByUserId: slackUser.roughUserId,
       referenceId,
       personId,
-    }
+    },
   })
   if (note.error) {
-    return { success: false, reply: failure('Could not createNote', note.error.message) }
+    return {
+      success: false,
+      reply: failure('Could not createNote', note.error.message),
+    }
   }
 
   return {

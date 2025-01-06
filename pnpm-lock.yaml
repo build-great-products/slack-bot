@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@roughapp/sdk':
-        specifier: 2.0.0
-        version: 2.0.0
+        specifier: 2.1.0
+        version: 2.1.0
       '@slack/bolt':
         specifier: 4.2.0
         version: 4.2.0
@@ -18,8 +18,8 @@ importers:
         specifier: 4.3.0
         version: 4.3.0
       arctic:
-        specifier: 3.0.0
-        version: 3.0.0
+        specifier: 3.1.0
+        version: 3.1.0
       better-sqlite3:
         specifier: 11.7.2
         version: 11.7.2
@@ -278,8 +278,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@hey-api/client-fetch@0.5.7':
-    resolution: {integrity: sha512-hLpID6NCs8+stbz935UyvyGOXY44oLBSOy7ZEpwXxj977A/0U41iihDQllDoCJrxtbe06DnDgwPOn6/xnRJ71w==}
+  '@hey-api/client-fetch@0.6.0':
+    resolution: {integrity: sha512-FlhFsVeH8RxJe/nq8xUzxNbiOpe+GadxlD2pfvDyOyLdCTU4o/LRv46ZVWstaW7DgF4nxhI328chy3+AulwVXw==}
 
   '@isaacs/cliui@8.0.2':
     resolution: {integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==}
@@ -424,8 +424,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@roughapp/sdk@2.0.0':
-    resolution: {integrity: sha512-FzTraaqe9cRfHrdCauLfEhnBzDE1H6zLQummAzuJ8AoMELVTbS3JOvNQa8YNpbIsnowmmkZtGMBUuVmySPlRAg==}
+  '@roughapp/sdk@2.1.0':
+    resolution: {integrity: sha512-6PNiMAQL2T/Uir3Q1NqGVlHh8EMgSukTt4AJWAsoYynD9AIrcy1tUi6K0iFwAtS760JuDl8gAi7mL0gnotJ7LQ==}
     engines: {node: ^22.9.0}
 
   '@slack/bolt@4.2.0':
@@ -545,8 +545,8 @@ packages:
     resolution: {integrity: sha512-bN798gFfQX+viw3R7yrGWRqnrN2oRkEkUjjl4JNn4E8GxxbjtG3FbrEIIY3l8/hrwUwIeCZvi4QuOTP4MErVug==}
     engines: {node: '>=12'}
 
-  arctic@3.0.0:
-    resolution: {integrity: sha512-Od87d6wYenoExOHMmU0ss7ViXnNZpUhclemhf32OAYzpzQyXEz1clV/MlPEkBtpbukJ+ZVNuQdconuzW1tsh0w==}
+  arctic@3.1.0:
+    resolution: {integrity: sha512-g+EOL5+/DUm1aly4HD90L/bpg7ngDvjH65SvZn0MaUfPzuPxhzra7w3HP8f1tvDpSJqyzbI7l1L4Rvj9eqoOcg==}
 
   argparse@2.0.1:
     resolution: {integrity: sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==}
@@ -1744,7 +1744,7 @@ snapshots:
   '@esbuild/win32-x64@0.20.2':
     optional: true
 
-  '@hey-api/client-fetch@0.5.7': {}
+  '@hey-api/client-fetch@0.6.0': {}
 
   '@isaacs/cliui@8.0.2':
     dependencies:
@@ -1862,11 +1862,11 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.24.0':
     optional: true
 
-  '@roughapp/sdk@2.0.0':
+  '@roughapp/sdk@2.1.0':
     dependencies:
-      '@hey-api/client-fetch': 0.5.7
+      '@hey-api/client-fetch': 0.6.0
       '@stayradiated/error-boundary': 4.3.0
-      arctic: 3.0.0
+      arctic: 3.1.0
 
   '@slack/bolt@4.2.0':
     dependencies:
@@ -2042,7 +2042,7 @@ snapshots:
 
   ansi-styles@6.2.1: {}
 
-  arctic@3.0.0:
+  arctic@3.1.0:
     dependencies:
       '@oslojs/crypto': 1.0.1
       '@oslojs/encoding': 1.1.0

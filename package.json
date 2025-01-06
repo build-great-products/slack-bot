@@ -2,7 +2,7 @@
   "name": "@roughapp/slack-bot",
   "private": true,
   "version": "0.15.0",
-  "packageManager": "pnpm@9.15.2",
+  "packageManager": "pnpm@9.15.3",
   "type": "module",
   "main": "./src/index.ts",
   "author": {
@@ -24,10 +24,10 @@
     "check": "tsc"
   },
   "dependencies": {
-    "@roughapp/sdk": "2.0.0",
+    "@roughapp/sdk": "2.1.0",
     "@slack/bolt": "4.2.0",
     "@stayradiated/error-boundary": "4.3.0",
-    "arctic": "3.0.0",
+    "arctic": "3.1.0",
     "better-sqlite3": "11.7.2",
     "dotenv": "16.4.7",
     "kysely": "0.27.5",
