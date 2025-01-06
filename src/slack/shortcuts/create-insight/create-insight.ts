@@ -1,4 +1,4 @@
-import * as roughSdk from '@roughapp/sdk'
+import * as rough from '@roughapp/sdk'
 import type { RoughOAuth2Provider } from '@roughapp/sdk'
 
 import type { KyselyDb, SlackUserId, SlackWorkspaceId } from '#src/database.ts'
@@ -75,19 +75,23 @@ const createInsight = async (
       content.length > 40 ? `${content.trim().slice(0, 40).trim()}…` : content
 
     const url = new URL(referencePath, slackUser.slackWorkspaceUrl)
-    const reference = await roughSdk.createReference({
+    const reference = await rough.createReference({
       baseUrl: getRoughAppUrl(),
-      apiToken,
-      name: `Slack: "${snippet}"`,
-      url: url.toString(),
+      headers: {
+        Authorization: `Bearer ${apiToken}`,
+      },
+      body: {
+        name: `Slack: "${snippet}"`,
+        url: url.toString(),
+      },
     })
-    if (reference instanceof Error) {
+    if (reference.error) {
       return {
         success: false,
-        reply: failure('Could not createReference', reference),
+        reply: failure('Could not createReference', reference.error.message),
       }
     }
-    referenceId = reference.id
+    referenceId = reference.data.id
   }
 
   let personId: string | undefined
@@ -95,64 +99,86 @@ const createInsight = async (
     // if we have an email address, upsert by email,
     // otherwise upsert by name
     if (originalAuthor.email) {
-      const person = await roughSdk.upsertPersonByEmail({
+      const person = await rough.upsertPerson({
         baseUrl: getRoughAppUrl(),
-        apiToken,
-        name: originalAuthor.name,
-        email: originalAuthor.email,
-      })
-      if (person instanceof Error) {
-        return {
-          success: false,
-          reply: failure('Could not createPerson', person),
-        }
-      }
-      personId = person.id
-    } else {
-      const existingPersonList = await roughSdk.getPersonList({
-        baseUrl: getRoughAppUrl(),
-        apiToken,
-        where: {
+        headers: {
+          Authorization: `Bearer ${apiToken}`,
+        },
+        path: {
+          email: originalAuthor.email,
+        },
+        body: {
           name: originalAuthor.name,
         },
       })
-      if (existingPersonList instanceof Error) {
+      if (person.error) {
         return {
           success: false,
-          reply: failure('Could not getPersonList', existingPersonList),
+          reply: failure('Could not createPerson', person.error.message),
         }
       }
-      const existingPerson = existingPersonList.at(0)
+      personId = person.data.id
+    } else {
+      const existingPersonList = await rough.getPersonList({
+        baseUrl: getRoughAppUrl(),
+        headers: {
+          Authorization: `Bearer ${apiToken}`,
+        },
+        query: {
+          name: originalAuthor.name,
+        },
+      })
+      if (existingPersonList.error) {
+        return {
+          success: false,
+          reply: failure(
+            'Could not getPersonList',
+            existingPersonList.error.message,
+          ),
+        }
+      }
+      const existingPerson = existingPersonList.data.at(0)
       if (existingPerson) {
         personId = existingPerson.id
       } else {
-        const person = await roughSdk.createPerson({
+        const person = await rough.createPerson({
           baseUrl: getRoughAppUrl(),
-          apiToken,
-          name: originalAuthor.name,
-          email: originalAuthor.email,
+          headers: {
+            Authorization: `Bearer ${apiToken}`,
+          },
+          body: {
+            name: originalAuthor.name,
+            email: originalAuthor.email,
+          },
         })
-        if (person instanceof Error) {
+        if (person.error) {
           return {
             success: false,
-            reply: failure('Could not createPerson', person),
+            reply: failure('Could not createPerson', person.error.message),
           }
         }
-        personId = person.id
+        personId = person.data.id
       }
     }
   }
 
-  const note = await roughSdk.createNote({
+  const note = await rough.createNote({
     baseUrl: getRoughAppUrl(),
-    apiToken,
-    content,
-    createdByUserId: slackUser.roughUserId,
-    referenceId,
-    personId,
+    headers: {
+      Authorization: `Bearer ${apiToken}`,
+    },
+    body: {
+      content,
+      createdByUserId: slackUser.roughUserId,
+      referenceId,
+      personId,
+    },
   })
-  if (note instanceof Error) {
-    return { success: false, reply: failure('Could not createNote', note) }
+  if (note.error) {
+    return {
+      success: false,
+      reply: failure('Could not createNote', note.error.message),
+    }
   }
 
   return {

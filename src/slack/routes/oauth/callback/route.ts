@@ -1,7 +1,4 @@
-import {
-  getUser as rapiGetUser,
-  getWorkspace as rapiGetWorkspace,
-} from '@roughapp/sdk'
+import * as rough from '@roughapp/sdk'
 import { errorBoundary } from '@stayradiated/error-boundary'
 
 import type { SlackUserOauthState } from '#src/database.ts'
@@ -65,23 +62,31 @@ const getRoute = defineRoute(
       return new HttpError(500, 'Could not delete state.', errorTemplate)
     }
 
-    const user = await rapiGetUser({
+    const user = await rough.getUser({
       baseUrl: getRoughAppUrl(),
-      apiToken: tokens.accessToken,
-      userId: 'current',
+      headers: {
+        Authorization: `Bearer ${tokens.accessToken}`,
+      },
+      path: {
+        userId: 'current',
+      },
     })
-    if (user instanceof Error) {
-      console.error(user)
+    if (user.error) {
+      console.error(user.error.message)
       return new HttpError(500, 'Could not read user.', errorTemplate)
     }
 
-    const workspace = await rapiGetWorkspace({
+    const workspace = await rough.getWorkspace({
       baseUrl: getRoughAppUrl(),
-      apiToken: tokens.accessToken,
-      workspaceId: 'current',
+      headers: {
+        Authorization: `Bearer ${tokens.accessToken}`,
+      },
+      path: {
+        workspaceId: 'current',
+      },
     })
-    if (workspace instanceof Error) {
-      console.error(workspace)
+    if (workspace.error) {
+      console.error(workspace.error.message)
       return new HttpError(500, 'Could not read workspace.', errorTemplate)
     }
 
@@ -91,10 +96,10 @@ const getRoute = defineRoute(
         slackUserId: slackUserOauth.slackUserId,
         slackWorkspaceId: slackUserOauth.slackWorkspaceId,
         slackWorkspaceUrl: slackUserOauth.slackWorkspaceUrl,
-        roughUserId: user.id,
-        roughWorkspaceId: workspace.id,
-        roughWorkspacePublicId: workspace.publicId,
-        name: user.name,
+        roughUserId: user.data.id,
+        roughWorkspaceId: workspace.data.id,
+        roughWorkspacePublicId: workspace.data.publicId,
+        name: user.data.name ?? '',
         accessToken: tokens.accessToken,
         accessTokenExpiresAt: tokens.accessTokenExpiresAt,
         refreshToken: tokens.refreshToken,

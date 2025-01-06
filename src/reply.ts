@@ -12,8 +12,10 @@ const text = (message: string): Reply => {
 
 const warning = (message: string) => text(`⚠️ ${message}`)
 
-const failure = (message: string, error?: Error) =>
-  text(`❌ ${message}${error ? ` Error: \`${error.message}\`` : ''}`)
+const failure = (message: string, error: Error | string = '') =>
+  text(
+    `❌ ${message}${error ? ` Error: \`${error instanceof Error ? error.message : error}\`` : ''}`,
+  )
 
 const success = (message: string) => text(`✅ ${message}`)
 
