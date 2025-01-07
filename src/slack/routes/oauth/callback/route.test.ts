@@ -1,3 +1,4 @@
+import type { GetUserResponse, GetWorkspaceResponse } from '@roughapp/sdk'
 import { assertOk } from '@stayradiated/error-boundary'
 import { test as anyTest, expect } from 'vitest'
 
@@ -75,20 +76,39 @@ test('should create SlackWorkspaceUser', async ({
       method: 'GET',
       path: '/api/v1/user/current',
     })
-    .reply(200, {
-      id: 'user-3823',
-      name: 'Larry Testerson',
-    })
+    .reply(
+      200,
+      {
+        id: 'user-3823',
+        name: 'Larry Testerson',
+        email: 'larry.testerson@hotmail.com',
+        isDemoAccount: false,
+      } satisfies GetUserResponse,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+
   roughApi
     .intercept({
       method: 'GET',
       path: '/api/v1/workspace/current',
     })
-    .reply(200, {
-      id: 'workspace.id.9783',
-      publicId: 'HERSCHFELDT',
-      name: 'Herschfeldt',
-    })
+    .reply(
+      200,
+      {
+        id: 'workspace.id.9783',
+        publicId: 'HERSCHFELDT',
+        name: 'Herschfeldt',
+      } satisfies GetWorkspaceResponse,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
 
   const searchParams = new URLSearchParams()
   searchParams.set('state', slackWorkspaceOauth.state)

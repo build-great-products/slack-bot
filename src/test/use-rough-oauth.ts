@@ -39,11 +39,19 @@ const useRoughOAuth =
           method: 'POST',
           path: '/api/v1/oauth2/token',
         })
-        .reply(200, {
-          access_token: accessToken,
-          refresh_token: refreshToken,
-          expires_in: expiresInSeconds,
-        })
+        .reply(
+          200,
+          {
+            access_token: accessToken,
+            refresh_token: refreshToken,
+            expires_in: expiresInSeconds,
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          },
+        )
 
       return {
         accessToken,

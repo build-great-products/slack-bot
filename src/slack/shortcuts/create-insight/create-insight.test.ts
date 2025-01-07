@@ -1,3 +1,8 @@
+import type {
+  CreatePersonResponse,
+  CreateReferenceResponse,
+  GetPersonListResponse,
+} from '@roughapp/sdk'
 import { assertOk } from '@stayradiated/error-boundary'
 import { test as anyTest, expect } from 'vitest'
 
@@ -34,10 +39,15 @@ test('create an insight', async ({
       headers: {
         Authorization: `Bearer ${slackUser.accessToken}`,
       },
+      body: (body) => {
+        expect(JSON.parse(body)).toStrictEqual({
+          content: 'hello world',
+          createdByUserId: slackUser.roughUserId,
+        })
+        return true
+      },
     })
-    .reply(200, {
-      // created note details are not used
-    })
+    .reply(200) // created note details are not used
     .times(1)
 
   const result = await createInsight({
@@ -84,10 +94,15 @@ test('automatically refresh token if needed', async ({
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
+      body: (body) => {
+        expect(JSON.parse(body)).toStrictEqual({
+          content: 'whats up doc?',
+          createdByUserId: slackUser.roughUserId,
+        })
+        return true
+      },
     })
-    .reply(200, {
-      // created note details are not used
-    })
+    .reply(200) // created note details are not used
     .times(1)
 
   const result = await createInsight({
@@ -115,18 +130,7 @@ test('create an insight with a reference', async ({
 }) => {
   const { slackWorkspaceId, slackUserId } = slackUser
 
-  interceptor(getRoughAppUrl())
-    .intercept({
-      method: 'POST',
-      path: '/api/v1/note',
-      headers: {
-        Authorization: `Bearer ${slackUser.accessToken}`,
-      },
-    })
-    .reply(200, {
-      // created note details are not used
-    })
-    .times(1)
+  const expectedReferenceId = 'reference-123'
 
   interceptor(getRoughAppUrl())
     .intercept({
@@ -136,12 +140,46 @@ test('create an insight with a reference', async ({
         'Content-Type': 'application/json',
         Authorization: `Bearer ${slackUser.accessToken}`,
       },
-      body: JSON.stringify({
-        name: 'Slack: "hello world this is a particularly insig…"',
-        url: 'https://test.slack.com/archives/channel/p123',
-      }),
+      body: (body) => {
+        expect(JSON.parse(body)).toStrictEqual({
+          name: 'Slack: "hello world this is a particularly insig…"',
+          url: 'https://test.slack.com/archives/channel/p123',
+        })
+        return true
+      },
     })
-    .reply(200, {})
+    .reply(
+      200,
+      {
+        id: expectedReferenceId,
+        name: '__name',
+        url: '__url',
+      } satisfies CreateReferenceResponse,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+    .times(1)
+
+  interceptor(getRoughAppUrl())
+    .intercept({
+      method: 'POST',
+      path: '/api/v1/note',
+      headers: {
+        Authorization: `Bearer ${slackUser.accessToken}`,
+      },
+      body: (body) => {
+        expect(JSON.parse(body)).toStrictEqual({
+          content: 'hello world this is a particularly insightful insight',
+          createdByUserId: slackUser.roughUserId,
+          referenceId: expectedReferenceId,
+        })
+        return true
+      },
+    })
+    .reply(200) // created note details are not used
     .times(1)
 
   const result = await createInsight({
@@ -170,18 +208,7 @@ test('create an insight with a person', async ({
 }) => {
   const { slackWorkspaceId, slackUserId } = slackUser
 
-  interceptor(getRoughAppUrl())
-    .intercept({
-      method: 'POST',
-      path: '/api/v1/note',
-      headers: {
-        Authorization: `Bearer ${slackUser.accessToken}`,
-      },
-    })
-    .reply(200, {
-      // created note details are not used
-    })
-    .times(1)
+  const expectedPersonId = 'person-123'
 
   interceptor(getRoughAppUrl())
     .intercept({
@@ -191,7 +218,17 @@ test('create an insight with a person', async ({
         Authorization: `Bearer ${slackUser.accessToken}`,
       },
     })
-    .reply(200, [])
+    .reply(
+      200,
+      [
+        /* no matches for Johny Appleseed */
+      ] satisfies GetPersonListResponse,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
     .times(1)
 
   interceptor(getRoughAppUrl())
@@ -202,11 +239,45 @@ test('create an insight with a person', async ({
         'Content-Type': 'application/json',
         Authorization: `Bearer ${slackUser.accessToken}`,
       },
-      body: JSON.stringify({
-        name: 'Johny Appleseed',
-      }),
+      body: (body) => {
+        expect(JSON.parse(body)).toStrictEqual({
+          name: 'Johny Appleseed',
+        })
+        return true
+      },
     })
-    .reply(200, {})
+    .reply(
+      200,
+      {
+        id: expectedPersonId,
+        name: 'Johny Appleseed',
+        description: '',
+      } satisfies CreatePersonResponse,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+    .times(1)
+
+  interceptor(getRoughAppUrl())
+    .intercept({
+      method: 'POST',
+      path: '/api/v1/note',
+      headers: {
+        Authorization: `Bearer ${slackUser.accessToken}`,
+      },
+      body: (body) => {
+        expect(JSON.parse(body)).toStrictEqual({
+          content: 'hello world this is a particularly insightful insight',
+          createdByUserId: slackUser.roughUserId,
+          personId: expectedPersonId,
+        })
+        return true
+      },
+    })
+    .reply(200) // created note details are not used
     .times(1)
 
   const result = await createInsight({
