@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v0.17.0](https://github.com/build-great-products/slack-bot/releases/tag/v0.17.0) - 2025-01-08
+
+- [`e62e512`](https://github.com/build-great-products/slack-bot/commit/e62e512e23956fca96c37c9a93b817f58eacc5d7) feat: improve test assertions with type-safe responses 🧪
+
 ## [v0.16.0](https://github.com/build-great-products/slack-bot/releases/tag/v0.16.0) - 2025-01-07
 
 - [`4be3515`](https://github.com/build-great-products/slack-bot/commit/4be3515ebfd3ab857a678533c4b622cdc8481998) feat: upgrade @roughapp/sdk to v2 and update API calls 📦 (#35)
