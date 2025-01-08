@@ -26,6 +26,7 @@ type CreateInsightOptions = {
   originalAuthor?: {
     name: string
     email: string | undefined
+    imageUrl?: string
   }
 }
 
@@ -96,19 +97,40 @@ const createInsight = async (
 
   let personId: string | undefined
   if (originalAuthor) {
-    // if we have an email address, upsert by email,
-    // otherwise upsert by name
-    if (originalAuthor.email) {
-      const person = await rough.upsertPerson({
+    const existingPersonList = await rough.getPersonList({
+      baseUrl: getRoughAppUrl(),
+      headers: {
+        Authorization: `Bearer ${apiToken}`,
+      },
+      // if we have an email address, filter by email
+      // otherwise filter by name
+      query: originalAuthor.email
+        ? { email: originalAuthor.email }
+        : { name: originalAuthor.name },
+    })
+    if (existingPersonList.error) {
+      return {
+        success: false,
+        reply: failure(
+          'Could not getPersonList',
+          existingPersonList.error.message,
+        ),
+      }
+    }
+    const existingPerson = existingPersonList.data.at(0)
+    if (existingPerson) {
+      personId = existingPerson.id
+    } else {
+      const person = await rough.createPerson({
         baseUrl: getRoughAppUrl(),
         headers: {
           Authorization: `Bearer ${apiToken}`,
         },
-        path: {
-          email: originalAuthor.email,
-        },
         body: {
           name: originalAuthor.name,
+          email: originalAuthor.email,
+          // TODO: implement image url upload
+          // imageUrl: originalAuthor.imageUrl,
         },
       })
       if (person.error) {
@@ -118,47 +140,6 @@ const createInsight = async (
         }
       }
       personId = person.data.id
-    } else {
-      const existingPersonList = await rough.getPersonList({
-        baseUrl: getRoughAppUrl(),
-        headers: {
-          Authorization: `Bearer ${apiToken}`,
-        },
-        query: {
-          name: originalAuthor.name,
-        },
-      })
-      if (existingPersonList.error) {
-        return {
-          success: false,
-          reply: failure(
-            'Could not getPersonList',
-            existingPersonList.error.message,
-          ),
-        }
-      }
-      const existingPerson = existingPersonList.data.at(0)
-      if (existingPerson) {
-        personId = existingPerson.id
-      } else {
-        const person = await rough.createPerson({
-          baseUrl: getRoughAppUrl(),
-          headers: {
-            Authorization: `Bearer ${apiToken}`,
-          },
-          body: {
-            name: originalAuthor.name,
-            email: originalAuthor.email,
-          },
-        })
-        if (person.error) {
-          return {
-            success: false,
-            reply: failure('Could not createPerson', person.error.message),
-          }
-        }
-        personId = person.data.id
-      }
     }
   }
 

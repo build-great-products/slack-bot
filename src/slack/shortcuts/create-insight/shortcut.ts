@@ -90,7 +90,13 @@ const getShortcut =
     })
 
     // Optionally, modify the message content if it's not authored by the user submitting the insight
-    let originalAuthor: { name: string; email: string | undefined } | undefined
+    let originalAuthor:
+      | {
+          name: string
+          email: string | undefined
+          imageUrl: string | undefined
+        }
+      | undefined
     const messageAuthorUserId = message.user as SlackUserId | undefined
     if (messageAuthorUserId && messageAuthorUserId !== slackuser.slackUserId) {
       const profile = await lookupUserId(messageAuthorUserId)
@@ -100,6 +106,7 @@ const getShortcut =
         originalAuthor = {
           name: profile.displayName ?? profile.realName ?? 'Anonymous',
           email: profile.email,
+          imageUrl: profile.imageUrl,
         }
       }
     }

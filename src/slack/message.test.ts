@@ -10,6 +10,7 @@ const lookupUserId: LookupUserIdFn = async (userId) => {
       displayName: 'johndoe',
       realName: 'John Doe',
       email: 'john.doe@gmail.com',
+      imageUrl: undefined,
     }
   }
   if (userId === 'U456') {
@@ -17,6 +18,7 @@ const lookupUserId: LookupUserIdFn = async (userId) => {
       displayName: 'janedoe',
       realName: 'Jane Doe',
       email: 'jane.doe@gmail.com',
+      imageUrl: undefined,
     }
   }
   return new Error('User not found')

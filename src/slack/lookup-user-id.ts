@@ -5,6 +5,7 @@ type SlackUserProfile = {
   realName: string | undefined
   displayName: string | undefined
   email: string | undefined
+  imageUrl: string | undefined
 }
 
 type LookupUserIdFn = (userId: string) => Promise<SlackUserProfile | Error>
@@ -19,11 +20,21 @@ const createLookupUserIdFn = (client: webApi.WebClient): LookupUserIdFn => {
       }
 
       const { real_name: realName, display_name: displayName, email } = profile
+      const imageUrl =
+        profile.image_original ??
+        profile.image_1024 ??
+        profile.image_512 ??
+        profile.image_192 ??
+        profile.image_72 ??
+        profile.image_48 ??
+        profile.image_32 ??
+        profile.image_24
 
       return {
         realName,
         displayName,
         email,
+        imageUrl,
       }
     })
   }
