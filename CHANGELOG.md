@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v0.18.0](https://github.com/build-great-products/slack-bot/releases/tag/v0.18.0) - 2025-01-08
+
+- [`0155416`](https://github.com/build-great-products/slack-bot/commit/0155416cb4d4f97e23f073e52eeafe6a45f7a716) feat: add user avatar support in insight creation ✨
+
 ## [v0.17.0](https://github.com/build-great-products/slack-bot/releases/tag/v0.17.0) - 2025-01-08
 
 - [`e62e512`](https://github.com/build-great-products/slack-bot/commit/e62e512e23956fca96c37c9a93b817f58eacc5d7) feat: improve test assertions with type-safe responses 🧪
