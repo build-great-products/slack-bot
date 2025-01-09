@@ -77,10 +77,7 @@ const createInsight = async (
 
     const url = new URL(referencePath, slackUser.slackWorkspaceUrl)
     const reference = await rough.createReference({
-      baseUrl: getRoughAppUrl(),
-      headers: {
-        Authorization: `Bearer ${apiToken}`,
-      },
+      auth: apiToken,
       body: {
         name: `Slack: "${snippet}"`,
         url: url.toString(),
@@ -98,10 +95,7 @@ const createInsight = async (
   let personId: string | undefined
   if (originalAuthor) {
     const existingPersonList = await rough.getPersonList({
-      baseUrl: getRoughAppUrl(),
-      headers: {
-        Authorization: `Bearer ${apiToken}`,
-      },
+      auth: apiToken,
       // if we have an email address, filter by email
       // otherwise filter by name
       query: originalAuthor.email
@@ -117,20 +111,43 @@ const createInsight = async (
         ),
       }
     }
+
     const existingPerson = existingPersonList.data.at(0)
     if (existingPerson) {
       personId = existingPerson.id
     } else {
+      let imageFileId: string | undefined
+      if (originalAuthor.imageUrl) {
+        const image = await fetch(originalAuthor.imageUrl)
+        // get the image data as a buffer
+        const buffer = Buffer.from(await image.arrayBuffer())
+
+        // upload to rough
+        const pendingUpload = await rough.createPendingFileUpload({
+          auth: apiToken,
+        })
+        if (pendingUpload.error || !pendingUpload.data) {
+          console.error('Could not createPendingFileUpload', pendingUpload)
+          // don't block the process if the image upload fails
+          // continue without the image
+        } else {
+          const mimeType = image.headers.get('content-type')
+          const result = await rough.uploadFile({
+            uploadToken: pendingUpload.data.token,
+            data: buffer,
+            fileName: `SlackImage:${originalAuthor.name}`,
+            mimeType: mimeType ?? 'image/jpeg',
+          })
+          imageFileId = result.uploadId
+        }
+      }
+
       const person = await rough.createPerson({
-        baseUrl: getRoughAppUrl(),
-        headers: {
-          Authorization: `Bearer ${apiToken}`,
-        },
+        auth: apiToken,
         body: {
           name: originalAuthor.name,
           email: originalAuthor.email,
-          // TODO: implement image url upload
-          // imageUrl: originalAuthor.imageUrl,
+          image: imageFileId,
         },
       })
       if (person.error) {
@@ -144,10 +161,7 @@ const createInsight = async (
   }
 
   const note = await rough.createNote({
-    baseUrl: getRoughAppUrl(),
-    headers: {
-      Authorization: `Bearer ${apiToken}`,
-    },
+    auth: apiToken,
     body: {
       content,
       createdByUserId: slackUser.roughUserId,

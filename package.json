@@ -24,7 +24,7 @@
     "check": "tsc"
   },
   "dependencies": {
-    "@roughapp/sdk": "2.2.0",
+    "@roughapp/sdk": "2.3.0",
     "@slack/bolt": "4.2.0",
     "@stayradiated/error-boundary": "4.3.0",
     "arctic": "3.1.0",
@@ -37,12 +37,12 @@
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
     "@types/better-sqlite3": "7.6.12",
-    "@vitest/coverage-v8": "2.1.8",
+    "@vitest/coverage-v8": "3.0.0-beta.4",
     "knip": "5.41.1",
-    "typescript": "5.7.2",
+    "typescript": "5.7.3",
     "undici": "7.2.0",
     "vite-tsconfig-paths": "5.1.4",
-    "vitest": "2.1.8"
+    "vitest": "3.0.0-beta.4"
   },
   "engines": {
     "node": "^23.5.0"

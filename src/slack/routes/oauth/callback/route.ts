@@ -3,8 +3,6 @@ import { errorBoundary } from '@stayradiated/error-boundary'
 
 import type { SlackUserOauthState } from '#src/database.ts'
 
-import { getRoughAppUrl } from '#src/env.ts'
-
 import { defineRoute } from '#src/utils/define-route.ts'
 import { HttpError } from '#src/utils/error.ts'
 import { loadTemplate } from '#src/utils/html-template.ts'
@@ -63,10 +61,7 @@ const getRoute = defineRoute(
     }
 
     const user = await rough.getUser({
-      baseUrl: getRoughAppUrl(),
-      headers: {
-        Authorization: `Bearer ${tokens.accessToken}`,
-      },
+      auth: tokens.accessToken,
       path: {
         userId: 'current',
       },
@@ -76,15 +71,7 @@ const getRoute = defineRoute(
       return new HttpError(500, 'Could not read user.', errorTemplate)
     }
 
-    const workspace = await rough.getWorkspace({
-      baseUrl: getRoughAppUrl(),
-      headers: {
-        Authorization: `Bearer ${tokens.accessToken}`,
-      },
-      path: {
-        workspaceId: 'current',
-      },
-    })
+    const workspace = await rough.getWorkspace({ auth: tokens.accessToken })
     if (workspace.error) {
       console.error(workspace.error.message)
       return new HttpError(500, 'Could not read workspace.', errorTemplate)
