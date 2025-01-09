@@ -1,4 +1,5 @@
 import memoize from 'memoize'
+import { defineFactory } from 'test-fixture-factory'
 
 import type { KyselyDb } from '#src/database.ts'
 
@@ -12,15 +13,23 @@ const getInMemoryDb = memoize(async () => {
   return db
 })
 
-const useDb = () => {
-  return async (
+const dbFactory = defineFactory<
+  Record<string, unknown>, // no deps
+  void, // no attributes
+  KyselyDb // returns adb instance
+>(
+  async (
     // biome-ignore lint/correctness/noEmptyPattern: vitest requires {}
     {}: Record<string, unknown>,
-    use: (db: KyselyDb) => Promise<void>,
+    _attrs,
   ) => {
     const db = await getInMemoryDb()
-    await use(db)
-  }
-}
+    return {
+      value: db,
+    }
+  },
+)
+
+const useDb = dbFactory.useValueFn
 
 export { useDb }
