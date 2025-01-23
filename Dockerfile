@@ -1,4 +1,4 @@
-FROM node:23.5.0-alpine AS base
+FROM node:23.6.1-alpine AS base
 ENV PNPM_HOME=/app/.pnpm \
     PATH=$PNPM_HOME:$PATH
 
