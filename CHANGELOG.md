@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v0.22.0](https://github.com/build-great-products/slack-bot/releases/tag/v0.22.0) - 2025-05-04
+
+- [`2f43596`](https://github.com/build-great-products/slack-bot/commit/2f43596df053941326a9a57bcc4b33c62bc1c830) feat: add tests for Slack user CRUD operations 🚀 (#59)
+
 ## [v0.21.0](https://github.com/build-great-products/slack-bot/releases/tag/v0.21.0) - 2025-05-04
 
 - [`847ad1c`](https://github.com/build-great-products/slack-bot/commit/847ad1c22720274f5d0810c856bfcff1493af7cf) fix: deploy workflow
