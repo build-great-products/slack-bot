@@ -66,7 +66,6 @@ export type {
   Database,
   KyselyDb,
   OmitTimestamps,
-  SlackInstallation,
   SlackInstallationId,
   SlackUser,
   SlackUserId,

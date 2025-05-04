@@ -41,4 +41,4 @@ const createLookupUserIdFn = (client: webApi.WebClient): LookupUserIdFn => {
 }
 
 export { createLookupUserIdFn }
-export type { LookupUserIdFn, SlackUserProfile }
+export type { LookupUserIdFn }

@@ -9,7 +9,6 @@ import { buildErrorResponse } from '#src/utils/error-response.ts'
 import type { RoughOAuth2Provider } from '@roughapp/sdk'
 
 type ShortcutHandlerFn = Parameters<App['shortcut']>[2]
-type ShortcutEvent = Parameters<ShortcutHandlerFn>[0]
 
 type CommandHandlerFn = Parameters<App['command']>[2]
 type CommandEvent = Parameters<CommandHandlerFn>[0]
@@ -69,10 +68,4 @@ const defineRoute = (method: Method, path: string, handler: Handler) => {
 }
 
 export { defineRoute }
-export type {
-  RouteContext,
-  CommandHandlerFn,
-  CommandEvent,
-  ShortcutHandlerFn,
-  ShortcutEvent,
-}
+export type { RouteContext, CommandHandlerFn, CommandEvent, ShortcutHandlerFn }
