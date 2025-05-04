@@ -6,6 +6,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v0.21.0](https://github.com/build-great-products/slack-bot/releases/tag/v0.21.0) - 2025-05-04
+
+- [`847ad1c`](https://github.com/build-great-products/slack-bot/commit/847ad1c22720274f5d0810c856bfcff1493af7cf) fix: deploy workflow
+- [`4b0c39b`](https://github.com/build-great-products/slack-bot/commit/4b0c39b0bbcb85f3469cc72c3f7503768f1b82ae) feat: setup deployment workflow with Fly.io integration 🚀 (#58)
+- [`741f253`](https://github.com/build-great-products/slack-bot/commit/741f2539240ff5d33eb407b94a93b9d227106bfc) chore: update dependencies and package manager version 🛠️ (#57)
+- [`c58093a`](https://github.com/build-great-products/slack-bot/commit/c58093a9de956b8ec7bc16893c336b8be82dd20d) chore(deps): bump actions/setup-node from 4.1.0 to 4.3.0 (#55)
+- [`147af44`](https://github.com/build-great-products/slack-bot/commit/147af442464e9a3509626e178b8896874b82fd83) chore(deps): bump docker/setup-qemu-action from 3.2.0 to 3.6.0 (#53)
+- [`069e2b7`](https://github.com/build-great-products/slack-bot/commit/069e2b7b50263ce2c4bd2490d5e98523d1661ed8) chore(deps): bump docker/build-push-action from 6.10.0 to 6.15.0 (#50)
+- [`60bafa2`](https://github.com/build-great-products/slack-bot/commit/60bafa2bc363d3d3f0f4597b74725ba6bb566392) chore(deps): bump node from 23.5.0-alpine to 23.11.0-alpine (#56)
+- [`194d772`](https://github.com/build-great-products/slack-bot/commit/194d77280f0f56e1c70f215007abc41e00864c47) chore(deps): bump docker/setup-buildx-action from 3.8.0 to 3.10.0 (#49)
+- [`11bfd13`](https://github.com/build-great-products/slack-bot/commit/11bfd1314ad70c095ab51bce3f317ab52ac84490) chore(deps): bump softprops/action-gh-release from 2.2.0 to 2.2.1 (#38)
+
 ## [v0.20.0](https://github.com/build-great-products/slack-bot/releases/tag/v0.20.0) - 2025-01-09
 
 - [`7d7468f`](https://github.com/build-great-products/slack-bot/commit/7d7468f5f77202edaebf358df4679edf690bbd07) feat: migrate test fixtures to use test-fixture-factory 🏭
