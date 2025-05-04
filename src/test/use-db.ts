@@ -16,7 +16,7 @@ const getInMemoryDb = memoize(async () => {
 const dbFactory = defineFactory<
   Record<string, unknown>, // no deps
   void, // no attributes
-  KyselyDb // returns adb instance
+  KyselyDb // returns a db instance
 >(
   async (
     // biome-ignore lint/correctness/noEmptyPattern: vitest requires {}
