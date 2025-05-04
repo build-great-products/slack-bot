@@ -1,5 +1,4 @@
 import { errorBoundary } from '@stayradiated/error-boundary'
-import type { DeleteResult } from 'kysely'
 
 import type { KyselyDb, SlackUserId, SlackWorkspaceId } from '#src/database.ts'
 
@@ -13,16 +12,21 @@ type DeleteSlackUserApiTokenOptions = {
 
 const deleteSlackUser = async (
   options: DeleteSlackUserApiTokenOptions,
-): Promise<DeleteResult | Error> => {
+): Promise<number | Error> => {
   const { db, where } = options
 
-  return errorBoundary(() =>
+  const row = await errorBoundary(() =>
     db
       .deleteFrom('slackUser')
       .where('slackUser.slackWorkspaceId', '=', where.slackWorkspaceId)
       .where('slackUser.slackUserId', '=', where.slackUserId)
-      .executeTakeFirst(),
+      .executeTakeFirstOrThrow(),
   )
+  if (row instanceof Error) {
+    return row
+  }
+
+  return Number(row.numDeletedRows)
 }
 
 export { deleteSlackUser }
