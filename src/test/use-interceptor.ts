@@ -54,5 +54,5 @@ const useInterceptor =
     }
   }
 
-export type { GlobalAgent, Interceptor }
+export type { Interceptor }
 export { useInterceptor }
