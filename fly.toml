@@ -9,7 +9,7 @@ primary_region = 'sin'
 [env]
   PORT = '3000'
   DB_PATH = '/data/rough-slack-bot.db'
-  ORIGIN = 'https://rough-slack-bot.fly.dev/'
+  ORIGIN = 'https://slack.rough.app'
 
 [build]
 
