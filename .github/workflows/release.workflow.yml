@@ -47,6 +47,7 @@ jobs:
     name: Deploy app
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    needs: uplift
 
     # ensure only one action runs at a time
     concurrency: deploy-group
