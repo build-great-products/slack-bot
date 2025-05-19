@@ -6,6 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v0.22.2](https://github.com/build-great-products/slack-bot/releases/tag/v0.22.2) - 2025-05-19
+
+- [`d48adb1`](https://github.com/build-great-products/slack-bot/commit/d48adb15a50d9ed05ba71bd91a8f0d0ee6841482) fix: update node engine version in package.json 🔧
+- [`7eebbcf`](https://github.com/build-great-products/slack-bot/commit/7eebbcf5675acc6dfbcb01affbc7d75fed93d217) chore: update configuration and dependencies 📦
+- [`db4b273`](https://github.com/build-great-products/slack-bot/commit/db4b2733a922d7c78b8282840766c0842e6bce71) chore: update deployment workflow dependencies 🧹
+- [`24570b8`](https://github.com/build-great-products/slack-bot/commit/24570b82a9aab8c2c9ec7107ccbea3c836e84eac) chore(deps): bump softprops/action-gh-release from 2.2.1 to 2.2.2 (#61)
+- [`d9cdee5`](https://github.com/build-great-products/slack-bot/commit/d9cdee5092380b056ea5b8a08cca94684c8d3a8d) chore(deps): bump node from 23.11.0-alpine to 24.0.2-alpine (#66)
+- [`d0f2ec7`](https://github.com/build-great-products/slack-bot/commit/d0f2ec7295147ab131e0d6275edd16c66a824e2d) chore(deps): bump actions/setup-node from 4.3.0 to 4.4.0 (#63)
+- [`0fbedf0`](https://github.com/build-great-products/slack-bot/commit/0fbedf0fc9c55b9ab6d71ed4b6895cf3f5b11617) chore(deps): bump actions/cache from 4.2.0 to 4.2.3 (#62)
+- [`0386bec`](https://github.com/build-great-products/slack-bot/commit/0386bec7886fe1afcc4a600dbda76623a382d612) chore(deps): bump pnpm/action-setup from 4.0.0 to 4.1.0 (#60)
+
 ## [v0.22.1](https://github.com/build-great-products/slack-bot/releases/tag/v0.22.1) - 2025-05-04
 
 - [`0d4c3b8`](https://github.com/build-great-products/slack-bot/commit/0d4c3b885737fa3f8cf9660cd6748abf3307935e) fix: update ORIGIN URL in fly.toml 🔧
