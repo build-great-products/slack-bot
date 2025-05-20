@@ -31,6 +31,7 @@ WORKDIR /app
 # Copy built node modules and source code from builder stage
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/src ./src
+COPY --from=builder /app/package.json ./package.json
 
 # Set the command to run the application
 CMD ["node", "--no-warnings", "--experimental-strip-types", "./src/index.ts"]
