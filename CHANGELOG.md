@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v0.23.0](https://github.com/build-great-products/slack-bot/releases/tag/v0.23.0) - 2025-05-21
+
+- [`df5e39d`](https://github.com/build-great-products/slack-bot/commit/df5e39d86780edf2cd7c5f5cca9b8028795c0e39) feat: add database configuration and necessary migrations 🗄️
+- [`c2d2884`](https://github.com/build-great-products/slack-bot/commit/c2d288413a39b640937bcab74c00605db4382f3a) chore: add package.json copy to Dockerfile for build context 🔧
+- [`ddb5674`](https://github.com/build-great-products/slack-bot/commit/ddb5674a5a4cb23c1ad005ccea233b7cced240a3) build: update Dockerfile with multi-stage builds and dependencies 🐳
+- [`037f939`](https://github.com/build-great-products/slack-bot/commit/037f939afb55bd20736b1e699b94007828aaf8ed) chore: update dependencies in package.json 🛠️
+
 ## [v0.22.2](https://github.com/build-great-products/slack-bot/releases/tag/v0.22.2) - 2025-05-19
 
 - [`d48adb1`](https://github.com/build-great-products/slack-bot/commit/d48adb15a50d9ed05ba71bd91a8f0d0ee6841482) fix: update node engine version in package.json 🔧
