@@ -4,12 +4,11 @@ import { defineFactory } from 'test-fixture-factory'
 import type { KyselyDb } from '#src/database.ts'
 
 import { getDb } from '#src/database.ts'
-import { migrateToLatest } from '#src/migrate.ts'
+import { getDatabaseUrl } from '#src/env.ts'
 
 // ensure only one instance of the in-memory database for all tests
 const getInMemoryDb = memoize(async () => {
-  const db = getDb(':memory:')
-  await migrateToLatest(db)
+  const db = getDb(getDatabaseUrl())
   return db
 })
 

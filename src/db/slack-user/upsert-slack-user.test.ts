@@ -9,6 +9,7 @@ import { useNow } from '#src/test/use-now.ts'
 
 import { getSlackUser } from '#src/db/slack-user/get-slack-user.ts'
 
+import { deleteSlackUser } from './delete-slack-user.ts'
 import { upsertSlackUser } from './upsert-slack-user.ts'
 
 const test = anyTest.extend({
@@ -62,6 +63,11 @@ test('should insert a new slack user', async ({ nonce, now, db }) => {
     updatedAt: now,
   })
   expect(upsertedSlackUser).toStrictEqual(slackUser)
+
+  // cleanup
+  assertOk(
+    await deleteSlackUser({ db, where: { slackUserId, slackWorkspaceId } }),
+  )
 })
 
 test('should update an existing slack user', async ({ nonce, now, db }) => {
@@ -128,4 +134,8 @@ test('should update an existing slack user', async ({ nonce, now, db }) => {
     updatedAt: now,
   })
   expect(upsertedSlackUser).toStrictEqual(slackUser)
+
+  assertOk(
+    await deleteSlackUser({ db, where: { slackUserId, slackWorkspaceId } }),
+  )
 })

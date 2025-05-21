@@ -6,7 +6,7 @@ import type {
   SlackUserOauthState,
 } from '#src/database.ts'
 
-type GetSlackUserOauthApiTokenOptions = {
+type GetSlackUserOauthOptions = {
   db: KyselyDb
   where: {
     state: SlackUserOauthState
@@ -14,7 +14,7 @@ type GetSlackUserOauthApiTokenOptions = {
 }
 
 const getSlackUserOauth = async (
-  options: GetSlackUserOauthApiTokenOptions,
+  options: GetSlackUserOauthOptions,
 ): Promise<SlackUserOauth | undefined | Error> => {
   const { db, where } = options
 

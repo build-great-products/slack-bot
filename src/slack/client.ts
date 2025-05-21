@@ -30,7 +30,7 @@ const createClient = async (options: CreateClientOptions) => {
     signingSecret: slack.signingSecret,
     stateSecret: slack.stateSecret,
     scopes: ['commands', 'reactions:write', 'users:read', 'team:read'],
-    installationStore: createInstallationStore(db),
+    installationStore: createInstallationStore({ db }),
     installerOptions: {
       directInstall: true,
     },

@@ -25,6 +25,6 @@
     }
   },
   "files": {
-    "ignore": ["coverage/"]
+    "ignore": ["coverage/", "src/__generated__/"]
   }
 }

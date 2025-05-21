@@ -45,11 +45,11 @@ const getSlackConfig = memoize(() => {
   }
 })
 
-const getDbPath = memoize(() => {
+const getDatabaseUrl = memoize(() => {
   const $env = z.object({
-    DB_PATH: z.string().default('state.db'),
+    DATABASE_URL: z.string().url(),
   })
-  return $env.parse(process.env).DB_PATH
+  return $env.parse(process.env).DATABASE_URL
 })
 
 const getPort = memoize(() => {
@@ -64,6 +64,6 @@ export {
   getRoughAppUrl,
   getRoughConfig,
   getSlackConfig,
-  getDbPath,
+  getDatabaseUrl,
   getPort,
 }

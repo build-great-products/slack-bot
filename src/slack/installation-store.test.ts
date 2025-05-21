@@ -1,10 +1,15 @@
 import type { Installation } from '@slack/bolt'
-import { test as anyTest, describe, expect, vi } from 'vitest'
+import { test as anyTest, describe, expect } from 'vitest'
+import { assertOk } from '@stayradiated/error-boundary'
 
-import type { SlackInstallationId } from '#src/database.ts'
+import type { SlackInstallationId, SlackUserId } from '#src/database.ts'
 
 import { useDb } from '#src/test/use-db.ts'
 import { useNow } from '#src/test/use-now.ts'
+
+import { genId } from '#src/utils/gen-id.ts'
+
+import { deleteSlackInstallation } from '#src/db/slack-installation/delete-slack-installation.ts'
 
 import { createInstallationStore } from './installation-store.ts'
 
@@ -15,9 +20,13 @@ const test = anyTest.extend({
 
 describe('storeInstallation', () => {
   test('should store team installation', async ({ now, db }) => {
-    const installationStore = createInstallationStore(db)
+    const installationStore = createInstallationStore({
+      db,
+      getCurrentTime: () => now,
+    })
 
-    const teamId = 'T0001' as SlackInstallationId
+    const teamId = genId<SlackInstallationId>()
+    const userId = genId<SlackUserId>()
 
     const installation: Installation = {
       isEnterpriseInstall: false,
@@ -26,7 +35,7 @@ describe('storeInstallation', () => {
       },
       enterprise: undefined,
       user: {
-        id: 'U123',
+        id: userId,
         token: 'xoxb-123',
         scopes: [],
       },
@@ -46,12 +55,21 @@ describe('storeInstallation', () => {
       createdAt: now,
       updatedAt: now,
     })
+
+    // cleanup
+    assertOk(
+      await deleteSlackInstallation({ db, where: { installationId: teamId } }),
+    )
   })
 
   test('should store enterprise installation', async ({ now, db }) => {
-    const installationStore = createInstallationStore(db)
+    const installationStore = createInstallationStore({
+      db,
+      getCurrentTime: () => now,
+    })
 
-    const enterpriseId = 'E001' as SlackInstallationId
+    const enterpriseId = genId<SlackInstallationId>()
+    const userId = genId<SlackUserId>()
 
     const installation: Installation = {
       isEnterpriseInstall: true,
@@ -60,7 +78,7 @@ describe('storeInstallation', () => {
         id: enterpriseId,
       },
       user: {
-        id: 'U123',
+        id: userId,
         token: 'xoxb-123',
         scopes: [],
       },
@@ -80,15 +98,27 @@ describe('storeInstallation', () => {
       createdAt: now,
       updatedAt: now,
     })
+
+    // cleanup
+    assertOk(
+      await deleteSlackInstallation({
+        db,
+        where: { installationId: enterpriseId },
+      }),
+    )
   })
 
   test('should handle overwriting an existing installation', async ({
     now,
     db,
   }) => {
-    const installationStore = createInstallationStore(db)
+    const installationStore = createInstallationStore({
+      db,
+      getCurrentTime: () => now,
+    })
 
-    const teamId = 'T0012' as SlackInstallationId
+    const teamId = genId<SlackInstallationId>()
+    const userId = genId<SlackUserId>()
 
     const installation: Installation = {
       isEnterpriseInstall: false,
@@ -97,7 +127,7 @@ describe('storeInstallation', () => {
       },
       enterprise: undefined,
       user: {
-        id: 'U123',
+        id: userId,
         token: 'xoxb-123',
         scopes: [],
       },
@@ -114,7 +144,7 @@ describe('storeInstallation', () => {
       .execute()
 
     // move clock forward
-    vi.setSystemTime(now + 1000)
+    now += 1000
 
     const updatedInstallation: Installation = {
       isEnterpriseInstall: false,
@@ -123,7 +153,7 @@ describe('storeInstallation', () => {
       },
       enterprise: undefined,
       user: {
-        id: 'U123',
+        id: userId,
         token: 'xoxb-456',
         scopes: [],
       },
@@ -140,17 +170,26 @@ describe('storeInstallation', () => {
     expect(row).toEqual({
       id: teamId,
       value: JSON.stringify(updatedInstallation),
-      createdAt: now,
-      updatedAt: now + 1000,
+      createdAt: now - 1000,
+      updatedAt: now,
     })
+
+    // cleanup
+    assertOk(
+      await deleteSlackInstallation({ db, where: { installationId: teamId } }),
+    )
   })
 })
 
 describe('fetchInstallation', () => {
   test('should fetch team installation', async ({ now, db }) => {
-    const installationStore = createInstallationStore(db)
+    const installationStore = createInstallationStore({
+      db,
+      getCurrentTime: () => now,
+    })
 
-    const teamId = 'T0103' as SlackInstallationId
+    const teamId = genId<SlackInstallationId>()
+    const userId = genId<SlackUserId>()
 
     const installation: Installation = {
       isEnterpriseInstall: false,
@@ -159,7 +198,7 @@ describe('fetchInstallation', () => {
       },
       enterprise: undefined,
       user: {
-        id: 'U123',
+        id: userId,
         token: 'xoxb-123',
         scopes: [],
       },
@@ -182,12 +221,21 @@ describe('fetchInstallation', () => {
     })
 
     expect(fetchedInstallation).toEqual(installation)
+
+    // cleanup
+    assertOk(
+      await deleteSlackInstallation({ db, where: { installationId: teamId } }),
+    )
   })
 
   test('should fetch enterprise installation', async ({ now, db }) => {
-    const installationStore = createInstallationStore(db)
+    const installationStore = createInstallationStore({
+      db,
+      getCurrentTime: () => now,
+    })
 
-    const enterpriseId = 'E002' as SlackInstallationId
+    const enterpriseId = genId<SlackInstallationId>()
+    const userId = genId<SlackUserId>()
 
     const installation: Installation = {
       isEnterpriseInstall: true,
@@ -196,7 +244,7 @@ describe('fetchInstallation', () => {
         id: enterpriseId,
       },
       user: {
-        id: 'U123',
+        id: userId,
         token: 'xoxb-123',
         scopes: [],
       },
@@ -219,14 +267,26 @@ describe('fetchInstallation', () => {
     })
 
     expect(fetchedInstallation).toEqual(installation)
+
+    // cleanup
+    assertOk(
+      await deleteSlackInstallation({
+        db,
+        where: { installationId: enterpriseId },
+      }),
+    )
   })
 })
 
 describe('deleteInstallation', () => {
   test('should delete team installation', async ({ now, db }) => {
-    const installationStore = createInstallationStore(db)
+    const installationStore = createInstallationStore({
+      db,
+      getCurrentTime: () => now,
+    })
 
-    const teamId = 'T1004' as SlackInstallationId
+    const teamId = genId<SlackInstallationId>()
+    const userId = genId<SlackUserId>()
 
     const installation: Installation = {
       isEnterpriseInstall: false,
@@ -235,7 +295,7 @@ describe('deleteInstallation', () => {
       },
       enterprise: undefined,
       user: {
-        id: 'U123',
+        id: userId,
         token: 'xoxb-123',
         scopes: [],
       },
@@ -264,12 +324,21 @@ describe('deleteInstallation', () => {
       .executeTakeFirst()
 
     expect(row).toBeUndefined()
+
+    // cleanup
+    assertOk(
+      await deleteSlackInstallation({ db, where: { installationId: teamId } }),
+    )
   })
 
   test('should delete enterprise installation', async ({ now, db }) => {
-    const installationStore = createInstallationStore(db)
+    const installationStore = createInstallationStore({
+      db,
+      getCurrentTime: () => now,
+    })
 
-    const enterpriseId = 'E003' as SlackInstallationId
+    const enterpriseId = genId<SlackInstallationId>()
+    const userId = genId<SlackUserId>()
 
     const installation: Installation = {
       isEnterpriseInstall: true,
@@ -278,7 +347,7 @@ describe('deleteInstallation', () => {
         id: enterpriseId,
       },
       user: {
-        id: 'U123',
+        id: userId,
         token: 'xoxb-123',
         scopes: [],
       },
@@ -307,5 +376,13 @@ describe('deleteInstallation', () => {
       .executeTakeFirst()
 
     expect(row).toBeUndefined()
+
+    // cleanup
+    assertOk(
+      await deleteSlackInstallation({
+        db,
+        where: { installationId: enterpriseId },
+      }),
+    )
   })
 })

@@ -1,0 +1,22 @@
+services:
+  postgres:
+    image: postgres:17.4
+    restart: unless-stopped
+    ports:
+      - 47291:5432
+    env_file: .env
+    environment:
+      POSTGRES_DB: '$POSTGRES_DB'
+      POSTGRES_USER: '$POSTGRES_USER'
+      POSTGRES_PASSWORD: '$POSTGRES_PASSWORD'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      timeout: 1s
+      start_period: 5s
+      interval: 1s
+      retries: 1000
+
+volumes:
+  postgres_data:

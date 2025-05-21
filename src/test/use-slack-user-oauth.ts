@@ -8,12 +8,14 @@ import type {
   SlackUserOauthState,
 } from '#src/database.ts'
 
+import { genId } from '#src/utils/gen-id.ts'
+
 import { deleteSlackUserOauth } from '#src/db/slack-user-oauth/delete-slack-user-oauth.ts'
 import { upsertSlackUserOauth } from '#src/db/slack-user-oauth/upsert-slack-user-oauth.ts'
 
 type CreateUserOauthAttrs = {
   state?: SlackUserOauthState
-  code?: string
+  codeVerifier?: string
 }
 
 const slackUserOauthFactory = defineFactory<
@@ -25,14 +27,17 @@ const slackUserOauthFactory = defineFactory<
   void | CreateUserOauthAttrs,
   SlackUserOauth
 >(async ({ db, slackUser }, attrs) => {
+  const state = attrs?.state ?? genId<SlackUserOauthState>()
+  const codeVerifier = attrs?.codeVerifier ?? genId()
+
   const slackUserOauth = await upsertSlackUserOauth({
     db,
     insert: {
-      state: attrs?.state ?? ('1' as SlackUserOauthState),
+      state,
       slackWorkspaceId: slackUser.slackWorkspaceId,
       slackWorkspaceUrl: slackUser.slackWorkspaceUrl,
       slackUserId: slackUser.slackUserId,
-      codeVerifier: attrs?.code ?? '2',
+      codeVerifier,
       slackResponseUrl: null,
     },
   })

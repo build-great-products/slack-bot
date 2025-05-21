@@ -3,10 +3,13 @@ import type {
   InstallationQuery,
   InstallationStore,
 } from '@slack/bolt'
-import { errorBoundary } from '@stayradiated/error-boundary'
 
 import type { KyselyDb } from '#src/database.ts'
 import type { SlackInstallationId } from '#src/database.ts'
+
+import { deleteSlackInstallation } from '#src/db/slack-installation/delete-slack-installation.ts'
+import { getSlackInstallation } from '#src/db/slack-installation/get-slack-installation.ts'
+import { upsertSlackInstallation } from '#src/db/slack-installation/upsert-slack-installation.ts'
 
 const getInstallationId = (
   installation: Installation | InstallationQuery<boolean>,
@@ -38,64 +41,71 @@ const getInstallationId = (
   return installationId as SlackInstallationId
 }
 
-const createInstallationStore = (db: KyselyDb): InstallationStore => {
+type CreateInstallationStoreOptions = {
+  db: KyselyDb
+  getCurrentTime?: () => number
+}
+
+const createInstallationStore = (
+  options: CreateInstallationStoreOptions,
+): InstallationStore => {
+  const { db, getCurrentTime = () => Date.now() } = options
   return {
     storeInstallation: async (installation) => {
       const installationId = getInstallationId(installation)
-
-      const result = await errorBoundary(() =>
-        db
-          .insertInto('slackInstallation')
-          .values({
-            id: installationId,
-            value: JSON.stringify(installation),
-            createdAt: Date.now(),
-            updatedAt: Date.now(),
-          })
-          .onConflict((oc) =>
-            oc.doUpdateSet({
-              value: JSON.stringify(installation),
-              updatedAt: Date.now(),
-            }),
-          )
-          .execute(),
-      )
+      const result = await upsertSlackInstallation({
+        db,
+        insert: {
+          id: installationId,
+          value: JSON.stringify(installation),
+        },
+        now: getCurrentTime(),
+      })
       if (result instanceof Error) {
         console.error(result)
-        throw new Error('Failed saving installation data to installationStore')
+        throw new Error(
+          'Failed saving installation data to installationStore',
+          {
+            cause: result,
+          },
+        )
       }
     },
     fetchInstallation: async (installQuery) => {
       const installationId = getInstallationId(installQuery)
 
-      const installation = await errorBoundary(async () => {
-        const row = await db
-          .selectFrom('slackInstallation')
-          .select('value')
-          .where('id', '=', installationId)
-          .executeTakeFirstOrThrow()
-
-        return JSON.parse(row.value) as Installation
+      const installation = await getSlackInstallation({
+        db,
+        where: {
+          installationId: installationId,
+        },
       })
       if (installation instanceof Error) {
         console.error(installation)
+        throw new Error('Failed fetching installation', {
+          cause: installation,
+        })
+      }
+      if (!installation) {
         throw new Error('Failed fetching installation')
       }
 
-      return installation
+      return JSON.parse(installation.value)
     },
     deleteInstallation: async (installQuery) => {
       const installationId = getInstallationId(installQuery)
 
-      const result = await errorBoundary(() =>
-        db
-          .deleteFrom('slackInstallation')
-          .where('id', '=', installationId)
-          .execute(),
-      )
+      const result = await deleteSlackInstallation({
+        db,
+        where: {
+          installationId,
+        },
+      })
       if (result instanceof Error) {
         console.error(result)
-        throw new Error('Failed to delete installation')
+        throw new Error('Failed to delete installation', {
+          cause: result,
+        })
       }
     },
   }

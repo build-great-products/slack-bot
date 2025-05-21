@@ -7,7 +7,7 @@ import type {
   SlackWorkspaceId,
 } from '#src/database.ts'
 
-type GetSlackUserApiTokenOptions = {
+type GetSlackUserOptions = {
   db: KyselyDb
   where: {
     slackWorkspaceId: SlackWorkspaceId
@@ -16,7 +16,7 @@ type GetSlackUserApiTokenOptions = {
 }
 
 const getSlackUser = async (
-  options: GetSlackUserApiTokenOptions,
+  options: GetSlackUserOptions,
 ): Promise<SlackUser | undefined | Error> => {
   const { db, where } = options
 

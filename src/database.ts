@@ -1,76 +1,39 @@
-import SqliteDatabase from 'better-sqlite3'
-import { CamelCasePlugin, Kysely, SqliteDialect } from 'kysely'
+import { CamelCasePlugin, Kysely, PostgresDialect } from 'kysely'
 import memoize from 'memoize'
+import pg from 'pg'
 
-type BrandedString<Brand extends string> = string & {
-  __brand: Brand
-}
+import type Database from './__generated__/kanel/Database.ts'
 
 type OmitTimestamps<T> = Omit<T, 'createdAt' | 'updatedAt'>
 
-type SlackInstallationId = BrandedString<'slackInstallationId'>
-type SlackInstallation = {
-  id: SlackInstallationId
-  value: string
-  createdAt: number
-  updatedAt: number
-}
-
-type SlackWorkspaceId = BrandedString<'slackWorkspaceId'>
-type SlackUserId = BrandedString<'slackUserId'>
-type SlackUser = {
-  slackWorkspaceId: SlackWorkspaceId
-  slackUserId: SlackUserId
-  slackWorkspaceUrl: string
-  roughUserId: string
-  roughWorkspaceId: string
-  roughWorkspacePublicId: string
-  name: string
-  accessToken: string
-  accessTokenExpiresAt: number
-  refreshToken: string
-  createdAt: number
-  updatedAt: number
-}
-
-type SlackUserOauthState = BrandedString<'slackUserOauthState'>
-type SlackUserOauth = {
-  state: SlackUserOauthState
-  slackUserId: SlackUserId
-  slackWorkspaceId: SlackWorkspaceId
-  slackWorkspaceUrl: string
-  codeVerifier: string
-  slackResponseUrl: string | null
-  createdAt: number
-  updatedAt: number
-}
-
-type Database = {
-  slackInstallation: SlackInstallation
-  slackUser: SlackUser
-  slackUserOauth: SlackUserOauth
-}
-
 type KyselyDb = Kysely<Database>
+
+// bigint → number
+pg.types.setTypeParser(20, (val) => {
+  return Number.parseInt(val, 10)
+})
 
 const getDb = memoize((dbPath: string): KyselyDb => {
   return new Kysely({
-    dialect: new SqliteDialect({
-      database: async () => new SqliteDatabase(dbPath),
+    dialect: new PostgresDialect({
+      pool: new pg.Pool({
+        connectionString: dbPath,
+      }),
     }),
     plugins: [new CamelCasePlugin()],
   })
 })
 
+export type { Database, KyselyDb, OmitTimestamps }
+
 export type {
-  Database,
-  KyselyDb,
-  OmitTimestamps,
   SlackInstallationId,
+  SlackInstallation,
   SlackUser,
-  SlackUserId,
   SlackUserOauth,
   SlackUserOauthState,
-  SlackWorkspaceId,
-}
+  SlackUserSlackUserId as SlackUserId,
+  SlackUserSlackWorkspaceId as SlackWorkspaceId,
+} from './__generated__/kanel/index.ts'
+
 export { getDb }

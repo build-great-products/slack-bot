@@ -8,6 +8,8 @@ import type {
   SlackWorkspaceId,
 } from '#src/database.ts'
 
+import { genId } from '#src/utils/gen-id.ts'
+
 import { deleteSlackUser } from '#src/db/slack-user/delete-slack-user.ts'
 import { upsertSlackUser } from '#src/db/slack-user/upsert-slack-user.ts'
 
@@ -32,16 +34,22 @@ const slackUserFactory = defineFactory<
   void | CreateUserAttrs,
   SlackUser
 >(async ({ db }, attrs) => {
+  const slackUserId = attrs?.slackUserId ?? genId<SlackUserId>()
+  const slackWorkspaceId = attrs?.slackWorkspaceId ?? genId<SlackWorkspaceId>()
+  const roughUserId = attrs?.roughUserId ?? genId()
+  const roughWorkspaceId = attrs?.roughWorkspaceId ?? genId()
+  const roughWorkspacePublicId = attrs?.roughWorkspacePublicId ?? genId()
+
   const workspaceUser = await upsertSlackUser({
     db,
     insert: {
-      slackUserId: attrs?.slackUserId ?? ('1' as SlackUserId),
-      slackWorkspaceId: attrs?.slackWorkspaceId ?? ('0' as SlackWorkspaceId),
+      slackUserId,
+      slackWorkspaceId,
       slackWorkspaceUrl: 'https://test.slack.com/team/',
-      roughUserId: attrs?.roughUserId ?? '2',
-      roughWorkspaceId: attrs?.roughWorkspaceId ?? '3',
-      roughWorkspacePublicId: attrs?.roughWorkspacePublicId ?? '3',
-      name: attrs?.name ?? '3',
+      roughUserId,
+      roughWorkspaceId,
+      roughWorkspacePublicId,
+      name: attrs?.name ?? 'User Name',
       accessToken: attrs?.accessToken ?? 'xxx.access.token',
       accessTokenExpiresAt:
         attrs?.accessTokenExpiresAt ?? Date.now() + 1000 * 60 * 30,

@@ -6,22 +6,10 @@
 app = 'rough-slack-bot'
 primary_region = 'sin'
 
-[env]
-  PORT = '3000'
-  DB_PATH = '/data/rough-slack-bot.db'
-  ORIGIN = 'https://slack.rough.app'
-
 [build]
 
 [processes]
   app = 'node --no-warnings --experimental-strip-types ./src/index.ts'
-
-[[mounts]]
-  source = 'data'
-  destination = '/data'
-  auto_extend_size_threshold = 80
-  auto_extend_size_increment = '1GB'
-  auto_extend_size_limit = '10GB'
 
 [http_service]
   internal_port = 3000
@@ -33,3 +21,17 @@ primary_region = 'sin'
 
 [[vm]]
   size = 'shared-cpu-1x'
+
+[env]
+  PORT = '3000'
+  ORIGIN = 'https://slack.rough.app'
+
+# secrets
+# -------
+# DATABASE_URL=
+# ROUGH_CLIENT_ID=
+# ROUGH_CLIENT_SECRET=
+# SLACK_CLIENT_ID=
+# SLACK_CLIENT_SECRET=
+# SLACK_SIGNING_SECRET=
+# SLACK_STATE_SECRET=

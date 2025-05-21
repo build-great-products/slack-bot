@@ -75,6 +75,9 @@ test('should create SlackWorkspaceUser', async ({
     .intercept({
       method: 'GET',
       path: '/api/v1/user/current',
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      },
     })
     .reply(
       200,
@@ -95,6 +98,9 @@ test('should create SlackWorkspaceUser', async ({
     .intercept({
       method: 'GET',
       path: '/api/v1/workspace/current',
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      },
     })
     .reply(
       200,

@@ -2,8 +2,11 @@
 *
 
 # ... and then we whitelist the files we need
+!/crunchydb.pem
+!/docker-app-start.sh
+!/gmrc.cjs
+!/migrations
 !/package.json
 !/pnpm-lock.yaml
 !/src
 !/tsconfig.json
-/!tsup.config.ts
