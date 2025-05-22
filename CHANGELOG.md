@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v0.24.0](https://github.com/build-great-products/slack-bot/releases/tag/v0.24.0) - 2025-05-22
+
+- [`7cbb851`](https://github.com/build-great-products/slack-bot/commit/7cbb85171085d00e5e710579428e6936e56cbe39) feat: add CI workflow for test coverage 🧪
+
 ## [v0.23.1](https://github.com/build-great-products/slack-bot/releases/tag/v0.23.1) - 2025-05-22
 
 - [`4184276`](https://github.com/build-great-products/slack-bot/commit/41842763bee573442d578514f460c4d0c5ae1b41) fix: update SDK dependency and remove Arctic references 🧹 (#69)
