@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v0.23.1](https://github.com/build-great-products/slack-bot/releases/tag/v0.23.1) - 2025-05-22
+
+- [`4184276`](https://github.com/build-great-products/slack-bot/commit/41842763bee573442d578514f460c4d0c5ae1b41) fix: update SDK dependency and remove Arctic references 🧹 (#69)
+- [`d6c7e65`](https://github.com/build-great-products/slack-bot/commit/d6c7e65e6cb55b7951af13744f1d9dd477fdad0f) chore: update dependencies to latest versions 🔧 (#68)
+- [`c8f1438`](https://github.com/build-great-products/slack-bot/commit/c8f14381ccd1298083b4ff67b61e055bc897ebe9) chore: simplify fly.toml configuration 🧹
+
 ## [v0.23.0](https://github.com/build-great-products/slack-bot/releases/tag/v0.23.0) - 2025-05-21
 
 - [`df5e39d`](https://github.com/build-great-products/slack-bot/commit/df5e39d86780edf2cd7c5f5cca9b8028795c0e39) feat: add database configuration and necessary migrations 🗄️
