@@ -26,7 +26,7 @@ const handleLogin = async (event: CommandEvent, context: RouteContext) => {
   }
   if (slackUser) {
     await respond({
-      text: '😯 You are already logged in to Rough as - no need to log in again!',
+      text: '😯 You are already logged in to Rough as - no need to log in again! If you would like to log in as a different user, please `/rough logout` first.',
       response_type: 'ephemeral',
     })
     return

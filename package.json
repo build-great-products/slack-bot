@@ -27,10 +27,9 @@
     "kanel": "env-cmd -x kanel --database=\\$DATABASE_URL"
   },
   "dependencies": {
-    "@roughapp/sdk": "2.4.0",
+    "@roughapp/sdk": "2.5.0",
     "@slack/bolt": "4.4.0",
     "@stayradiated/error-boundary": "4.3.0",
-    "arctic": "3.7.0",
     "dotenv": "16.5.0",
     "graphile-migrate": "1.4.1",
     "kysely": "0.28.2",
