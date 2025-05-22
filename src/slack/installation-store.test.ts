@@ -1,6 +1,6 @@
 import type { Installation } from '@slack/bolt'
-import { test as anyTest, describe, expect } from 'vitest'
 import { assertOk } from '@stayradiated/error-boundary'
+import { test as anyTest, describe, expect } from 'vitest'
 
 import type { SlackInstallationId, SlackUserId } from '#src/database.ts'
 
