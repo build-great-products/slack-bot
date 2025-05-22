@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v0.25.0](https://github.com/build-great-products/slack-bot/releases/tag/v0.25.0) - 2025-05-22
+
+- [`20cd35c`](https://github.com/build-great-products/slack-bot/commit/20cd35cf6208d24bfd7ba8a35e9a6f1bba88c95b) feat: add slack user oauth migration and refactor data types 🌟
+- [`1cc2e95`](https://github.com/build-great-products/slack-bot/commit/1cc2e9500d8c5eeb6c465edd78f6b4204eac0dbb) chore: remove Vitest step from CI workflow 🧹
+
 ## [v0.24.0](https://github.com/build-great-products/slack-bot/releases/tag/v0.24.0) - 2025-05-22
 
 - [`7cbb851`](https://github.com/build-great-products/slack-bot/commit/7cbb85171085d00e5e710579428e6936e56cbe39) feat: add CI workflow for test coverage 🧪
