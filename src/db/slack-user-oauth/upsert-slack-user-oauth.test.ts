@@ -7,8 +7,11 @@ import { useDb } from '#src/test/use-db.ts'
 import { useNow } from '#src/test/use-now.ts'
 import { useSlackUser } from '#src/test/use-slack-user.ts'
 
+import { genId } from '#src/utils/gen-id.ts'
+
 import { getSlackUserOauth } from '#src/db/slack-user-oauth/get-slack-user-oauth.ts'
 
+import { deleteSlackUserOauth } from './delete-slack-user-oauth.ts'
 import { upsertSlackUserOauth } from './upsert-slack-user-oauth.ts'
 
 const test = anyTest.extend({
@@ -18,7 +21,7 @@ const test = anyTest.extend({
 })
 
 test('should insert a new slack oauth user', async ({ now, db, slackUser }) => {
-  const state = 'state' as SlackUserOauthState
+  const state = genId<SlackUserOauthState>()
 
   const result = await upsertSlackUserOauth({
     db,
@@ -52,4 +55,7 @@ test('should insert a new slack oauth user', async ({ now, db, slackUser }) => {
     updatedAt: now,
   })
   expect(result).toStrictEqual(slackUserOauth)
+
+  // cleanup
+  await deleteSlackUserOauth({ db, where: { state } })
 })

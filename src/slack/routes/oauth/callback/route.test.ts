@@ -2,6 +2,8 @@ import type { GetUserResponse, GetWorkspaceResponse } from '@roughapp/sdk'
 import { assertOk } from '@stayradiated/error-boundary'
 import { test as anyTest, expect } from 'vitest'
 
+import type { SlackUserId, SlackWorkspaceId } from '#src/database.ts'
+
 import { getRoughAppUrl } from '#src/env.ts'
 
 import { useDb } from '#src/test/use-db.ts'
@@ -130,8 +132,8 @@ test('should create SlackWorkspaceUser', async ({
   const slackUser = await getSlackUser({
     db,
     where: {
-      slackWorkspaceId,
-      slackUserId,
+      slackWorkspaceId: slackWorkspaceId as SlackWorkspaceId,
+      slackUserId: slackUserId as SlackUserId,
     },
   })
   assertOk(slackUser)

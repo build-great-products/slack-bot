@@ -1,7 +1,11 @@
 import * as rough from '@roughapp/sdk'
 import { errorBoundary } from '@stayradiated/error-boundary'
 
-import type { SlackUserOauthState } from '#src/database.ts'
+import type {
+  SlackUserId,
+  SlackUserOauthState,
+  SlackWorkspaceId,
+} from '#src/database.ts'
 
 import { defineRoute } from '#src/utils/define-route.ts'
 import { HttpError } from '#src/utils/error.ts'
@@ -80,8 +84,8 @@ const getRoute = defineRoute(
     const result = await upsertSlackUser({
       db,
       insert: {
-        slackUserId: slackUserOauth.slackUserId,
-        slackWorkspaceId: slackUserOauth.slackWorkspaceId,
+        slackUserId: slackUserOauth.slackUserId as SlackUserId,
+        slackWorkspaceId: slackUserOauth.slackWorkspaceId as SlackWorkspaceId,
         slackWorkspaceUrl: slackUserOauth.slackWorkspaceUrl,
         roughUserId: user.data.id,
         roughWorkspaceId: workspace.data.id,

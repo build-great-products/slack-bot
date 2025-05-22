@@ -1,4 +1,3 @@
-import type { SlackUserSlackUserId, SlackUserSlackWorkspaceId } from './SlackUser';
 import type { ColumnType, Selectable, Insertable, Updateable } from 'kysely';
 
 /** Identifier type for public.slack_user_oauth */
@@ -12,9 +11,9 @@ export default interface SlackUserOauthTable {
 
   updatedAt: ColumnType<number, number, number>;
 
-  slackUserId: ColumnType<SlackUserSlackUserId, SlackUserSlackUserId, SlackUserSlackUserId>;
+  slackUserId: ColumnType<string, string, string>;
 
-  slackWorkspaceId: ColumnType<SlackUserSlackWorkspaceId, SlackUserSlackWorkspaceId, SlackUserSlackWorkspaceId>;
+  slackWorkspaceId: ColumnType<string, string, string>;
 
   slackWorkspaceUrl: ColumnType<string, string, string>;
 
