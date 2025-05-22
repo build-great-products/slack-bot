@@ -15,7 +15,7 @@
   "scripts": {
     "test": "vitest",
     "test:coverage": "vitest --run --coverage",
-    "fmt": "biome format --write --unsafe",
+    "fmt": "biome format --write",
     "tidy": "biome check --write --unsafe",
     "tidy:check": "biome check",
     "watch": "node --no-warnings --experimental-strip-types --env-file=.env --watch ./src/index.ts",
