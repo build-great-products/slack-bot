@@ -84,4 +84,5 @@ jobs:
       - name: Report Coverage
         # Set `if: always()` to also generate the report if tests are failing
         if: always()
+        # https://github.com/davelosert/vitest-coverage-report-action
         uses: davelosert/vitest-coverage-report-action@8ab049ff5a2c6e78f78af446329379b318544a1a # v2.8.3
