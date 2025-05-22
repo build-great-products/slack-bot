@@ -79,7 +79,7 @@ jobs:
         run: pnpm run graphile-migrate reset --erase
 
       - name: Vitest
-        run: pnpm run ci:coverage
+        run: pnpm run test:coverage
 
       - name: Report Coverage
         # Set `if: always()` to also generate the report if tests are failing

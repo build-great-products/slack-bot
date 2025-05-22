@@ -55,6 +55,3 @@ jobs:
 
       - name: Typescript
         run: pnpm run tsc
-
-      - name: Vitest
-        run: pnpm run test
