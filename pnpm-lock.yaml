@@ -18,11 +18,14 @@ importers:
         specifier: 4.3.0
         version: 4.3.0
       arctic:
-        specifier: 3.6.1
-        version: 3.6.1
+        specifier: 3.7.0
+        version: 3.7.0
       dotenv:
         specifier: 16.5.0
         version: 16.5.0
+      graphile-migrate:
+        specifier: 1.4.1
+        version: 1.4.1
       kysely:
         specifier: 0.28.2
         version: 0.28.2
@@ -33,8 +36,8 @@ importers:
         specifier: 8.16.0
         version: 8.16.0
       zod:
-        specifier: 3.25.16
-        version: 3.25.16
+        specifier: 3.25.20
+        version: 3.25.20
     devDependencies:
       '@biomejs/biome':
         specifier: 1.9.4
@@ -48,9 +51,6 @@ importers:
       env-cmd:
         specifier: 10.1.0
         version: 10.1.0
-      graphile-migrate:
-        specifier: 1.4.1
-        version: 1.4.1
       kanel:
         specifier: 3.14.1
         version: 3.14.1
@@ -58,8 +58,8 @@ importers:
         specifier: 0.7.1
         version: 0.7.1
       knip:
-        specifier: 5.57.0
-        version: 5.57.0(@types/node@22.15.21)(typescript@5.8.3)
+        specifier: 5.57.1
+        version: 5.57.1(@types/node@22.15.21)(typescript@5.8.3)
       test-fixture-factory:
         specifier: 1.6.1
         version: 1.6.1
@@ -721,8 +721,8 @@ packages:
   arctic@3.2.4:
     resolution: {integrity: sha512-EGQAIZtl3Z/2GVGxp0pUnPbD15V4HrbknY+O6zSnLeTBT/cshL4mkNd/X+qFd1zFpW2lVO34w6CTx+3gjwb3lQ==}
 
-  arctic@3.6.1:
-    resolution: {integrity: sha512-zM3a1Y+HAhdXF3MFtNnesyI4X4f0yW7SsNGVeR1gYyZ6TSqH1346GUMU4dNDplTEoxWOxEjl7wrhXgkNTqUacw==}
+  arctic@3.7.0:
+    resolution: {integrity: sha512-ZMQ+f6VazDgUJOd+qNV+H7GohNSYal1mVjm5kEaZfE2Ifb7Ss70w+Q7xpJC87qZDkMZIXYf0pTIYZA0OPasSbw==}
 
   argparse@2.0.1:
     resolution: {integrity: sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==}
@@ -1269,8 +1269,8 @@ packages:
       tedious:
         optional: true
 
-  knip@5.57.0:
-    resolution: {integrity: sha512-3i2neotCfFWOEGByzz8kzSFePZahelhwZfHXT5SM9FlpMxzN1PE8wV+M65Sl+itd2Z+v7FBXeVd96YLwXnviGg==}
+  knip@5.57.1:
+    resolution: {integrity: sha512-FWdCuoYtaVB9+/9F9iGcKOGX2Orz9xEfbxCENq2UGnCwa6PGRYmlVR8d3MybnoplLmBjTC9yO/+npK5CRLTb2w==}
     engines: {node: '>=18.18.0'}
     hasBin: true
     peerDependencies:
@@ -2096,8 +2096,8 @@ packages:
     peerDependencies:
       zod: ^3.24.4
 
-  zod@3.25.16:
-    resolution: {integrity: sha512-3lOav31WLa1MstEvkM0QlcsFjKmJ2TI9IFYlIVpLE3upguhaeiRfPOzqqtisS/Hetk4ri2fLLC3OtW15lS5jxQ==}
+  zod@3.25.20:
+    resolution: {integrity: sha512-z03fqpTMDF1G02VLKUMt6vyACE7rNWkh3gpXVHgPTw28NPtDFRGvcpTtPwn2kMKtQ0idtYJUTxchytmnqYswcw==}
 
 snapshots:
 
@@ -2670,7 +2670,7 @@ snapshots:
       '@oslojs/encoding': 1.1.0
       '@oslojs/jwt': 0.2.0
 
-  arctic@3.6.1:
+  arctic@3.7.0:
     dependencies:
       '@oslojs/crypto': 1.0.1
       '@oslojs/encoding': 1.1.0
@@ -3297,7 +3297,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  knip@5.57.0(@types/node@22.15.21)(typescript@5.8.3):
+  knip@5.57.1(@types/node@22.15.21)(typescript@5.8.3):
     dependencies:
       '@nodelib/fs.walk': 1.2.8
       '@types/node': 22.15.21
@@ -3312,8 +3312,8 @@ snapshots:
       smol-toml: 1.3.4
       strip-json-comments: 5.0.1
       typescript: 5.8.3
-      zod: 3.25.16
-      zod-validation-error: 3.4.1(zod@3.25.16)
+      zod: 3.25.20
+      zod-validation-error: 3.4.1(zod@3.25.20)
 
   kysely@0.28.2: {}
 
@@ -4096,8 +4096,8 @@ snapshots:
       y18n: 4.0.3
       yargs-parser: 18.1.3
 
-  zod-validation-error@3.4.1(zod@3.25.16):
+  zod-validation-error@3.4.1(zod@3.25.20):
     dependencies:
-      zod: 3.25.16
+      zod: 3.25.20
 
-  zod@3.25.16: {}
+  zod@3.25.20: {}

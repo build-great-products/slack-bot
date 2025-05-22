@@ -15,7 +15,7 @@
   "scripts": {
     "test": "vitest",
     "test:coverage": "vitest --run --coverage",
-    "fmt": "biome format --write",
+    "fmt": "biome format --write --unsafe",
     "tidy": "biome check --write --unsafe",
     "tidy:check": "biome check",
     "watch": "node --no-warnings --experimental-strip-types --env-file=.env --watch ./src/index.ts",
@@ -30,13 +30,13 @@
     "@roughapp/sdk": "2.4.0",
     "@slack/bolt": "4.4.0",
     "@stayradiated/error-boundary": "4.3.0",
-    "arctic": "3.6.1",
+    "arctic": "3.7.0",
     "dotenv": "16.5.0",
     "graphile-migrate": "1.4.1",
     "kysely": "0.28.2",
     "memoize": "10.1.0",
     "pg": "8.16.0",
-    "zod": "3.25.16"
+    "zod": "3.25.20"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
@@ -45,7 +45,7 @@
     "env-cmd": "10.1.0",
     "kanel": "3.14.1",
     "kanel-kysely": "0.7.1",
-    "knip": "5.57.0",
+    "knip": "5.57.1",
     "test-fixture-factory": "1.6.1",
     "typescript": "5.8.3",
     "undici": "7.10.0",
