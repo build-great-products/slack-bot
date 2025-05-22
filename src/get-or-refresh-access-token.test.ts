@@ -1,5 +1,5 @@
 import { assertError, assertOk } from '@stayradiated/error-boundary'
-import { OAuth2RequestError } from 'arctic'
+import { OAuth2RequestError } from '@roughapp/sdk'
 import { test as anyTest, beforeEach, describe, vi } from 'vitest'
 
 import { getOrRefreshAccessToken } from './get-or-refresh-access-token.js'
