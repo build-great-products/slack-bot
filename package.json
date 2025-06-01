@@ -27,7 +27,7 @@
     "kanel": "env-cmd -x kanel --database=\\$DATABASE_URL"
   },
   "dependencies": {
-    "@roughapp/sdk": "2.5.0",
+    "@roughapp/sdk": "2.6.0",
     "@slack/bolt": "4.4.0",
     "@stayradiated/error-boundary": "4.3.0",
     "dotenv": "16.5.0",
@@ -35,7 +35,7 @@
     "kysely": "0.28.2",
     "memoize": "10.1.0",
     "pg": "8.16.0",
-    "zod": "3.25.20"
+    "zod": "3.25.45"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
@@ -44,7 +44,7 @@
     "env-cmd": "10.1.0",
     "kanel": "3.14.1",
     "kanel-kysely": "0.7.1",
-    "knip": "5.57.1",
+    "knip": "5.59.1",
     "test-fixture-factory": "1.6.1",
     "typescript": "5.8.3",
     "undici": "7.10.0",

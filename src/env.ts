@@ -1,6 +1,6 @@
 import * as process from 'node:process'
 import memoize from 'memoize'
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import 'dotenv/config'
 
 const getOriginUrl = memoize(() => {
@@ -47,7 +47,7 @@ const getSlackConfig = memoize(() => {
 
 const getDatabaseUrl = memoize(() => {
   const $env = z.object({
-    DATABASE_URL: z.string().url(),
+    DATABASE_URL: z.url(),
   })
   return $env.parse(process.env).DATABASE_URL
 })
