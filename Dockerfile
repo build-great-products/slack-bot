@@ -10,7 +10,10 @@ ENV PNPM_HOME=/app/.pnpm \
     PATH=$PNPM_HOME:$PATH
 
 WORKDIR /app
-RUN corepack enable && corepack use pnpm
+RUN set -ex ;\
+  npm install --global --force corepack ;\
+  corepack enable ;\
+  corepack use pnpm
 
 # Copy package files
 COPY package.json pnpm-lock.yaml ./
