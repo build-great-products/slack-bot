@@ -5,16 +5,16 @@
 
 version: 2
 updates:
-  - package-ecosystem: 'github-actions'
-    directory: '/' # Location of package manifests
+  - package-ecosystem: "github-actions"
+    directory: "/" # Location of package manifests
     commit-message:
-      prefix: 'chore(deps)'
+      prefix: "chore(deps)"
     schedule:
-      interval: 'daily'
+      interval: "daily"
 
-  - package-ecosystem: 'docker'
-    directory: '/'
+  - package-ecosystem: "docker"
+    directory: "/"
     commit-message:
-      prefix: 'chore(deps)'
+      prefix: "chore(deps)"
     schedule:
-      interval: 'daily'
+      interval: "daily"
