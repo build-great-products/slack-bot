@@ -1,5 +1,5 @@
 import { assertOk } from '@stayradiated/error-boundary'
-import { defineFactory } from 'test-fixture-factory'
+import { createFactory } from 'test-fixture-factory'
 
 import type {
   KyselyDb,
@@ -7,73 +7,77 @@ import type {
   SlackUserId,
   SlackWorkspaceId,
 } from '#src/database.ts'
-
-import { genId } from '#src/utils/gen-id.ts'
-
 import { deleteSlackUser } from '#src/db/slack-user/delete-slack-user.ts'
 import { upsertSlackUser } from '#src/db/slack-user/upsert-slack-user.ts'
+import { genId } from '#src/utils/gen-id.ts'
 
-type CreateUserAttrs = {
-  slackUserId?: SlackUserId
-  slackWorkspaceId?: SlackWorkspaceId
-  slackWorkspaceUrl?: string
-  roughUserId?: string
-  roughWorkspaceId?: string
-  roughWorkspacePublicId?: string
-  name?: string
-  accessToken?: string
-  accessTokenExpiresAt?: number
-  refreshToken?: string
-}
-
-const slackUserFactory = defineFactory<
-  {
+const slackUserFactory = createFactory<SlackUser>('SlackUser')
+  .withContext<{
     db: KyselyDb
-  },
-  // biome-ignore lint/suspicious/noConfusingVoidType: allow optional attrs
-  void | CreateUserAttrs,
-  SlackUser
->(async ({ db }, attrs) => {
-  const slackUserId = attrs?.slackUserId ?? genId<SlackUserId>()
-  const slackWorkspaceId = attrs?.slackWorkspaceId ?? genId<SlackWorkspaceId>()
-  const roughUserId = attrs?.roughUserId ?? genId()
-  const roughWorkspaceId = attrs?.roughWorkspaceId ?? genId()
-  const roughWorkspacePublicId = attrs?.roughWorkspacePublicId ?? genId()
-
-  const workspaceUser = await upsertSlackUser({
-    db,
-    insert: {
+  }>()
+  .withSchema((f) => ({
+    db: f.type<KyselyDb>().from('db'),
+    slackUserId: f.type<SlackUserId>().default(() => genId<SlackUserId>()),
+    slackWorkspaceId: f
+      .type<SlackWorkspaceId>()
+      .default(() => genId<SlackWorkspaceId>()),
+    slackWorkspaceUrl: f
+      .type<string>()
+      .default(() => 'https://test.slack.com/team/'),
+    roughUserId: f.type<string>().default(() => genId()),
+    roughWorkspaceId: f.type<string>().default(() => genId()),
+    roughWorkspacePublicId: f.type<string>().default(() => genId()),
+    name: f.type<string>().default(() => 'User Name'),
+    accessToken: f.type<string>().default(() => 'xxx.access.token'),
+    accessTokenExpiresAt: f
+      .type<number>()
+      .default(() => Date.now() + 1000 * 60 * 30),
+    refreshToken: f.type<string>().default(() => 'xxx.refresh.token'),
+  }))
+  .fixture(async (attrs, use) => {
+    const {
+      db,
       slackUserId,
       slackWorkspaceId,
-      slackWorkspaceUrl: 'https://test.slack.com/team/',
+      slackWorkspaceUrl,
       roughUserId,
       roughWorkspaceId,
       roughWorkspacePublicId,
-      name: attrs?.name ?? 'User Name',
-      accessToken: attrs?.accessToken ?? 'xxx.access.token',
-      accessTokenExpiresAt:
-        attrs?.accessTokenExpiresAt ?? Date.now() + 1000 * 60 * 30,
-      refreshToken: attrs?.refreshToken ?? 'xxx.refresh.token',
-    },
+      name,
+      accessToken,
+      accessTokenExpiresAt,
+      refreshToken,
+    } = attrs
+
+    const workspaceUser = await upsertSlackUser({
+      db,
+      insert: {
+        slackUserId,
+        slackWorkspaceId,
+        slackWorkspaceUrl,
+        roughUserId,
+        roughWorkspaceId,
+        roughWorkspacePublicId,
+        name,
+        accessToken,
+        accessTokenExpiresAt,
+        refreshToken,
+      },
+    })
+    assertOk(workspaceUser)
+
+    await use(workspaceUser)
+
+    const deleteUserResult = await deleteSlackUser({
+      db,
+      where: {
+        slackWorkspaceId: workspaceUser.slackWorkspaceId,
+        slackUserId: workspaceUser.slackUserId,
+      },
+    })
+    assertOk(deleteUserResult)
   })
-  assertOk(workspaceUser)
 
-  return {
-    value: workspaceUser,
-    destroy: async () => {
-      const deleteUserResult = await deleteSlackUser({
-        db,
-        where: {
-          slackWorkspaceId: workspaceUser.slackWorkspaceId,
-          slackUserId: workspaceUser.slackUserId,
-        },
-      })
-      assertOk(deleteUserResult)
-    },
-  }
-})
+const useSlackUser = slackUserFactory.useValue
 
-const useSlackUser = slackUserFactory.useValueFn
-const useCreateSlackUser = slackUserFactory.useCreateFn
-
-export { useCreateSlackUser, useSlackUser }
+export { useSlackUser }

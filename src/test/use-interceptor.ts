@@ -1,3 +1,4 @@
+import { createFactory } from 'test-fixture-factory'
 import type { Interceptable as GlobalAgent } from 'undici'
 import { MockAgent, setGlobalDispatcher } from 'undici'
 
@@ -28,13 +29,8 @@ const getGlobalMockAgent = once(() => {
 
 type Interceptor = (origin: string) => GlobalAgent
 
-const useInterceptor =
-  () =>
-  async (
-    // biome-ignore lint/correctness/noEmptyPattern: vitest requires {}
-    {}: Record<string, unknown>,
-    use: (interceptor: Interceptor) => Promise<void>,
-  ) => {
+const interceptorFactory = createFactory<Interceptor>('Interceptor').fixture(
+  async (_attrs, use) => {
     const globalMockAgent = getGlobalMockAgent()
 
     const agentSet = new Set<GlobalAgent>()
@@ -52,7 +48,10 @@ const useInterceptor =
     for (const agent of agentSet) {
       await agent.destroy()
     }
-  }
+  },
+)
+
+const useInterceptor = interceptorFactory.useValue
 
 export type { Interceptor }
 export { useInterceptor }

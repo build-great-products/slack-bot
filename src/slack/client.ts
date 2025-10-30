@@ -1,4 +1,4 @@
-import bolt from '@slack/bolt'
+import * as bolt from '@slack/bolt'
 
 import type { KyselyDb } from '#src/database.ts'
 
@@ -40,7 +40,7 @@ const createClient = async (options: CreateClientOptions) => {
         import('./routes/oauth/callback/route.ts'),
         import('./routes/oauth/callback/success/route.ts'),
       ])
-    ).map((module) => module.getRoute(context)),
+    ).map((module) => module.default(context)),
   })
 
   // register shortcut handlers

@@ -1,22 +1,12 @@
-import { defineFactory } from 'test-fixture-factory'
+import { createFactory } from 'test-fixture-factory'
 
-const nonceFactory = defineFactory<
-  Record<string, unknown>, // no deps
-  void, // no attributes
-  string // returns a nonce
->(
-  async (
-    // biome-ignore lint/correctness/noEmptyPattern: vitest requires {}
-    {}: Record<string, unknown>,
-    _attrs,
-  ) => {
+const nonceFactory = createFactory<string>('Nonce').fixture(
+  async (_attrs, use) => {
     const nonce = (Math.random() * 1000000).toFixed(0)
-    return {
-      value: nonce,
-    }
+    await use(nonce)
   },
 )
 
-const useNonce = nonceFactory.useValueFn
+const useNonce = nonceFactory.useValue
 
 export { useNonce }

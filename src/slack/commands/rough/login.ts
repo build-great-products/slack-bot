@@ -1,8 +1,7 @@
 import type { SlackUserId, SlackWorkspaceId } from '#src/database.ts'
-import type { CommandEvent, RouteContext } from '#src/utils/define-route.ts'
-
 import { getSlackUser } from '#src/db/slack-user/get-slack-user.ts'
 import { initiateLogin } from '#src/initiate-login.ts'
+import type { CommandEvent, RouteContext } from '#src/utils/define-route.ts'
 
 const handleLogin = async (event: CommandEvent, context: RouteContext) => {
   const { client, command, respond } = event

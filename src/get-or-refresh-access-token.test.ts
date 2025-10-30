@@ -1,15 +1,12 @@
 import { OAuth2RequestError } from '@roughapp/sdk'
 import { assertError, assertOk } from '@stayradiated/error-boundary'
 import { test as anyTest, beforeEach, describe, vi } from 'vitest'
-
-import { getOrRefreshAccessToken } from './get-or-refresh-access-token.js'
-
-import { mockDb } from '#src/test/mock-db.ts'
-import { mockRoughOAuth } from './test/mock-rough-oauth.js'
-import { mockSlackUser } from './test/mock-slack-user.js'
-
 import { deleteSlackUser } from '#src/db/slack-user/delete-slack-user.ts'
 import { updateSlackUser } from '#src/db/slack-user/update-slack-user.ts'
+import { mockDb } from '#src/test/mock-db.ts'
+import { getOrRefreshAccessToken } from './get-or-refresh-access-token.js'
+import { mockRoughOAuth } from './test/mock-rough-oauth.js'
+import { mockSlackUser } from './test/mock-slack-user.js'
 
 vi.mock('#src/db/slack-user/update-slack-user.ts')
 vi.mock('#src/db/slack-user/delete-slack-user.ts')

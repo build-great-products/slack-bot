@@ -1,96 +1,100 @@
 import type { IncomingMessage, ServerResponse } from 'node:http'
-import type { CustomRoute } from '@slack/bolt'
-import { defineFactory } from 'test-fixture-factory'
-
 import type { RoughOAuth2Provider } from '@roughapp/sdk'
+import type { CustomRoute } from '@slack/bolt'
+import { createFactory } from 'test-fixture-factory'
 import type { KyselyDb } from '#src/database.ts'
 import type { RouteContext } from '#src/utils/define-route.ts'
-
-type GetRouteFn = (context: RouteContext) => CustomRoute
 
 type RouteServer = {
   fetch: (request: Request) => Promise<Response>
 }
+type GetRouteFn = (context: RouteContext) => CustomRoute
 
-const routeServerFactory = defineFactory<
-  {
+const routeServerFactory = createFactory<RouteServer>('RouteServer')
+  .withContext<{
     db: KyselyDb
     roughOAuth: RoughOAuth2Provider
-  },
-  GetRouteFn[],
-  RouteServer
->(async ({ db, roughOAuth }, getRouteList) => {
-  const routes = getRouteList
-    .map((getRoute) => {
-      return getRoute({ db, roughOAuth })
-    })
-    .reduce(
-      (acc, route) => {
-        acc[route.path] ??= {}
+  }>()
+  .withSchema((f) => ({
+    db: f.type<KyselyDb>().from('db'),
+    roughOAuth: f.type<RoughOAuth2Provider>().from('roughOAuth'),
+    routes: f.type<GetRouteFn[]>(),
+  }))
+  .fixture(async (attrs, use) => {
+    const { db, roughOAuth, routes: initialRoutes } = attrs
 
-        const methodList = Array.isArray(route.method)
-          ? route.method
-          : [route.method]
-        for (const method of methodList) {
-          acc[route.path][method.toUpperCase()] = route.handler
+    const routes = initialRoutes
+      .map((getRoute) => {
+        return getRoute({ db, roughOAuth })
+      })
+      .reduce(
+        (acc, route) => {
+          acc[route.path] ??= {}
+
+          const methodList = Array.isArray(route.method)
+            ? route.method
+            : [route.method]
+          for (const method of methodList) {
+            acc[route.path][method.toUpperCase()] = route.handler
+          }
+
+          return acc
+        },
+        {} as Record<string, Record<string, CustomRoute['handler']>>,
+      )
+
+    const server: RouteServer = {
+      fetch: async (request) => {
+        const url = new URL(request.url)
+        const route = routes[url.pathname][request.method.toUpperCase()]
+        if (!route) {
+          return new Response(
+            JSON.stringify({
+              error: '404 not found',
+            }),
+            {
+              status: 404,
+            },
+          )
         }
 
-        return acc
-      },
-      {} as Record<string, Record<string, CustomRoute['handler']>>,
-    )
+        const { promise, reject, resolve } = Promise.withResolvers<Response>()
 
-  const server: RouteServer = {
-    fetch: async (request) => {
-      const url = new URL(request.url)
-      const route = routes[url.pathname][request.method.toUpperCase()]
-      if (!route) {
-        return new Response(
-          JSON.stringify({
-            error: '404 not found',
-          }),
-          {
-            status: 404,
+        let status: number | undefined
+        const headers: Record<string, string> = {}
+
+        const mockReq = {
+          url: request.url,
+          headers: Object.fromEntries(
+            request.headers,
+          ) as IncomingMessage['headers'],
+        } as unknown as IncomingMessage
+
+        const mockRes = {
+          setHeader: (key: string, value: string) => {
+            headers[key] = value
           },
-        )
-      }
+          writeHead: (statusCode: number) => {
+            if (typeof status === 'number') {
+              reject(new Error('Already wrote head!'))
+            }
+            status = statusCode
+          },
+          end: (body: string) => {
+            const response = new Response(body, { status, headers })
+            resolve(response)
+          },
+        } as unknown as ServerResponse<IncomingMessage>
 
-      const { promise, reject, resolve } = Promise.withResolvers<Response>()
+        route(mockReq, mockRes)
 
-      let status: number | undefined
-      const headers: Record<string, string> = {}
+        return promise
+      },
+    }
 
-      const mockReq = {
-        url: request.url,
-        headers: Object.fromEntries(
-          request.headers,
-        ) as IncomingMessage['headers'],
-      } as unknown as IncomingMessage
+    await use(server)
+  })
 
-      const mockRes = {
-        setHeader: (key: string, value: string) => {
-          headers[key] = value
-        },
-        writeHead: (statusCode: number) => {
-          if (typeof status === 'number') {
-            reject(new Error('Already wrote head!'))
-          }
-          status = statusCode
-        },
-        end: (body: string) => {
-          const response = new Response(body, { status, headers })
-          resolve(response)
-        },
-      } as unknown as ServerResponse<IncomingMessage>
-
-      route(mockReq, mockRes)
-
-      return promise
-    },
-  }
-  return { value: server }
-})
-
-const useRouteServer = routeServerFactory.useValueFn
+const useRouteServer = routeServerFactory.useValue
 
 export { useRouteServer }

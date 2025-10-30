@@ -2,21 +2,16 @@ import type { webApi } from '@slack/bolt'
 import { errorBoundary } from '@stayradiated/error-boundary'
 
 import type { SlackUserId, SlackWorkspaceId } from '#src/database.ts'
+import { getSlackUser } from '#src/db/slack-user/get-slack-user.ts'
 import { initiateLogin } from '#src/initiate-login.ts'
-
+import { failure, success, warning } from '#src/reply.ts'
 import { createLookupUserIdFn } from '#src/slack/lookup-user-id.ts'
 import { getMessageText } from '#src/slack/message.ts'
-
-import { failure, success, warning } from '#src/reply.ts'
-
 import type {
   RouteContext,
   ShortcutHandlerFn,
 } from '#src/utils/define-route.ts'
-
 import { createInsight } from './create-insight.ts'
-
-import { getSlackUser } from '#src/db/slack-user/get-slack-user.ts'
 
 const getShortcut =
   (context: RouteContext): ShortcutHandlerFn =>

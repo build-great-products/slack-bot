@@ -1,17 +1,15 @@
-import * as rough from '@roughapp/sdk'
 import type { RoughOAuth2Provider } from '@roughapp/sdk'
+import * as rough from '@roughapp/sdk'
 
 import type { KyselyDb, SlackUserId, SlackWorkspaceId } from '#src/database.ts'
-
-import { getRoughAppUrl } from '#src/env.ts'
-
 import { getSlackUser } from '#src/db/slack-user/get-slack-user.ts'
+import { getRoughAppUrl } from '#src/env.ts'
 
 import { getOrRefreshAccessToken } from '#src/get-or-refresh-access-token.ts'
 
 import {
-  type Reply,
   failure,
+  type Reply,
   success,
   userNotIdentifiedReply,
 } from '#src/reply.ts'
@@ -116,7 +114,7 @@ const createInsight = async (
     if (existingPerson) {
       personId = existingPerson.id
     } else {
-      let imageFileId: string | undefined
+      let imageUrl: string | undefined
       if (originalAuthor.imageUrl) {
         const image = await fetch(originalAuthor.imageUrl)
         // get the image data as a buffer
@@ -138,7 +136,10 @@ const createInsight = async (
             fileName: `SlackImage:${originalAuthor.name}`,
             mimeType: mimeType ?? 'image/jpeg',
           })
-          imageFileId = result.uploadId
+          const uploadedImage = await rough.getImage({
+            query: { key: result.key },
+          })
+          imageUrl = uploadedImage.data?.signedUrl
         }
       }
 
@@ -147,7 +148,7 @@ const createInsight = async (
         body: {
           name: originalAuthor.name,
           email: originalAuthor.email,
-          image: imageFileId,
+          image: imageUrl,
         },
       })
       if (person.error) {
@@ -164,6 +165,7 @@ const createInsight = async (
     auth: apiToken,
     body: {
       content,
+      contentFormat: 'markdown',
       createdByUserId: slackUser.roughUserId,
       referenceId,
       personId,
