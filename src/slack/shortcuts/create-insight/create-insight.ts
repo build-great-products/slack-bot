@@ -137,6 +137,7 @@ const createInsight = async (
             mimeType: mimeType ?? 'image/jpeg',
           })
           const uploadedImage = await rough.getImage({
+            auth: apiToken,
             query: { key: result.key },
           })
           if (uploadedImage.error) {
@@ -149,12 +150,6 @@ const createInsight = async (
           }
         }
       }
-
-      console.log('Creating person', {
-        name: originalAuthor.name,
-        email: originalAuthor.email,
-        imageUrl,
-      })
 
       const person = await rough.createPerson({
         auth: apiToken,
