@@ -9,11 +9,11 @@ permissions:
   contents: write
   packages: write
 
+jobs:
   deploy:
     name: Deploy app
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    needs: uplift
 
     # See https://fly.io/docs/app-guides/continuous-deployment-with-github-actions/
     steps:
