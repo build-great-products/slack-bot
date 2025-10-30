@@ -139,9 +139,22 @@ const createInsight = async (
           const uploadedImage = await rough.getImage({
             query: { key: result.key },
           })
-          imageUrl = uploadedImage.data?.signedUrl
+          if (uploadedImage.error) {
+            console.error(
+              `Could not get signed image URL for key "${result.key}"`,
+              uploadedImage,
+            )
+          } else {
+            imageUrl = uploadedImage.data.signedUrl
+          }
         }
       }
+
+      console.log('Creating person', {
+        name: originalAuthor.name,
+        email: originalAuthor.email,
+        imageUrl,
+      })
 
       const person = await rough.createPerson({
         auth: apiToken,
