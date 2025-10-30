@@ -1,12 +1,8 @@
-import type { App } from '@slack/bolt'
-import { errorBoundary } from '@stayradiated/error-boundary'
-
-import type { CustomRoute } from '@slack/bolt'
-import type { KyselyDb } from '#src/database.ts'
-
-import { buildErrorResponse } from '#src/utils/error-response.ts'
-
 import type { RoughOAuth2Provider } from '@roughapp/sdk'
+import type { App, CustomRoute } from '@slack/bolt'
+import { errorBoundary } from '@stayradiated/error-boundary'
+import type { KyselyDb } from '#src/database.ts'
+import { buildErrorResponse } from '#src/utils/error-response.ts'
 
 type ShortcutHandlerFn = Parameters<App['shortcut']>[2]
 

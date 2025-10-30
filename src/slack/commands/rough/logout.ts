@@ -1,8 +1,7 @@
 import type { SlackUserId, SlackWorkspaceId } from '#src/database.ts'
-import type { CommandEvent, RouteContext } from '#src/utils/define-route.ts'
-
 import { deleteSlackUser } from '#src/db/slack-user/delete-slack-user.ts'
 import { getSlackUser } from '#src/db/slack-user/get-slack-user.ts'
+import type { CommandEvent, RouteContext } from '#src/utils/define-route.ts'
 
 const handleLogout = async (event: CommandEvent, context: RouteContext) => {
   const { command, respond } = event

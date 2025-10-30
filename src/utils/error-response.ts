@@ -1,5 +1,5 @@
-import { HttpError, errorResponse } from '#src/utils/error.ts'
-import { type Template, renderTemplate } from '#src/utils/html-template.ts'
+import { errorResponse, HttpError } from '#src/utils/error.ts'
+import { renderTemplate, type Template } from '#src/utils/html-template.ts'
 
 const errorPageResponse = async (
   statusCode: number,

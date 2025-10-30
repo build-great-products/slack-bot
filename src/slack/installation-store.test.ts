@@ -3,13 +3,10 @@ import { assertOk } from '@stayradiated/error-boundary'
 import { test as anyTest, describe, expect } from 'vitest'
 
 import type { SlackInstallationId, SlackUserId } from '#src/database.ts'
-
+import { deleteSlackInstallation } from '#src/db/slack-installation/delete-slack-installation.ts'
 import { useDb } from '#src/test/use-db.ts'
 import { useNow } from '#src/test/use-now.ts'
-
 import { genId } from '#src/utils/gen-id.ts'
-
-import { deleteSlackInstallation } from '#src/db/slack-installation/delete-slack-installation.ts'
 
 import { createInstallationStore } from './installation-store.ts'
 

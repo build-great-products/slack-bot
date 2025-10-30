@@ -9,6 +9,9 @@
     "name": "George Czabania"
   },
   "license": "MIT",
+  "engines": {
+    "node": ">=24.0.0"
+  },
   "imports": {
     "#src/*": "./src/*"
   },
@@ -18,8 +21,8 @@
     "fmt": "biome format --write",
     "tidy": "biome check --write --unsafe",
     "tidy:check": "biome check",
-    "watch": "node --no-warnings --experimental-strip-types --env-file=.env --watch ./src/index.ts",
-    "start": "node --no-warnings --experimental-strip-types --env-file=.env ./src/index.ts",
+    "watch": "node --env-file=.env --watch ./src/index.ts",
+    "start": "node --env-file=.env ./src/index.ts",
     "tsc": "tsc",
     "check": "tsc",
     "knip": "knip",
@@ -27,38 +30,50 @@
     "kanel": "env-cmd -x kanel --database=\\$DATABASE_URL"
   },
   "dependencies": {
-    "@roughapp/sdk": "2.6.0",
-    "@slack/bolt": "4.4.0",
+    "@roughapp/sdk": "2.9.0",
+    "@slack/bolt": "4.6.0",
     "@stayradiated/error-boundary": "4.3.0",
-    "dotenv": "16.5.0",
+    "dotenv": "17.2.3",
     "graphile-migrate": "1.4.1",
-    "kysely": "0.28.2",
-    "memoize": "10.1.0",
-    "pg": "8.16.0",
-    "zod": "3.25.45"
+    "kysely": "0.28.8",
+    "memoize": "10.2.0",
+    "pg": "8.16.3",
+    "zod": "4.1.12"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.9.4",
-    "@types/pg": "8.15.2",
-    "@vitest/coverage-v8": "3.1.4",
-    "env-cmd": "10.1.0",
-    "kanel": "3.14.1",
-    "kanel-kysely": "0.7.1",
-    "knip": "5.59.1",
-    "test-fixture-factory": "1.6.1",
-    "typescript": "5.8.3",
-    "undici": "7.10.0",
+    "@biomejs/biome": "2.3.2",
+    "@types/pg": "8.15.6",
+    "@vitest/coverage-v8": "4.0.5",
+    "env-cmd": "11.0.0",
+    "kanel": "3.15.0",
+    "kanel-kysely": "0.8.0",
+    "knip": "5.66.4",
+    "test-fixture-factory": "2.1.0",
+    "typescript": "5.9.3",
+    "undici": "7.16.0",
     "vite-tsconfig-paths": "5.1.4",
-    "vitest": "3.1.4"
-  },
-  "engines": {
-    "node": "^24.0.1"
+    "vitest": "4.0.5"
   },
   "knip": {
-    "ignore": ["src/utils/log-query.ts", "src/migrations/*.ts"],
-    "ignoreDependencies": ["@vitest/coverage-v8"]
+    "ignore": [
+      "src/**/*.test.ts",
+      "src/utils/log-query.ts",
+      "src/migrations/*.ts",
+      "src/__generated__/**"
+    ],
+    "ignoreDependencies": [
+      "graphile-migrate",
+      "kanel",
+      "kanel-kysely"
+    ],
+    "ignoreFiles": [
+      ".kanelrc.cjs",
+      "gmrc.cjs"
+    ]
   },
   "pnpm": {
-    "onlyBuiltDependencies": ["esbuild"]
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
   }
 }

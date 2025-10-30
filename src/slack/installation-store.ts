@@ -3,9 +3,7 @@ import type {
   InstallationQuery,
   InstallationStore,
 } from '@slack/bolt'
-
-import type { KyselyDb } from '#src/database.ts'
-import type { SlackInstallationId } from '#src/database.ts'
+import type { KyselyDb, SlackInstallationId } from '#src/database.ts'
 
 import { deleteSlackInstallation } from '#src/db/slack-installation/delete-slack-installation.ts'
 import { getSlackInstallation } from '#src/db/slack-installation/get-slack-installation.ts'

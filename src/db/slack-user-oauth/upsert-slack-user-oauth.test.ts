@@ -2,14 +2,11 @@ import { assertOk } from '@stayradiated/error-boundary'
 import { test as anyTest, expect } from 'vitest'
 
 import type { SlackUserOauthState } from '#src/database.ts'
-
+import { getSlackUserOauth } from '#src/db/slack-user-oauth/get-slack-user-oauth.ts'
 import { useDb } from '#src/test/use-db.ts'
 import { useNow } from '#src/test/use-now.ts'
 import { useSlackUser } from '#src/test/use-slack-user.ts'
-
 import { genId } from '#src/utils/gen-id.ts'
-
-import { getSlackUserOauth } from '#src/db/slack-user-oauth/get-slack-user-oauth.ts'
 
 import { deleteSlackUserOauth } from './delete-slack-user-oauth.ts'
 import { upsertSlackUserOauth } from './upsert-slack-user-oauth.ts'

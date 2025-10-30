@@ -6,13 +6,11 @@ import type {
   SlackUserOauthState,
   SlackWorkspaceId,
 } from '#src/database.ts'
-import type { Reply } from '#src/reply.ts'
+import { upsertSlackUserOauth } from '#src/db/slack-user-oauth/upsert-slack-user-oauth.ts'
 
 import { getOriginUrl } from '#src/env.ts'
-
+import type { Reply } from '#src/reply.ts'
 import { failure, text } from '#src/reply.ts'
-
-import { upsertSlackUserOauth } from '#src/db/slack-user-oauth/upsert-slack-user-oauth.ts'
 
 type InitiateloginOptions = {
   db: KyselyDb

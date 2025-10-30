@@ -6,16 +6,14 @@ import type {
   SlackUserOauthState,
   SlackWorkspaceId,
 } from '#src/database.ts'
-
+import { upsertSlackUser } from '#src/db/slack-user/upsert-slack-user.ts'
+import { deleteSlackUserOauth } from '#src/db/slack-user-oauth/delete-slack-user-oauth.ts'
+import { getSlackUserOauth } from '#src/db/slack-user-oauth/get-slack-user-oauth.ts'
 import { defineRoute } from '#src/utils/define-route.ts'
 import { HttpError } from '#src/utils/error.ts'
 import { loadTemplate } from '#src/utils/html-template.ts'
 
-import { deleteSlackUserOauth } from '#src/db/slack-user-oauth/delete-slack-user-oauth.ts'
-import { getSlackUserOauth } from '#src/db/slack-user-oauth/get-slack-user-oauth.ts'
-import { upsertSlackUser } from '#src/db/slack-user/upsert-slack-user.ts'
-
-const getRoute = defineRoute(
+export default defineRoute(
   'GET',
   '/oauth/callback',
   async (request, context) => {
@@ -128,5 +126,3 @@ const getRoute = defineRoute(
     })
   },
 )
-
-export { getRoute }

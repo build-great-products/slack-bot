@@ -2,12 +2,10 @@ import { assertOk } from '@stayradiated/error-boundary'
 import { test as anyTest, expect } from 'vitest'
 
 import type { SlackUserId, SlackWorkspaceId } from '#src/database.ts'
-
+import { getSlackUser } from '#src/db/slack-user/get-slack-user.ts'
 import { useDb } from '#src/test/use-db.ts'
 import { useNonce } from '#src/test/use-nonce.ts'
 import { useNow } from '#src/test/use-now.ts'
-
-import { getSlackUser } from '#src/db/slack-user/get-slack-user.ts'
 
 import { deleteSlackUser } from './delete-slack-user.ts'
 import { upsertSlackUser } from './upsert-slack-user.ts'

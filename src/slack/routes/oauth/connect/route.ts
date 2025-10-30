@@ -1,11 +1,10 @@
 import type { SlackUserOauthState } from '#src/database.ts'
+import { getSlackUserOauth } from '#src/db/slack-user-oauth/get-slack-user-oauth.ts'
 import { defineRoute } from '#src/utils/define-route.ts'
 import { HttpError } from '#src/utils/error.ts'
 import { loadTemplate } from '#src/utils/html-template.ts'
 
-import { getSlackUserOauth } from '#src/db/slack-user-oauth/get-slack-user-oauth.ts'
-
-const getRoute = defineRoute(
+export default defineRoute(
   'GET',
   '/oauth/connect',
   async (request, context) => {
@@ -57,5 +56,3 @@ const getRoute = defineRoute(
     })
   },
 )
-
-export { getRoute }

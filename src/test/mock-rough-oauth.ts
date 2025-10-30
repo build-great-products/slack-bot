@@ -1,12 +1,10 @@
 import type { RoughOAuth2Provider } from '@roughapp/sdk'
-import { defineFactory } from 'test-fixture-factory'
+import { createFactory } from 'test-fixture-factory'
 import { vi } from 'vitest'
 
-const roughOAuthFactory = defineFactory<
-  Record<string, unknown>, // no deps
-  void, // no attributes
-  RoughOAuth2Provider // returns a roughOAuth instance
->(() => {
+const mockRoughOAuthFactory = createFactory<RoughOAuth2Provider>(
+  'MockRoughOAuth',
+).fixture(async (_attrs, use) => {
   const roughOAuth = {
     createAuthorizationURL: vi.fn(),
     validateAuthorizationCode: vi.fn(),
@@ -14,11 +12,9 @@ const roughOAuthFactory = defineFactory<
     revokeToken: vi.fn(),
   } satisfies RoughOAuth2Provider
 
-  return {
-    value: roughOAuth,
-  }
+  await use(roughOAuth)
 })
 
-const mockRoughOAuth = roughOAuthFactory.useValueFn
+const mockRoughOAuth = mockRoughOAuthFactory.useValue
 
 export { mockRoughOAuth }

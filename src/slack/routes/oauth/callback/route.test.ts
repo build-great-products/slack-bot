@@ -3,20 +3,17 @@ import { assertOk } from '@stayradiated/error-boundary'
 import { test as anyTest, expect } from 'vitest'
 
 import type { SlackUserId, SlackWorkspaceId } from '#src/database.ts'
-
+import { getSlackUser } from '#src/db/slack-user/get-slack-user.ts'
 import { getRoughAppUrl } from '#src/env.ts'
-
 import { useDb } from '#src/test/use-db.ts'
 import { useInterceptor } from '#src/test/use-interceptor.ts'
 import { useNow } from '#src/test/use-now.ts'
 import { useRoughOAuth } from '#src/test/use-rough-oauth.ts'
 import { useRouteServer } from '#src/test/use-route-server.ts'
-import { useSlackUserOauth } from '#src/test/use-slack-user-oauth.ts'
 import { useSlackUser } from '#src/test/use-slack-user.ts'
+import { useSlackUserOauth } from '#src/test/use-slack-user-oauth.ts'
 
-import { getSlackUser } from '#src/db/slack-user/get-slack-user.ts'
-
-import { getRoute } from './route.ts'
+import getRoute from './route.ts'
 
 const test = anyTest.extend({
   now: useNow(),
@@ -25,7 +22,7 @@ const test = anyTest.extend({
   slackWorkspaceOauth: useSlackUserOauth(),
   interceptor: useInterceptor(),
   roughOAuth: useRoughOAuth(),
-  server: useRouteServer([getRoute]),
+  server: useRouteServer({ routes: [getRoute] }),
 })
 
 test('should require state & code query params', async ({ server }) => {

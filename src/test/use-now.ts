@@ -1,25 +1,16 @@
-import { defineFactory } from 'test-fixture-factory'
+import { createFactory } from 'test-fixture-factory'
 import { vi } from 'vitest'
 
-const nowFactory = defineFactory<
-  Record<string, unknown>, // no deps
-  // biome-ignore lint/suspicious/noConfusingVoidType: allow optional attrs
-  void | { now: number },
-  number // returns a nonce
->(
-  async (
-    // biome-ignore lint/correctness/noEmptyPattern: vitest requires {}
-    {}: Record<string, unknown>,
-    attrs,
-  ) => {
-    const { now = Date.now() } = attrs ?? {}
+const nowFactory = createFactory<number>('Now')
+  .withSchema((f) => ({
+    now: f.type<number>().default(() => Date.now()),
+  }))
+  .fixture(async (attrs, use) => {
+    const { now } = attrs
     vi.setSystemTime(now)
-    return {
-      value: now,
-    }
-  },
-)
+    await use(now)
+  })
 
-const useNow = nowFactory.useValueFn
+const useNow = nowFactory.useValue
 
 export { useNow }

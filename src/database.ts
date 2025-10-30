@@ -24,11 +24,11 @@ const getDb = memoize((dbPath: string): KyselyDb => {
   })
 })
 
-export type { Database, KyselyDb, OmitTimestamps }
+export type { KyselyDb, OmitTimestamps }
 
 export type {
-  SlackInstallationId,
   SlackInstallation,
+  SlackInstallationId,
   SlackUser,
   SlackUserOauth,
   SlackUserOauthState,

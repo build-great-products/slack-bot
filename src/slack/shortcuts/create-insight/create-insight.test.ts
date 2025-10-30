@@ -5,15 +5,12 @@ import type {
 } from '@roughapp/sdk'
 import { assertOk } from '@stayradiated/error-boundary'
 import { test as anyTest, expect } from 'vitest'
-
+import { updateSlackUser } from '#src/db/slack-user/update-slack-user.ts'
 import { getRoughAppUrl } from '#src/env.ts'
-
 import { useDb } from '#src/test/use-db.ts'
 import { useInterceptor } from '#src/test/use-interceptor.ts'
 import { useRoughOAuth } from '#src/test/use-rough-oauth.ts'
 import { useSlackUser } from '#src/test/use-slack-user.ts'
-
-import { updateSlackUser } from '#src/db/slack-user/update-slack-user.ts'
 
 import { createInsight } from './create-insight.ts'
 
@@ -42,6 +39,7 @@ test('create an insight', async ({
       body: (body) => {
         expect(JSON.parse(body)).toStrictEqual({
           content: 'hello world',
+          contentFormat: 'markdown',
           createdByUserId: slackUser.roughUserId,
         })
         return true
@@ -97,6 +95,7 @@ test('automatically refresh token if needed', async ({
       body: (body) => {
         expect(JSON.parse(body)).toStrictEqual({
           content: 'whats up doc?',
+          contentFormat: 'markdown',
           createdByUserId: slackUser.roughUserId,
         })
         return true
@@ -173,6 +172,7 @@ test('create an insight with a reference', async ({
       body: (body) => {
         expect(JSON.parse(body)).toStrictEqual({
           content: 'hello world this is a particularly insightful insight',
+          contentFormat: 'markdown',
           createdByUserId: slackUser.roughUserId,
           referenceId: expectedReferenceId,
         })
@@ -271,6 +271,7 @@ test('create an insight with a person', async ({
       body: (body) => {
         expect(JSON.parse(body)).toStrictEqual({
           content: 'hello world this is a particularly insightful insight',
+          contentFormat: 'markdown',
           createdByUserId: slackUser.roughUserId,
           personId: expectedPersonId,
         })
