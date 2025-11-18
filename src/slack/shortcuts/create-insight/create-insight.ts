@@ -1,5 +1,6 @@
 import type { RoughOAuth2Provider } from '@roughapp/sdk'
 import * as rough from '@roughapp/sdk'
+import { errorBoundary } from '@stayradiated/error-boundary'
 
 import type { KyselyDb, SlackUserId, SlackWorkspaceId } from '#src/database.ts'
 import { getSlackUser } from '#src/db/slack-user/get-slack-user.ts'
@@ -117,36 +118,37 @@ const createInsight = async (
       let imageUrl: string | undefined
       if (originalAuthor.imageUrl) {
         const image = await fetch(originalAuthor.imageUrl)
+
         // get the image data as a buffer
         const buffer = Buffer.from(await image.arrayBuffer())
 
+        const mimeType = image.headers.get('content-type') ?? 'image/unknown'
+
         // upload to rough
-        const pendingUpload = await rough.createPendingFileUpload({
+        const asset = await rough.createPendingAsset({
           auth: apiToken,
+          body: {
+            originalFileName: `SlackImage:${originalAuthor.name}`,
+            mimeType,
+            metadata: {},
+          },
         })
-        if (pendingUpload.error || !pendingUpload.data) {
-          console.error('Could not createPendingFileUpload', pendingUpload)
+        if (asset.error || !asset.data) {
+          console.error('Could not createPendingFileUpload', asset)
           // don't block the process if the image upload fails
           // continue without the image
         } else {
-          const mimeType = image.headers.get('content-type')
-          const result = await rough.uploadFile({
-            uploadToken: pendingUpload.data.token,
-            data: buffer,
-            fileName: `SlackImage:${originalAuthor.name}`,
-            mimeType: mimeType ?? 'image/jpeg',
-          })
-          const uploadedImage = await rough.getImage({
-            auth: apiToken,
-            query: { key: result.key },
-          })
-          if (uploadedImage.error) {
-            console.error(
-              `Could not get signed image URL for key "${result.key}"`,
-              uploadedImage,
-            )
+          const uploadResult = await errorBoundary(() =>
+            rough.uploadFile({
+              uploadToken: asset.data.tusUploadToken,
+              data: buffer,
+              mimeType,
+            }),
+          )
+          if (uploadResult instanceof Error) {
+            console.error(`Failed to upload image to Rough.`, uploadResult)
           } else {
-            imageUrl = uploadedImage.data.signedUrl
+            imageUrl = asset.data.url
           }
         }
       }
