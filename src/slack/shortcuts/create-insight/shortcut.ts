@@ -1,5 +1,6 @@
 import type { webApi } from '@slack/bolt'
 import { errorBoundary } from '@stayradiated/error-boundary'
+import { collect, filter, parallelMap, pipeline } from 'streaming-iterables'
 
 import type { SlackUserId, SlackWorkspaceId } from '#src/database.ts'
 import { getSlackUser } from '#src/db/slack-user/get-slack-user.ts'
@@ -13,10 +14,13 @@ import type {
 } from '#src/utils/define-route.ts'
 import { createInsight } from './create-insight.ts'
 
+import { downloadFile } from './download-file.ts'
+
 const getShortcut =
   (context: RouteContext): ShortcutHandlerFn =>
   async (event) => {
     const { db, roughOAuth } = context
+
     const { client, shortcut, body, ack, respond } = event
 
     // Acknowledge the shortcut
@@ -76,6 +80,16 @@ const getShortcut =
       return
     }
 
+    const fileList =
+      'files' in message && Array.isArray(message.files)
+        ? await pipeline(
+            () => message.files,
+            parallelMap(4, downloadFile(client)),
+            filter((file) => file instanceof File),
+            collect,
+          )
+        : []
+
     const lookupUserId = createLookupUserIdFn(client)
 
     // Resolve user mentions in the message text
@@ -116,6 +130,7 @@ const getShortcut =
       slackWorkspaceId: body.team?.id as SlackWorkspaceId,
       slackUserId: body.user.id as SlackUserId,
       content,
+      fileList,
       referencePath,
       originalAuthor,
     })

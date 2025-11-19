@@ -1,6 +1,7 @@
+import { inspect } from 'node:util'
 import type { RoughOAuth2Provider } from '@roughapp/sdk'
 import * as rough from '@roughapp/sdk'
-import { errorBoundary } from '@stayradiated/error-boundary'
+import { collect, parallelMap } from 'streaming-iterables'
 
 import type { KyselyDb, SlackUserId, SlackWorkspaceId } from '#src/database.ts'
 import { getSlackUser } from '#src/db/slack-user/get-slack-user.ts'
@@ -27,6 +28,7 @@ type CreateInsightOptions = {
     email: string | undefined
     imageUrl?: string
   }
+  fileList?: File[]
 }
 
 const createInsight = async (
@@ -40,6 +42,7 @@ const createInsight = async (
     content,
     referencePath,
     originalAuthor,
+    fileList,
   } = options
 
   const slackUser = await getSlackUser({
@@ -117,39 +120,21 @@ const createInsight = async (
     } else {
       let imageUrl: string | undefined
       if (originalAuthor.imageUrl) {
-        const image = await fetch(originalAuthor.imageUrl)
-
-        // get the image data as a buffer
-        const buffer = Buffer.from(await image.arrayBuffer())
-
-        const mimeType = image.headers.get('content-type') ?? 'image/unknown'
+        const imageResponse = await fetch(originalAuthor.imageUrl)
+        const imageBlob = await imageResponse.blob()
+        const imageFile = new File([imageBlob], originalAuthor.name)
 
         // upload to rough
-        const asset = await rough.createPendingAsset({
+        const asset = await rough.createAsset({
           auth: apiToken,
           body: {
-            originalFileName: `SlackImage:${originalAuthor.name}`,
-            mimeType,
-            metadata: {},
+            file: imageFile,
           },
         })
-        if (asset.error || !asset.data) {
-          console.error('Could not createPendingFileUpload', asset)
-          // don't block the process if the image upload fails
-          // continue without the image
+        if (asset.error) {
+          console.error(`Failed to upload image to Rough.`, asset.error)
         } else {
-          const uploadResult = await errorBoundary(() =>
-            rough.uploadFile({
-              uploadToken: asset.data.tusUploadToken,
-              data: buffer,
-              mimeType,
-            }),
-          )
-          if (uploadResult instanceof Error) {
-            console.error(`Failed to upload image to Rough.`, uploadResult)
-          } else {
-            imageUrl = asset.data.url
-          }
+          imageUrl = asset.data.url
         }
       }
 
@@ -171,10 +156,56 @@ const createInsight = async (
     }
   }
 
+  let contentWithFiles = content
+
+  if (fileList) {
+    const assetList = await collect(
+      parallelMap(
+        4,
+        async (file) => {
+          console.info(
+            `Uploading new asset "${file.name}" (${file.type}, ${file.size} bytes) to Rough.`,
+          )
+
+          const asset = await rough.createAsset({
+            auth: apiToken,
+            body: {
+              file,
+            },
+            headers: {
+              Origin: 'https://in.rough.app',
+            },
+          })
+          if (asset.error) {
+            return new Error(asset.error.message)
+          }
+          return asset.data
+        },
+        fileList,
+      ),
+    )
+
+    for (const asset of assetList) {
+      if (asset instanceof Error) {
+        console.error(asset)
+        continue
+      }
+      if (asset.type === 'IMAGE') {
+        contentWithFiles += `\n![${asset.originalFileName}](${asset.url} "assetId=${asset.id},width=${asset.metadata.width},height=${asset.metadata.height}")`
+      } else {
+        contentWithFiles += `\n[${asset.originalFileName}](${asset.url} "assetId=${asset.id}")`
+      }
+    }
+  }
+
+  console.info(
+    `Creating markdown note: ${inspect({ createdByUserId: slackUser.roughUserId, referenceId, personId, content: contentWithFiles })}`,
+  )
+
   const note = await rough.createNote({
     auth: apiToken,
     body: {
-      content,
+      content: contentWithFiles,
       contentFormat: 'markdown',
       createdByUserId: slackUser.roughUserId,
       referenceId,

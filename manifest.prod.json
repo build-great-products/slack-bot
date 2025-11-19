@@ -2,7 +2,7 @@
   "display_information": {
     "name": "Rough",
     "description": "The official Slack integration for Rough",
-    "background_color": "#b50b68"
+    "background_color": "#1b1052"
   },
   "features": {
     "bot_user": {
@@ -34,7 +34,8 @@
         "reactions:write",
         "team:read",
         "users:read",
-        "users:read.email"
+        "users:read.email",
+        "files:read"
       ]
     }
   },
