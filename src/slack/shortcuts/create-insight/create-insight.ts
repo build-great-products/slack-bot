@@ -190,11 +190,7 @@ const createInsight = async (
         console.error(asset)
         continue
       }
-      if (asset.type === 'IMAGE') {
-        contentWithFiles += `\n![${asset.originalFileName}](${asset.url} "assetId=${asset.id},width=${asset.metadata.width},height=${asset.metadata.height}")`
-      } else {
-        contentWithFiles += `\n[${asset.originalFileName}](${asset.url} "assetId=${asset.id}")`
-      }
+      contentWithFiles += `\n![${asset.originalFileName}](rough://asset/${asset.id})`
     }
   }
 
