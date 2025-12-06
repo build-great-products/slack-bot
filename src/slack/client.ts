@@ -40,13 +40,11 @@ const createClient = async (options: CreateClientOptions) => {
     installerOptions: {
       directInstall: true,
     },
-    customRoutes: (
-      await Promise.all([
-        import('./routes/oauth/connect/route.ts'),
-        import('./routes/oauth/callback/route.ts'),
-        import('./routes/oauth/callback/success/route.ts'),
-      ])
-    ).map((module) => module.default(context)),
+    customRoutes: [
+      (await import('./routes/oauth/connect/route.ts')).default,
+      (await import('./routes/oauth/callback/route.ts')).default,
+      (await import('./routes/oauth/callback/success/route.ts')).default,
+    ].map((module) => module(context)),
   })
 
   // register shortcut handlers

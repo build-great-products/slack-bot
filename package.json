@@ -30,7 +30,7 @@
     "kanel": "env-cmd -x kanel --database=\\$DATABASE_URL"
   },
   "dependencies": {
-    "@roughapp/sdk": "4.1.0",
+    "@roughapp/sdk": "4.3.0",
     "@slack/bolt": "4.6.0",
     "@stayradiated/error-boundary": "4.3.0",
     "dotenv": "17.2.3",
@@ -39,21 +39,21 @@
     "memoize": "10.2.0",
     "pg": "8.16.3",
     "streaming-iterables": "8.0.1",
-    "zod": "4.1.12"
+    "zod": "4.1.13"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.3.6",
+    "@biomejs/biome": "2.3.8",
     "@types/pg": "8.15.6",
-    "@vitest/coverage-v8": "4.0.10",
+    "@vitest/coverage-v8": "4.0.15",
     "env-cmd": "11.0.0",
     "kanel": "3.16.0",
     "kanel-kysely": "0.8.0",
-    "knip": "5.70.0",
+    "knip": "5.71.0",
     "test-fixture-factory": "2.1.0",
     "typescript": "5.9.3",
     "undici": "7.16.0",
     "vite-tsconfig-paths": "5.1.4",
-    "vitest": "4.0.10"
+    "vitest": "4.0.15"
   },
   "knip": {
     "ignore": [
