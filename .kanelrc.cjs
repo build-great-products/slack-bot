@@ -16,9 +16,19 @@ const supportVerbatimModuleSyntaxHook = (filePath, lines) => {
 const kyselyHook = makeKyselyHook()
 
 module.exports = {
+  // When `kanel` is called directly, it will use the DATABASE_URL environment
+  //
+  // However, when `kanel` is called by `graphile-migrate`, it will override
+  // the DATABASE_URL environment variable and force us to use GM_DBURL
+  // instead.
+  connection: process.env.GM_DBURL ?? process.env.DATABASE_URL,
+
   schemas: ['public'],
+
   enumStyle: 'enum',
+
   outputPath: 'src/__generated__/kanel',
+
   preDeleteOutputFolder: true,
 
   preRenderHooks: [kyselyHook, kyselyCamelCaseHook, generateIndexFile],
