@@ -46,6 +46,15 @@ jobs:
         name: Checkout
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
 
+        # install just binary
+        # https://github.com/extractions/setup-crate
+      - name: Install just
+        uses: extractions/setup-crate@4993624604c307fbca528d28a3c8b60fa5ecc859 # v1.4.0
+        with:
+          owner: casey
+          name: just
+          version: "1.42.4"
+
       - # https://github.com/pnpm/action-setup
         name: Install pnpm
         uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4.2.0
@@ -63,10 +72,10 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Migrations
-        run: pnpm run graphile-migrate reset --erase
+        run: just db reset
 
       - name: Vitest
-        run: pnpm run test:coverage
+        run: just test-coverage
 
       - name: Report Coverage
         # Set `if: always()` to also generate the report if tests are failing

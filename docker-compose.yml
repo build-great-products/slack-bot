@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: postgres:17.4
+    image: postgres:18.1
     restart: unless-stopped
     ports:
       - 47291:5432
@@ -9,8 +9,10 @@ services:
       POSTGRES_DB: '$POSTGRES_DB'
       POSTGRES_USER: '$POSTGRES_USER'
       POSTGRES_PASSWORD: '$POSTGRES_PASSWORD'
+      DATABASE_URL: '$DATABASE_URL'
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql
+      - ./scripts/db/mnt:/mnt
     healthcheck:
       test: ['CMD-SHELL', 'pg_isready -U postgres']
       timeout: 1s

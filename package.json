@@ -15,45 +15,30 @@
   "imports": {
     "#src/*": "./src/*"
   },
-  "scripts": {
-    "test": "vitest",
-    "test:coverage": "vitest --run --coverage",
-    "fmt": "biome format --write",
-    "tidy": "biome check --write --unsafe",
-    "tidy:check": "biome check",
-    "watch": "node --env-file=.env --watch ./src/index.ts",
-    "start": "node --env-file=.env ./src/index.ts",
-    "tsc": "tsc",
-    "check": "tsc",
-    "knip": "knip",
-    "graphile-migrate": "env-cmd --silent graphile-migrate --config ./gmrc.cjs",
-    "kanel": "env-cmd -x kanel --database=\\$DATABASE_URL"
-  },
   "dependencies": {
-    "@roughapp/sdk": "4.3.0",
+    "@roughapp/sdk": "4.4.0",
     "@slack/bolt": "4.6.0",
     "@stayradiated/error-boundary": "4.3.0",
     "dotenv": "17.2.3",
     "graphile-migrate": "1.4.1",
-    "kysely": "0.28.8",
+    "kysely": "0.28.10",
     "memoize": "10.2.0",
-    "pg": "8.16.3",
+    "pg": "8.17.1",
     "streaming-iterables": "8.0.1",
-    "zod": "4.1.13"
+    "zod": "4.3.5"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.3.8",
-    "@types/pg": "8.15.6",
-    "@vitest/coverage-v8": "4.0.15",
-    "env-cmd": "11.0.0",
+    "@biomejs/biome": "2.3.11",
+    "@types/pg": "8.16.0",
+    "@vitest/coverage-v8": "4.0.17",
     "kanel": "3.16.0",
     "kanel-kysely": "0.8.0",
-    "knip": "5.71.0",
+    "knip": "5.82.0",
     "test-fixture-factory": "2.1.0",
     "typescript": "5.9.3",
-    "undici": "7.16.0",
-    "vite-tsconfig-paths": "5.1.4",
-    "vitest": "4.0.15"
+    "undici": "7.18.2",
+    "vite-tsconfig-paths": "6.0.4",
+    "vitest": "4.0.17"
   },
   "knip": {
     "ignore": [
@@ -65,7 +50,8 @@
     "ignoreDependencies": [
       "graphile-migrate",
       "kanel",
-      "kanel-kysely"
+      "kanel-kysely",
+      "@biomejs/biome"
     ],
     "ignoreFiles": [
       ".kanelrc.cjs",
