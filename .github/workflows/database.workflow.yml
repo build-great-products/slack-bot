@@ -1,0 +1,189 @@
+name: Database
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  main:
+    name: Database
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+
+    env:
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/bowline
+      ROOT_DATABASE_URL: postgres://postgres:postgres@localhost:5432/template1
+
+    services:
+      postgres:
+        image: postgres:17.4
+        env:
+          POSTGRES_DB: rough_slackbot
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - # https://github.com/actions/checkout
+        name: Checkout
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+
+      - name: Ensure no uncommitted migrations
+        run: |
+          EXPECTED_CONTENT="-- Enter migration here"
+          ACTUAL_CONTENT=$(cat ./migrations/current.sql)
+
+          if [ "$ACTUAL_CONTENT" != "$EXPECTED_CONTENT" ]; then
+            echo "❌ ERROR: Uncommitted migration detected!"
+            echo ""
+            echo "The file migrations/current.sql contains migration code that hasn't been committed."
+            echo ""
+            echo "Current contents:"
+            echo "────────────────────────────────────────"
+            cat ./migrations/current.sql
+            echo "────────────────────────────────────────"
+            echo ""
+            echo "This error means you've written a migration but haven't committed it yet."
+            echo ""
+            echo "To fix this:"
+            echo "  1. Review the migration above to ensure it's correct"
+            echo "  2. Run: just db commit"
+            echo "  3. Add the new file in migrations/committed/ to git"
+            echo "  4. Commit and push your changes"
+            echo ""
+            echo "If you want to discard this migration instead:"
+            echo "  Run: echo '-- Enter migration here' > migrations/current.sql"
+            exit 1
+          fi
+
+          echo "✅ No uncommitted migrations found"
+
+        # https://github.com/extractions/setup-crate
+      - name: Install just
+        uses: extractions/setup-crate@4993624604c307fbca528d28a3c8b60fa5ecc859 # v1.4.0
+        with:
+          owner: casey
+          name: just
+          version: "1.42.4"
+
+      - # https://github.com/pnpm/action-setup
+        name: Install pnpm
+        uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4.2.0
+        with:
+          run_install: false
+
+      - # https://github.com/actions/setup-node
+        name: Install Node.js
+        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
+        with:
+          node-version-file: "package.json"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run database migrations
+        run: |
+          just db reset
+
+      - name: Generate TypeScript types with Kanel
+        run: |
+          just db types
+
+      - name: Verify Kanel Types
+        run: |
+          if ! git diff --quiet --exit-code src/__generated__/kanel; then
+            echo "❌ ERROR: Kanel-generated types are out of sync with the database!"
+            echo ""
+            echo "The following files have differences:"
+            git diff --name-only src/__generated__/kanel
+            echo ""
+            echo "Detailed changes:"
+            git diff src/__generated__/kanel
+            echo ""
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            echo "🛠️  HOW TO FIX THIS:"
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            echo ""
+            echo "This error means your database schema has changed but the TypeScript"
+            echo "types haven't been regenerated."
+            echo ""
+            echo "Run these commands locally:"
+            echo ""
+            echo "  1. pnpm install    # Ensure dependencies are up to date"
+            echo "  2. just db migrate # Apply latest migrations"
+            echo "  3. just db types   # Regenerate TypeScript types"
+            echo "  4. git add src/__generated__/kanel"
+            echo "  5. git commit -m 'chore: update Kanel types'"
+            echo ""
+            echo "If you're still having issues:"
+            echo "- Ensure your local database is running"
+            echo "- Check that DATABASE_URL is set correctly"
+            echo "- Ask for help in #development"
+            exit 1
+          fi
+
+          echo "✅ Kanel types are up to date"
+
+        # https://github.com/tj-actions/pg-dump
+      - name: Generate database schema dump
+        uses: tj-actions/pg-dump@c826d55715b153f5572006e464e69b2bf0422fea # v3.0.1
+        with:
+          database_url: ${{ env.DATABASE_URL }}
+          postgresql_version: "17"
+          path: "migrations/schema.sql"
+          options: "--exclude-schema=graphile_worker --exclude-schema=graphile_migrate --schema-only --no-owner --format=p --encoding=UTF-8 --restrict-key=xxx"
+
+      - name: Verify DB Schema
+        run: |
+          # Remove version-specific comments that may vary between environments
+          sed -i '/^-- Dumped by pg_dump/d' migrations/schema.sql
+          sed -i '/^-- Dumped from database version/d' migrations/schema.sql
+
+          if ! git diff --quiet --exit-code migrations/schema.sql; then
+            echo "❌ ERROR: Database schema dump is out of sync!"
+            echo ""
+            echo "The schema.sql file doesn't match the current database state."
+            echo ""
+            echo "Summary of changes:"
+            git diff --stat migrations/schema.sql
+            echo ""
+            echo "Detailed changes (first 100 lines):"
+            git diff migrations/schema.sql | head -n 100
+            echo ""
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            echo "🛠️  HOW TO FIX THIS:"
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            echo ""
+            echo "This error means your migrations have changed the database"
+            echo "structure but the schema dump hasn't been updated."
+            echo ""
+            echo "Run these commands locally:"
+            echo ""
+            echo "  1. just db migrate         # Apply all migrations"
+            echo "  2. just db snapshot-schema # Regenerate schema.sql"
+            echo "  3. git add migrations/schema.sql"
+            echo "  4. git commit -m 'chore: update database schema dump'"
+            echo ""
+            echo "Common causes:"
+            echo "- You added a new migration but didn't update the schema"
+            echo "- You modified an existing migration"
+            echo "- Your local database state differs from CI"
+            echo ""
+            echo "If problems persist, ask for help in #development"
+            exit 1
+          fi
+
+          echo "✅ Database schema is up to date"

@@ -28,7 +28,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres:17.4
+        image: postgres:18.1
         env:
           POSTGRES_DB: rough_slackbot
           POSTGRES_USER: postgres
@@ -46,7 +46,6 @@ jobs:
         name: Checkout
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
 
-        # install just binary
         # https://github.com/extractions/setup-crate
       - name: Install just
         uses: extractions/setup-crate@4993624604c307fbca528d28a3c8b60fa5ecc859 # v1.4.0
